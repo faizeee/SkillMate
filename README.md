@@ -16,4 +16,4 @@ SkillMate is a full-stack platform where users can **offer** or **learn** real-w
 - Admin Panel
 
 ## 🎯 Purpose
-This project is part of a 30-day challenge to become job-ready for remote full-stack role
+This project is part of a personal initiative to become job-ready for remote full-stack roles by building a complete application from scratch using modern tools.
