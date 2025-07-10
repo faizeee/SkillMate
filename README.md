@@ -41,6 +41,18 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 - Created and tested root API route (`GET /`)
 - Confirmed backend is running on `http://localhost:8000`
 
+### ✅ Day 2: Routing + Tailwind Integration
+- Added **TanStack Router** with base layout and pages  
+  - Created `/`, `/skills`, and `/profile` routes  
+  - Setup `RootLayout` with sidebar navigation
+- Fixed Vite + Tailwind 4 integration issues  
+  - Added `tailwind.config.js` with correct `content` paths  
+  - Cleaned up `index.css` to prevent default style conflicts
+- Verified Tailwind utility classes are rendering correctly  
+  - Example: `text-4xl text-green-400 font-bold`
+- Rendered sample content on `HomePage` for testing Tailwind output
+- Confirmed routing and layout working via `npm run dev`
+
 ## 📅 Daily Goal
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
