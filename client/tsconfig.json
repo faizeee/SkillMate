@@ -7,7 +7,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["client/src/*"]
     }
-  }
+  },
+   "include": ["client", "server", "types"]
 }

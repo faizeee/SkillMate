@@ -9,6 +9,7 @@ SkillMate is a full-stack platform where users can **offer** or **learn** real-w
 - **DevOps:** Docker, GitHub Actions
 
 ## 🛠️ Features (Planned)
+
 - User Registration & Login (JWT)
 - Skill Listings & Search
 - Booking / Request Sessions
@@ -16,6 +17,7 @@ SkillMate is a full-stack platform where users can **offer** or **learn** real-w
 - Admin Panel
 
 ## 🎯 Purpose
+
 This project is part of a personal initiative to become job-ready for remote full-stack roles by building a complete application from scratch using modern tools.
 
 # SkillMate
@@ -33,6 +35,7 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 ## 🚀 Progress Log
 
 ### ✅ Day 1: Project Setup (Frontend + Backend)
+
 - Initialized full-stack project: `SkillMate`
 - Set up React + TypeScript + Vite in `/client`
 - Installed and configured Tailwind CSS v4
@@ -42,18 +45,29 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 - Confirmed backend is running on `http://localhost:8000`
 
 ### ✅ Day 2: Routing + Tailwind Integration
-- Added **TanStack Router** with base layout and pages  
-  - Created `/`, `/skills`, and `/profile` routes  
+
+- Added **TanStack Router** with base layout and pages
+  - Created `/`, `/skills`, and `/profile` routes
   - Setup `RootLayout` with sidebar navigation
-- Fixed Vite + Tailwind 4 integration issues  
-  - Added `tailwind.config.js` with correct `content` paths  
+- Fixed Vite + Tailwind 4 integration issues
+  - Added `tailwind.config.js` with correct `content` paths
   - Cleaned up `index.css` to prevent default style conflicts
-- Verified Tailwind utility classes are rendering correctly  
+- Verified Tailwind utility classes are rendering correctly
   - Example: `text-4xl text-green-400 font-bold`
 - Rendered sample content on `HomePage` for testing Tailwind output
 - Confirmed routing and layout working via `npm run dev`
 
+### ✅ Day 3: Global Store + API Data Rendering
+
+- Created `useSkillStore.ts` with Zustand for global skill state
+  - Manages `skills`, `loading`, `error`
+  - Added async `fetchSkills()` method
+- Connected frontend to FastAPI with `GET /api/skills`
+- Displayed skills on the `/skills` route with Tailwind styling
+- Rendered loading/error UI states
+- Fixed rendering bug by correctly returning JSX inside `.map()`
+- Confirmed frontend is fully API-driven now 🚀
+
 ## 📅 Daily Goal
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
-
