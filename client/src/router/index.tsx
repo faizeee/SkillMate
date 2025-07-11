@@ -1,28 +1,45 @@
-import {createRootRoute, createRoute, createRouter, RouterProvider} from '@tanstack/react-router';
-import { lazy , StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  RouterProvider,
+} from "@tanstack/react-router";
+import { lazy, StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
 import Layout from "@/layouts/Layout";
-import HomePage from '@/pages/Home';
-import SkillsPage from '@/pages/Skills';
-import ProfilePage from '@/pages/Profile';
+import HomePage from "@/pages/Home";
+import SkillsPage from "@/pages/Skills";
+import ProfilePage from "@/pages/Profile";
 // Define root layout with children pages
 const rootRoute = createRootRoute({
   component: Layout,
 });
 
 const routeTree = rootRoute.addChildren([
-    createRoute({path:"/",getParentRoute:()=> rootRoute,component:HomePage}),
-    createRoute({path:"/skills",getParentRoute:()=> rootRoute,component:SkillsPage}),
-    createRoute({path:"/profile",getParentRoute:()=> rootRoute,component:ProfilePage}),
+  createRoute({
+    path: "/",
+    getParentRoute: () => rootRoute,
+    component: HomePage,
+  }),
+  createRoute({
+    path: "/skills",
+    getParentRoute: () => rootRoute,
+    component: SkillsPage,
+  }),
+  createRoute({
+    path: "/profile",
+    getParentRoute: () => rootRoute,
+    component: ProfilePage,
+  }),
 ]);
 
 // ✅ Export the router instance
-export const router = createRouter({ routeTree })
+export const router = createRouter({ routeTree });
 
 // ✅ Also declare module for type safety
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
