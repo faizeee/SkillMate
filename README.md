@@ -68,6 +68,26 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 - Fixed rendering bug by correctly returning JSX inside `.map()`
 - Confirmed frontend is fully API-driven now 🚀
 
+### ✅ Day 4: Zustand Integration + Add Skill Form
+
+- ✅ Integrated [**Zustand**](https://github.com/pmndrs/zustand) for global state management
+- ✅ Created a `useSkillsStore.ts` to manage:
+  - `skills` state
+  - `loading` and `error` flags
+  - an async `fetchSkills()` function using a reusable fetch wrapper
+- ✅ Defined `Skill` and `NewSkill` types with proper type safety
+- ✅ Built the `AddSkillPage` component with:
+  - Form inputs for `name` and `level`
+  - A submit handler to call `addSkill()` and navigate to `/skills`
+  - Basic client-side validation (`name` required)
+- ✅ Implemented a reusable fetch wrapper to simplify API handling
+- ✅ Discussed and planned for:
+  - Showing backend validation errors in the form
+  - Redirecting only on successful submission
+  - Optional `Skill` type merging with `NewSkill`
+  - Moving base URL to a central constants file
+- ✅ App now supports adding a new skill via FastAPI and viewing updated skill list
+
 ## 📅 Daily Goal
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
