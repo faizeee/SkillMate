@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from middlewares.logging import LoggingMiddleware
+from routes.skill_routes import router as skill_router
 
 app = FastAPI()
 
@@ -11,17 +13,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(LoggingMiddleware)
+
 @app.get("/")
 def root():
     return {"message": "SkillMate Backend is running!"}
-
-@app.get("/api/skills")
-def get_skills():
-    return [
-        {"id": 1, "name": "JavaScript", "level": "Advanced"},
-        {"id": 2, "name": "Python", "level": "Intermediate"},
-        {"id": 3, "name": "FastAPI", "level": "Beginner"},
-    ]
+app.include_router(skill_router,prefix="/api")
 
 # # (Optional but good for local development)
 # # This block allows you to run the app directly from this file

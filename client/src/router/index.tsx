@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 import Layout from "@/layouts/Layout";
 import HomePage from "@/pages/Home";
 import SkillsPage from "@/pages/Skills";
+import AddSkillPage from "@/pages/AddSkill";
 import ProfilePage from "@/pages/Profile";
 // Define root layout with children pages
 const rootRoute = createRootRoute({
@@ -21,6 +22,11 @@ const routeTree = rootRoute.addChildren([
     path: "/",
     getParentRoute: () => rootRoute,
     component: HomePage,
+  }),
+  createRoute({
+    path: "/add",
+    getParentRoute: () => rootRoute,
+    component: AddSkillPage,
   }),
   createRoute({
     path: "/skills",
