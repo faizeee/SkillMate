@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from middlewares.logging import LoggingMiddleware
-from routes.skill_routes import router as skill_router
+from routes.index import router
 
 app = FastAPI()
 
@@ -18,7 +18,7 @@ app.add_middleware(LoggingMiddleware)
 @app.get("/")
 def root():
     return {"message": "SkillMate Backend is running!"}
-app.include_router(skill_router,prefix="/api")
+app.include_router(router) #The tags parameter is used for grouping related API endpoints in the automatically generated interactive API documentation (Swagger UI / OpenAPI UI).
 
 # # (Optional but good for local development)
 # # This block allows you to run the app directly from this file

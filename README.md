@@ -88,6 +88,61 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
   - Moving base URL to a central constants file
 - ✅ App now supports adding a new skill via FastAPI and viewing updated skill list
 
+### ✅ Day 5: Backend Refactor, Controllers, and API Architecture
+
+- ✅ **Modularized backend structure** for scalability and maintainability
+- ✅ Created a dedicated `controllers/` folder and moved business logic there
+- ✅ Separated model definitions into `models/skill/`:
+  - `SkillIn` for incoming data (input)
+  - `Skill` for response with `id`
+- ✅ Extended `Skill` from `SkillIn` to keep input/output clean and DRY
+- ✅ Created `routes/api/skill.py` for all skill-related routes
+- ✅ Created centralized API router in `routes/api/index.py`
+- ✅ Mounted API in `main.py` with prefix `/api` using:
+  ```python
+  app.include_router(api_router, prefix="/api")
+🔧 Utilities & Validation
+
+    ✅ Created utils/validation.py for:
+
+        allowed_levels() — central allowed levels list
+
+        check_duplicate_skill_name(name: str) — checks for existing skill names (case-insensitive)
+
+    ✅ Added custom field validators using @validator:
+
+        Ensured level is in allowed values
+
+        Trimmed name and level before validation using pre=True
+
+⚙️ Middleware
+
+    ✅ Created custom logging middleware:
+
+        Logs every request method, path, and total process time
+
+        Added using FastAPI's BaseHTTPMiddleware
+
+        
+├── main.py
+├── models/
+│   └── skill/
+│       ├── __init__.py
+│       ├── skill.py      # Skill (output)
+│       └── skill_in.py   # SkillIn (input)
+├── controllers/
+│   └── skill_controller.py
+├── routes/
+│   └── api/
+│       ├── __init__.py
+│       ├── index.py      # Central API router
+│       └── skill.py      # Skill routes
+├── utils/
+│   └── validation.py     # Reusable validation helpers
+└── middleware/
+    └── logger.py         # Request logging middleware
+
+
 ## 📅 Daily Goal
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
