@@ -123,24 +123,18 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 
         Added using FastAPI's BaseHTTPMiddleware
 
-        
-├── main.py
-├── models/
-│   └── skill/
-│       ├── __init__.py
-│       ├── skill.py      # Skill (output)
-│       └── skill_in.py   # SkillIn (input)
-├── controllers/
-│   └── skill_controller.py
-├── routes/
-│   └── api/
-│       ├── __init__.py
-│       ├── index.py      # Central API router
-│       └── skill.py      # Skill routes
-├── utils/
-│   └── validation.py     # Reusable validation helpers
-└── middleware/
-    └── logger.py         # Request logging middleware
+ ### ✅ Day 6: JWT Auth Backend Setup (FastAPI)
+
+- 🔒 Created modular auth routes in `routes/api/auth_router.py`
+- ✅ Defined request & response models in `models/user/schema.py` and `models/base/auth_response.py`
+- 🧠 Added input validation using Pydantic (`min_length`, `no_spaces`, etc.)
+- 📂 Moved business logic into `controllers/auth_controller.py`
+  - Implemented `/register` route with password hashing and duplicate username check
+  - Implemented `/login` route with password verification and JWT creation
+- 🔐 Setup JWT utility functions in `core/auth.py`
+- 🧪 Protected `POST /skills` route using `Depends(get_current_user)`
+- 🧼 Organized route registration in `routes/api/index.py`
+- 📁 Maintained clean package structure across models, routes, controllers, and services
 
 
 ## 📅 Daily Goal
