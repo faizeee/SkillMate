@@ -16,6 +16,7 @@ def list_skills(db: Session = Depends(get_session)):
 @router.post("/",response_model=SkillRead)
 def create_skill(skill:SkillIn , user:User = Depends(get_current_user), db:Session = Depends(get_session) ): #Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
     return add_skills(skill,db)
+
 @router.get("/levels",response_model=list[SkillLevel])
 def get_levels(db:Session = Depends(get_session)):
     return get_skill_levels(db)

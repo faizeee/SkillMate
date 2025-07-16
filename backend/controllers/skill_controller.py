@@ -44,16 +44,14 @@ def add_skills(skill:SkillIn, db:Session) -> SkillRead : #the -> symbol in a fun
     # For case-insensitive, you might convert both to lower() if your DB supports it or use specific functions
     # For SQLite, it's typically case-insensitive for ASCII by default, but explicit is better.
     
-    if db.exec(select(Skill).where(Skill.name == skill.name)).first():
+    if db.exec(select(Skill).where(Skill.name.lower() == skill.name.lower())).first():
         raise HTTPException(status_code=409, detail=f"Skill with name '{skill.name}' already exits")
     # 1. Create and add the new skill
     new_skill = Skill(**skill.model_dump()) # OR Skill(name=skill.name,skill_level_id=skill.skill_level_id)
     db.add(new_skill)
-    # 2. Commit the new skill to the database.
     # This assigns the 'id' to new_skill and saves it.
     db.commit()
     
-    # 3. Refresh the new_skill object AND load its 'level' relationship.
     # This fetches the latest state from the database, including the related SkillLevel object.
     db.refresh(new_skill, attribute_names=["level"])
     # Now, new_skill.level will contain the fully loaded SkillLevel object
