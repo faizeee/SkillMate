@@ -1,9 +1,15 @@
-from sqlalchemy import Column, Integer, String
-from database import Base
+from typing import Optional
+from sqlmodel import SQLModel, Field,Relationship
+from models.skill_level import SkillLevel
 
-class SkillDB(Base):
+class Skill(SQLModel,table = True):
     __tablename__ = 'skills'
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String,nullable=False)
-    level = Column(String,nullable=False)
+    id : int | None = Field(default=None, primary_key=True)
+    name : str
+    skill_level_id : int = Field(foreign_key="skill_levels.id")
+
+    # Relationship to SkillLevel table (many-to-one)
+    level: Optional[SkillLevel] = Relationship(back_populates="skills")
+
+
 

@@ -1,22 +1,21 @@
-from pydantic import BaseModel, Field, validator
-from .base import allowed_levels
-
+from pydantic import BaseModel, Field ,field_validator
 class SkillIn(BaseModel):
     name:str = Field(...,min_length=2,max_length=50)
-    level:str = Field(...,min_length=2)
+    skill_level_id:int
 
-    @validator('name','level',pre=True)
-    def trim_fields(cls,v):
-        if not (isinstance(v,str)):
-            return v
-        return v.strip()
+    # @validator('name','skill_level_id',pre=True)
+    # def trim_fields(cls,v):
+    #     if not (isinstance(v,str)):
+    #         return v
+    #     return v.strip()
 
-    @validator('level')
-    def validate_level(cls,v):
-         valid_levels = allowed_levels()
-         if(v not in valid_levels):
-             raise ValueError(f"Level must be one of {', '.join(valid_levels)}")
-         return v
+    # Validator to convert 'name' to lowercase
+    @field_validator('name') # Decorator specifies which field to validate/transform
+    @classmethod # Class method is required for field_validator
+    def transform_input(cls,value:str) :
+        """Converts the skill name to lowercase and strips leading/trailing whitespace."""
+        return value.lower().strip()
     
-class Skill(SkillIn):
+class SkillRead(SkillIn):
     id:int
+    level:str
