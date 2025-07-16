@@ -1,24 +1,15 @@
-from fastapi import Depends,HTTPException
-from sqlmodel import Session,select
+from fastapi import HTTPException
+from sqlmodel import Session, select
 from models.user import User
 from core.auth import get_password_hash, verify_password,create_access_token
-from data.db import get_session
 from models.user import UserCreate,UserRead
 from models.base.auth_response import AuthResponse
 
-def register(user_input:UserCreate,db:Session = Depends(get_session))->UserRead:
+def register(user_input:UserCreate,db:Session)->UserRead:
     """
     Registers a new user.
     Checks if username already exists, hashes password, and saves to DB.
     """
-    # --- DEBUGGING LINES START ---
-    print(f"\n--- DEBUG: Inside register controller ---")
-    print(f"--- DEBUG: Type of 'db' parameter: {type(db)} ---")
-    print(f"--- DEBUG: ID of 'db' parameter: {id(db)} ---") # Unique ID for the object
-    # If type(db) is <class 'fastapi.params.Depends'>, dir(db) won't be very useful
-    # but if it was a Session, dir(db) would show its methods.
-    # print(f"--- DEBUG: dir(db): {dir(db)} ---")
-    # --- DEBUGGING LINES END ---
     username = user_input.username
 
     if db.exec(select(User).where(User.username == username)).first() :
@@ -32,7 +23,7 @@ def register(user_input:UserCreate,db:Session = Depends(get_session))->UserRead:
 
     return {"id":user.id, "username":user.username}
 
-def login(user_input: UserCreate, db:Session = Depends(get_session)) -> AuthResponse:
+def login(user_input: UserCreate, db:Session) -> AuthResponse:
     username = user_input.username
     user =  db.exec(select(User).where(User.username == username)).first()
 
