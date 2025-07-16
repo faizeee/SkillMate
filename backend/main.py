@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
-from routes.api import auth_routes
 from data.db import init_db
 
 app = FastAPI( title="SkillMate API",
@@ -12,9 +11,7 @@ app = FastAPI( title="SkillMate API",
 # Event handler to initialize the database on application startup
 @app.on_event("startup")
 def on_startup():
-    print("--- FastAPI Startup: Initializing database ---")
-    init_db()
-    print("--- FastAPI Startup: Database initialized ---")
+      init_db()
 
 # Allow CORS
 app.add_middleware(
@@ -30,8 +27,7 @@ app.add_middleware(LoggingMiddleware)
 def root():
     return {"message": "SkillMate Backend is running!"}
 
-#app.include_router(router) #The tags parameter is used for grouping related API endpoints in the automatically generated interactive API documentation (Swagger UI / OpenAPI UI).
-app.include_router(auth_routes.router, prefix="/api", tags=["Authentication"])
+app.include_router(router) #The tags parameter is used for grouping related API endpoints in the automatically generated interactive API documentation (Swagger UI / OpenAPI UI).
 # # (Optional but good for local development)
 # # This block allows you to run the app directly from this file
 # # by executing `python main.py`
