@@ -135,6 +135,75 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 - 🧪 Protected `POST /skills` route using `Depends(get_current_user)`
 - 🧼 Organized route registration in `routes/api/index.py`
 - 📁 Maintained clean package structure across models, routes, controllers, and services
+### ✅ Day 7: Authentication, ORM Mastery & Backend Enhancements
+
+#### 🔐 Frontend Authentication (React + Zustand)
+- Created `LoginPage` with controlled inputs for username and password
+- Implemented basic form validation on client
+- Connected login form to FastAPI `POST /api/login` endpoint
+- Created `useAuthStore` with Zustand to manage auth state
+  - Stored JWT token and username in `localStorage`
+  - Added logout function to clear state and storage
+- Updated UI to show current logged-in user
+- Redirected user to `/skills` page after successful login
+
+---
+
+#### 🧠 Backend Improvements (FastAPI + SQLModel)
+
+- **📦 Refactored Route & Controller Structure**
+  - Moved auth logic to `controllers/auth_controller.py`
+  - Created separate model for `AuthResponse` with helper method
+  - Used clean and type-safe request/response typing across endpoints
+  - Organized routes: `routes/api/auth_router.py`
+
+- **🌱 Separated DB Seeding Logic**
+  - Moved seeding from `data/db.py` to `seeders/seed.py`
+  - Cleaner architecture and single responsibility
+
+- **🔁 Resolved Circular Import Issues**
+  - Handled import errors between `Skill` and `SkillLevel` models
+  - Used `update_forward_refs()` in `data/models/__init__.py`
+  - Consolidated model imports with a clear API surface
+
+- **⚡ Eager Loading for Relationships**
+  - Used `selectinload` to load `SkillLevel` data efficiently with `Skill`
+  - Prevented N+1 query problem during DB access
+
+- **🐍 Pythonic Data Transformation**
+  - Converted SQLModel object lists to dicts using list comprehensions
+    ```python
+    skills = [skill.to_dict() for skill in result]
+    ```
+
+- **λ Mastered Lambda Functions**
+  - Used lambdas for inline sorting and data filtering
+    ```python
+    sorted_skills = sorted(skills, key=lambda s: s.name)
+    ```
+
+- **🧩 Improved Query Construction**
+  - Adopted multi-step, readable SQLModel query pattern:
+    ```python
+    stmt = select(Skill).where(Skill.level_id == 2)
+    skills = db.exec(stmt).all()
+    ```
+
+- **🛡️ Enforced DB-Level Unique Constraints**
+  - Checked duplicate `Skill.name` via DB query
+  - Explained why `@validator` isn't suitable for DB-based logic
+
+- **🐛 Fixed Validation Mistake**
+  - Debugged `min_length` TypeError for an integer (`level_id`)
+  - Learned that `min_length` only applies to string fields
+
+- **🔄 Refreshed Related Data on Commit**
+  - Used `db.refresh(obj, attribute_names=["relation"])` after creating `Skill`
+  - Ensured that nested relations like `Skill.level` are immediately available
+
+---
+
+🔥 **Reflection**: This was a real engineer's day. You cleaned architecture, handled DB relations like a pro, solved real-world bugs, and built solid auth. You're not just building apps now — you're building systems.
 
 
 ## 📅 Daily Goal
