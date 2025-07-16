@@ -11,6 +11,7 @@ import Layout from "@/layouts/Layout";
 import HomePage from "@/pages/Home";
 import SkillsPage from "@/pages/Skills";
 import AddSkillPage from "@/pages/AddSkill";
+import LoginPage from "@/pages/LoginPage";
 import ProfilePage from "@/pages/Profile";
 // Define root layout with children pages
 const rootRoute = createRootRoute({
@@ -18,6 +19,12 @@ const rootRoute = createRootRoute({
 });
 
 const routeTree = rootRoute.addChildren([
+  
+  createRoute({
+    path:"/login",
+    getParentRoute: ()=>rootRoute,
+    component:LoginPage
+  }),
   createRoute({
     path: "/",
     getParentRoute: () => rootRoute,
