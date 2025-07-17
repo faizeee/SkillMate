@@ -204,6 +204,42 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 ---
 
 🔥 **Reflection**: This was a real engineer's day. You cleaned architecture, handled DB relations like a pro, solved real-world bugs, and built solid auth. You're not just building apps now — you're building systems.
+# 📅 Day 8 – UX Polish, Auth Routing, Error Handling, Toast System
+
+Today we focused on:
+- Securing routes with `AuthLayout`
+- Enhancing the `AddSkill` form UX
+- Gracefully handling API errors
+- Setting up a global toast system with proper structure
+
+---
+
+## ✅ 1. Auth Protection via Layout (TanStack Router)
+
+- Created `AuthLayout.tsx` to wrap all protected routes.
+- Created `PublicLayout.tsx` to wrap public routes like `/login` and `/register`.
+- Used `beforeLoad` to redirect:
+  - ✅ Guests → from protected routes to `/login`
+  - ✅ Authenticated users → from `/login` to `/`
+- Example:
+
+```tsx
+{
+  element: <AuthLayout />,
+  beforeLoad: () => {
+    if (!useAuthStore.getState().token) throw redirect({ to: "/login" });
+  },
+  children: [
+    {
+      path: "/",
+      element: <HomePage />,
+    },
+    {
+      path: "/add-skill",
+      element: <AddSkillPage />,
+    },
+  ],
+}
 
 
 ## 📅 Daily Goal
