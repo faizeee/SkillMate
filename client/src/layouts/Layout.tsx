@@ -1,5 +1,10 @@
-import { Outlet, Link } from "@tanstack/react-router";
+import { Outlet, Link, Navigate} from "@tanstack/react-router";
+// import { useAuthStore } from "../store/useAuthStore";
 export default function Layout() {
+  
+  // const is_loggedin = useAuthStore(s => s.is_loggedin())
+  // if(!is_loggedin) return <Navigate to='/login'/>
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}

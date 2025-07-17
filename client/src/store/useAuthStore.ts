@@ -9,22 +9,24 @@ interface AuthState {
     setAuth : (token:string , username:string) => void;
     login: (credentials:LoginCredentials) => Promise<void>;
     logout : () => void;
+    is_loggedin : ()=> Boolean
 }
 const BASE_URL = import.meta.env.VITE_API_URL
 
-export const useAuthStore = create<AuthState>((set)=>({
+export const useAuthStore = create<AuthState>((set,get)=>({
     token:localStorage.getItem("token"),
     username :localStorage.getItem('username'),
     id : localStorage.getItem('id'),
+    is_loggedin : () => !!get().token,
     setAuth: (token,username) => {
         localStorage.setItem("token",token)
         localStorage.setItem("username",username)
-        localStorage.setItem("id",id)
+        // localStorage.setItem("id",id)
     },
     logout : () => {
         localStorage.removeItem("token")
         localStorage.removeItem("username")
-        localStorage.removeItem("id")
+        // localStorage.removeItem("id")
         set({token:null,username:null,id:null})
     },
     login : async (credentials:LoginCredentials) => {
