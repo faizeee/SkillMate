@@ -2,55 +2,92 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  Outlet,
+  redirect,
   RouterProvider,
 } from "@tanstack/react-router";
 import { lazy, StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { useAuthStore } from '@/store/useAuthStore';
 
 import Layout from "@/layouts/Layout";
-import AuthLayout from "@/layouts/AuthLayout";
-// import HomePage from "@/pages/Home";
-// import SkillsPage from "@/pages/Skills";
-// import AddSkillPage from "@/pages/AddSkill";
+import PublicLayout from "@/layouts/PublicLayout";
 import LoginPage from "@/pages/LoginPage";
-import ProfilePage from "@/pages/Profile";
-const SkillPage = lazy(() => import('@/pages/SkillPage'))
-const AddSkillPage = lazy(() => import('@/pages/AddSkillPage'))
-const HomePage = lazy(() => import('@/pages/Home'))
 
-// Define root layout with children pages
+// Lazy-loaded pages
+const SkillsPage = lazy(() => import('@/pages/Skills'))
+const AddSkillPage = lazy(() => import('@/pages/AddSkill'))
+const HomePage = lazy(() => import('@/pages/Home'))
+const ProfilePage = lazy(()=>import('@/pages/Profile'))
+
+// Define the absolute root route of your application.
+// This route acts as the highest common ancestor for all other routes.
+// It might render a very basic wrapper or nothing, depending on your app's overall structure.
+// For simplicity, let's make it render an <Outlet /> to immediately render its children.
 const rootRoute = createRootRoute({
-  component: Layout,
+  component: Outlet
 });
 
-const routeTree = rootRoute.addChildren([
-  
-  createRoute({
-    path:"/login",
-    getParentRoute: ()=>rootRoute,
-    component:LoginPage
-  }),
-  createRoute({
-    path: "/",
-    getParentRoute: () => rootRoute,
-    component: HomePage,
-  }),
-  createRoute({
-    path: "/add",
-    getParentRoute: () => rootRoute,
-    component: AddSkillPage,
-  }),
-  createRoute({
-    path: "/skills",
-    getParentRoute: () => rootRoute,
-    component: SkillsPage,
-  }),
-  createRoute({
-    path: "/profile",
-    getParentRoute: () => rootRoute,
-    component: ProfilePage,
-  }),
-]);
+// Define a child route of the main root for routes that use your main Layout and require auth
+const authenticatedRootRoute  = createRoute({
+  getParentRoute: ()=>rootRoute,
+  component:Layout,
+  id: 'authenticated-root',
+    // IMPORTANT: Use beforeLoad here for primary authentication check
+  beforeLoad: async () => {
+        // Access the auth state directly from the store (not via hook, as beforeLoad is not a React component)
+    const is_loggedin = useAuthStore.getState().is_loggedin();
+    if(!is_loggedin){
+      // If not logged in, redirect to the login page immediately.
+      // This prevents the Layout or any child components from rendering.
+      throw redirect({to:'/login'})
+    }
+    
+    // If logged in, proceed to render the Layout and its children.
+    return {}; // Must return an object
+  }
+});
+// Public Root Route
+const publicRoute = createRoute({
+  getParentRoute:()=>rootRoute,
+  component: PublicLayout,
+   id: 'public-root',
+});
+
+const public_routes =   publicRoute.addChildren([
+    createRoute({
+      path:"/login",
+      getParentRoute:()=>publicRoute,
+      component:LoginPage
+    }),
+        // Add other public routes like /register, /forgot-password here
+  ]);
+
+   // Authenticated routes (children of authenticatedRootRoute)
+  // These routes will first go through authenticatedRootRoute's beforeLoad
+  const authenticated_routes = authenticatedRootRoute.addChildren([
+    createRoute({
+      path:"/",
+      getParentRoute:()=>authenticatedRootRoute,
+      component:HomePage
+    }),
+    createRoute({
+      path:"/skills",
+      getParentRoute:()=>authenticatedRootRoute,
+      component:SkillsPage
+    }),
+    createRoute({
+      path:"/add",
+      getParentRoute : () => authenticatedRootRoute,
+      component:AddSkillPage
+    }),
+    createRoute({
+      path:"/profile",
+      getParentRoute:()=>authenticatedRootRoute,
+      component:ProfilePage,
+    })
+  ]);
+
+const routeTree = rootRoute.addChildren([public_routes,authenticated_routes]);
 
 // ✅ Export the router instance
 export const router = createRouter({ routeTree });
@@ -61,3 +98,14 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+// // Ensure the router is rendered in your root application component
+// const rootElement = document.getElementById('app')!;
+// if (!rootElement.innerHTML) {
+//   const root = createRoot(rootElement);
+//   root.render(
+//     <StrictMode>
+//       <RouterProvider router={router} />
+//     </StrictMode>
+//   );
+// }
