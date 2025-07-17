@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from '@tanstack/react-router'
 import { useAuthStore } from '@/store/useAuthStore'
+import AppToaster from '../components/ui/AppToaster'
 
 export default function PublicLayout() {
   const is_loggedin = useAuthStore(s => s.is_loggedin())
@@ -10,6 +11,7 @@ export default function PublicLayout() {
        {/* Main Content */}
       <main className="flex-1 p-6 bg-gray-50">
         <Outlet />
+        <AppToaster/>
       </main>
     </div>
     

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { fetchWrapper } from "../utils/fetchWrapper";
+import { useAuthStore } from "./useAuthStore";
+import { toast } from "sonner";
 export type NewSkill = {
   name: string;
   level: string;
@@ -32,14 +34,51 @@ export const useSkillsStore = create<SkillState>((set) => ({
   },
 
   addSkill: async (skill) => {
-    await fetchWrapper(`${BASE_URL}/api/skills`,{
+    try{
+const token = useAuthStore.getState().token;
+   const response =  await fetch(`${BASE_URL}/api/skills`,{
     method: "POST",
     body: JSON.stringify(skill),
-    headers: { "Content-Type": "application/json" },
-    onStart:()=>set({loading:true,error:null}),
-    onSuccess:(newSkill)=>set((state)=>({skills:[...state.skills,newSkill]})),
-    onError:(error)=>set({error:error}),
-    onFinish:()=>set({loading:false})
-  })
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}` 
+    },
+    });
+    if(!response.ok){
+      const err_data = await response.json()
+      let err_message = "Something went wrong";
+
+if (typeof err_data.detail === "string") {
+  err_message = err_data.detail;
+} else if (Array.isArray(err_data.detail)) {
+  err_message = err_data.detail.map((e: any) => e.msg).join(", ");
+} else if (typeof err_data.detail === "object" && err_data.detail.message) {
+  err_message = err_data.detail.message;
+}
+      set({error:err_message});
+      console.error(err_message)
+      throw new Error(response.status === 409 ? "Skill Already Exits" :  err_message);
+    }
+    toast.success("Skill added Successfully");
+    return;
+    }catch(err:any){
+           set({error:err.message});
+           throw new Error(err.message)
+    } finally {
+      set({loading:false})
+    }
+    
+  //   await fetchWrapper(`${BASE_URL}/api/skills`,{
+  //   method: "POST",
+  //   body: JSON.stringify(skill),
+  //   headers: { "Content-Type": "application/json" },
+  //   onStart:()=>set({loading:true,error:null}),
+  //   onSuccess:(newSkill)=>set((state)=>({skills:[...state.skills,newSkill]})),
+  //   onError:(err)=>{
+  //     set({error:err})
+  //     throw new Error(err)
+  //   },
+  //   onFinish:()=>set({loading:false})
+  // })
   }
 }));

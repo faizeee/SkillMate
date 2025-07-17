@@ -1,6 +1,7 @@
 import {useState} from "react"
 import { useNavigate } from "@tanstack/react-router"
 import { useAuthStore } from "../store/useAuthStore"
+import { toast } from "sonner";
 
 export default function LoginPage () {
     const [username,setUsername] = useState("");
@@ -18,6 +19,7 @@ export default function LoginPage () {
         }
         catch(err:any) {
             console.error(err.message || "Login failed")
+             toast.error(err.message || "Login failed")
             setError(err.message || "Login failed");
         }
     };
