@@ -206,41 +206,46 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 🔥 **Reflection**: This was a real engineer's day. You cleaned architecture, handled DB relations like a pro, solved real-world bugs, and built solid auth. You're not just building apps now — you're building systems.
 # 📅 Day 8 – UX Polish, Auth Routing, Error Handling, Toast System
 
-Today we focused on:
-- Securing routes with `AuthLayout`
-- Enhancing the `AddSkill` form UX
-- Gracefully handling API errors
-- Setting up a global toast system with proper structure
+Today we focused on ([→ Full Details](logs/Day8.md)):
+- Protected routing with `beforeLoad` and TanStack Router
+- Public vs Auth layouts
+- SSR-safe localStorage access
+- Improved login flow (via `performLogin` in Zustand)
+- Fixed auth state sync issues (read from localStorage)
+- AddSkillPage UX polish (validation, loading, reset)
+- Global toast system with `sonner`
+- Graceful error handling + proper Authorization header
+
+# 📘 SkillMate – Day 9: Backend Testing Begins 🧪
+
+Today we introduced backend testing using **pytest** with an isolated in-memory SQLite database. Our main goal was to set up a clean testing structure and validate our first endpoint: `GET /api/skills`.
 
 ---
 
-## ✅ 1. Auth Protection via Layout (TanStack Router)
+## ✅ Accomplishments
 
-- Created `AuthLayout.tsx` to wrap all protected routes.
-- Created `PublicLayout.tsx` to wrap public routes like `/login` and `/register`.
-- Used `beforeLoad` to redirect:
-  - ✅ Guests → from protected routes to `/login`
-  - ✅ Authenticated users → from `/login` to `/`
-- Example:
+- ✅ Set up **pytest** for the FastAPI backend
+- ✅ Created a test-only in-memory SQLite DB
+- ✅ Built `tests/conftest.py` with test client and fixtures
+- ✅ Added a `seed_test_db()` to populate skill levels and skills
+- ✅ Wrote and passed our **first test** for `GET /api/skills`
+- ✅ Learned how to override dependencies using FastAPI’s `app.dependency_overrides`
 
-```tsx
-{
-  element: <AuthLayout />,
-  beforeLoad: () => {
-    if (!useAuthStore.getState().token) throw redirect({ to: "/login" });
-  },
-  children: [
-    {
-      path: "/",
-      element: <HomePage />,
-    },
-    {
-      path: "/add-skill",
-      element: <AddSkillPage />,
-    },
-  ],
-}
+---
 
+## 🏗️ New Files and Structure
+tests/
+├── conftest.py # Pytest fixtures: DB setup, dependency override
+├── test_skills.py # GET /api/skills test
+└── utils/
+└── seed.py # Seed function to insert test skills
+
+## 🔧 `tests/conftest.py`
+
+- Creates in-memory SQLite DB
+- Overrides production DB dependency
+- Seeds skills + levels
+- Drops schema after all tests complete
 
 ## 📅 Daily Goal
 

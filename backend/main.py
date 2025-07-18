@@ -3,11 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from data.db import init_db
+import logging
 
 app = FastAPI( title="SkillMate API",
     description="API for SkillMate application",
     version="0.1.0")
-
+logging.basicConfig(level=logging.DEBUG)
 # Event handler to initialize the database on application startup
 @app.on_event("startup")
 def on_startup():

@@ -42,5 +42,5 @@ def get_session() -> Generator[Session, None, None]:
         Purpose: You would call this function once when your application starts up for the first time, or during a setup script, to create all the necessary tables in your skillmate.db file.
 
  """
-def init_db()->None :
+def init_db() ->None :
     SQLModel.metadata.create_all(engine)
