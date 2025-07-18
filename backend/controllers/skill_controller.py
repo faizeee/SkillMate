@@ -34,8 +34,9 @@ def get_skills(db:Session) -> list[SkillRead] :
              ]
           return results
      except Exception as e:
-          raise HTTPException(status_code=500,detail="Something went Wrong")
-     
+        # import traceback
+        # traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))     
 
 def add_skills(skill:SkillIn, db:Session) -> SkillRead : #the -> symbol in a function definition is used for type hints, specifically to indicate the return type of the function
     # check_duplicate_skill_name(skill.name)
