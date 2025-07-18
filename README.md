@@ -216,6 +216,36 @@ Today we focused on ([→ Full Details](logs/Day8.md)):
 - Global toast system with `sonner`
 - Graceful error handling + proper Authorization header
 
+# 📘 SkillMate – Day 9: Backend Testing Begins 🧪
+
+Today we introduced backend testing using **pytest** with an isolated in-memory SQLite database. Our main goal was to set up a clean testing structure and validate our first endpoint: `GET /api/skills`.
+
+---
+
+## ✅ Accomplishments
+
+- ✅ Set up **pytest** for the FastAPI backend
+- ✅ Created a test-only in-memory SQLite DB
+- ✅ Built `tests/conftest.py` with test client and fixtures
+- ✅ Added a `seed_test_db()` to populate skill levels and skills
+- ✅ Wrote and passed our **first test** for `GET /api/skills`
+- ✅ Learned how to override dependencies using FastAPI’s `app.dependency_overrides`
+
+---
+
+## 🏗️ New Files and Structure
+tests/
+├── conftest.py # Pytest fixtures: DB setup, dependency override
+├── test_skills.py # GET /api/skills test
+└── utils/
+└── seed.py # Seed function to insert test skills
+
+## 🔧 `tests/conftest.py`
+
+- Creates in-memory SQLite DB
+- Overrides production DB dependency
+- Seeds skills + levels
+- Drops schema after all tests complete
 
 ## 📅 Daily Goal
 
