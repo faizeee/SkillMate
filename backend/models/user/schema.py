@@ -7,7 +7,7 @@ class UserBase(BaseModel):
     def no_spaces (cls,value:str):
         if " " in value:
             raise ValueError("Username must not contain spaces")
-        return value.lower()
+        return value.lower().strip()
 
 
 class UserCreate(UserBase):

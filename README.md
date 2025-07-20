@@ -247,6 +247,63 @@ tests/
 - Seeds skills + levels
 - Drops schema after all tests complete
 
+# 📘 Day 10 – Backend Testing Complete (Users + Skills API)
+
+---
+
+## ✅ What We Accomplished
+
+- 🔹 Finalized **sync-based API testing** using `pytest`
+- 🔹 Added tests for:
+  - 🔸 Skills (create, fetch, delete, validation, edge cases)
+  - 🔸 Users (register, login, error handling)
+- 🔹 Structured clean test files: `test_skills.py`, `test_users.py`
+- 🔹 Created reusable test utilities in `utils/helpers.py`
+- 🔹 Used `auth_headers` fixture to simplify skill tests
+
+---
+
+## 🧪 Skills API Tests (`tests/test_skills.py`)
+
+- ✅ `test_get_skills`
+- ✅ `test_create_skill`
+- ✅ `test_create_duplicate_skill`
+- ✅ `test_invalid_payload` (parametrized)
+- ✅ `test_get_skill_by_valid_id`
+- ✅ `test_get_skill_by_invalid_id`
+- ✅ `test_delete_skill_by_valid_id`
+- ✅ `test_skill_by_invalid_id`
+
+---
+
+## 🔐 User Auth Tests (`tests/test_users.py`)
+
+- ✅ `test_register_user`
+- ✅ `test_register_duplicate_user`
+- ✅ `test_register_invalid_payload` (parametrized)
+- ✅ `test_register_invalid_min_length_payload`
+- ✅ `test_login_user`
+- ✅ `test_login_invalid_password` (parametrized)
+- ✅ `test_login_invalid_payload` (parametrized)
+
+---
+
+## ⚙️ Testing Utilities
+
+- 🔸 File: `utils/helpers.py`
+- 🔸 Function: `register_and_login_test_user(client)`
+- 🔸 Returns valid `Authorization` headers for authenticated testing
+- 🔸 Used in all skill-related tests via `auth_headers` fixture
+
+---
+
+## ⚡ Performance: Run Tests Faster
+
+- 🔹 Install `pytest-xdist`:
+  ```bash
+  pip install pytest-xdist
+
+
 ## 📅 Daily Goal
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.

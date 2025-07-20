@@ -13,8 +13,8 @@ class SkillIn(BaseModel):
     @field_validator('name') # Decorator specifies which field to validate/transform
     @classmethod # Class method is required for field_validator
     def transform_input(cls,value:str) :
-        """Converts the skill name to lowercase and strips leading/trailing whitespace."""
-        return value.lower().strip()
+        """Converts the skill name  strips leading/trailing whitespace."""
+        return value.strip()
     
 class SkillRead(SkillIn):
     id:int
