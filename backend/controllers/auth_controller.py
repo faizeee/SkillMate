@@ -33,3 +33,4 @@ def login(user_input: UserCreate, db:Session) -> AuthResponse:
     token = create_access_token({"sub":user.username})
     return AuthResponse.from_token(token=token)
 
+

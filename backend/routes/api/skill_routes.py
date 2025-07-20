@@ -4,8 +4,10 @@ from data.db import get_session
 from models.skill import SkillRead,SkillIn
 from models.skill_level import SkillLevel
 from services.auth_service import get_current_user
-from controllers.skill_controller import get_skills, add_skills,get_skill_levels
+from controllers.skill_controller import get_skills, add_skills,get_skill_levels,get_skill_by_id,delete_skill_by_id
 from models.user import User
+from models.base.response_schemas import ResponseMessage
+
 
 router = APIRouter() #The tags parameter is used for grouping related API endpoints in the automatically generated interactive API documentation (Swagger UI / OpenAPI UI).
 
@@ -20,3 +22,11 @@ def create_skill(skill:SkillIn , user:User = Depends(get_current_user), db:Sessi
 @router.get("/levels",response_model=list[SkillLevel])
 def get_levels(db:Session = Depends(get_session)):
     return get_skill_levels(db)
+
+@router.get("/{skill_id}",response_model=SkillRead)
+def get_a_skill(skill_id:int, user:User=Depends(get_current_user),db:Session=Depends(get_session)):
+    return get_skill_by_id(skill_id,db)
+
+@router.delete("/{skill_id}",response_model=ResponseMessage)
+def delete_a_skill(skill_id:int,user:User=Depends(get_current_user),db:Session=Depends(get_session)):
+    return delete_skill_by_id(skill_id,db)
