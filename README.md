@@ -303,6 +303,27 @@ tests/
   ```bash
   pip install pytest-xdist
 
+  # ✅ Day 11 – Backend Coverage & Testing Deep Dive
+
+Today, we refined our backend test suite and inspected code coverage for key controller files.
+
+## 🔍 Focus Areas
+- Ran `pytest` with `coverage` to analyze test reach
+- Investigated why controller methods (`auth_controller.py`, `skill_controller.py`) showed low coverage
+- Identified that calling routes does **not automatically mark controller function bodies as covered**
+- Ensured `.coveragerc` and project structure excludes `env/`, `__pycache__/`, and `.egg-info/` from scanning
+
+## 📁 Observations
+- Unexpected folders:
+  - `env/` – virtualenv; ignore in version control
+  - `skillmate_backend.egg-info/` – safe, created by editable installs
+  - `build/` – safe, usually created by packaging tools
+
+
+## 🧠 Learning Notes
+- Test coverage tools only mark code “covered” if the actual function body executes
+- Routes calling controller functions don't imply those inner blocks were run unless mocked/tested directly
+
 
 ## 📅 Daily Goal
 
