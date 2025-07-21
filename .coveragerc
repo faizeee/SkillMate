@@ -1,0 +1,8 @@
+[run]
+source = backend/src
+omit =
+    */tests/*
+    */__init__.py
+
+[report]
+show_missing = true

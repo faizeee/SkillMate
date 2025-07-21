@@ -40,7 +40,7 @@ def test_login_user(client):
     username = "testuser1"
     payload = {"username":username,"password":"12345678"}
     
-    # client.post("/api/register/",json=payload)
+    client.post("/api/register/",json=payload)
     response = client.post("/api/login/",json=payload)
     assert response.status_code == 200
     assert response.json()['token_type'] == "bearer"

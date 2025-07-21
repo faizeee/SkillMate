@@ -1,0 +1,89 @@
+# SkillMate/pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skillmate-backend"
+version = "0.1.0"
+description = "SkillMate Backend Application"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Muhammad Faizan Shakir", email = "mr.shakir117@live.com" }
+]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# --- IMPORTANT: Your Runtime Dependencies ---
+dependencies = [
+     # Core Framework & Server
+    "fastapi~=0.110.0",         # Pin to a compatible range
+    "uvicorn[standard]~=0.29.0", # Pin to a compatible range
+
+    # Database & ORM
+    "sqlalchemy~=2.0.0",        # For SQLAlchemy core
+    "sqlmodel~=0.0.24",         # If you're using SQLModel as your ORM
+    "psycopg2-binary",          # For PostgreSQL
+    "aiosqlite~=0.21.0",        # For async SQLite
+
+    # Authentication & Security
+    "python-jose[cryptography]~=3.5.0",
+    "passlib[bcrypt]~=1.7.0",    # This will typically bring in 'bcrypt' and other hashing algorithms
+    "python-dotenv~=1.1.0",      # For environment variables
+
+    # Other common direct dependencies you might use
+    # "requests", # If your backend makes HTTP requests to other services
+    # "celery",   # If using a task queue
+    # "redis",    # If using Redis
+    # ...
+    # Add any other packages your application needs to *run*
+]
+
+[tool.setuptools]
+package-dir = {"" = "backend/src"}
+
+[tool.setuptools.packages.find]
+where = ["backend/src"]
+
+# --- IMPORTANT: Your Development Dependencies ---
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest==8.4.1",
+    "pytest-cov==6.2.1",
+    "pytest-asyncio==1.1.0",
+    "pytest-mock==3.14.1",
+    "pytest-xdist==3.8.0",
+
+    # Code Quality & Tools
+    "black==24.4.2", # Use latest stable versions
+    "ruff==0.6.0",   # Use latest stable versions
+    "mypy==1.10.1",
+    "ipython",
+    "watchdog==6.0.0", # If used for dev server reloading/watching (often implicitly pulled by uvicorn --reload)
+    "watchfiles==1.1.0", # Often pulled by uvicorn --reload, but can list if you use it directly
+
+    # Add any other packages you need for development/testing but not for deployment
+]
+
+# --- Optional: Tool Configurations ---
+[tool.pytest.ini_options]
+pythonpath = ["backend/src"] # Helps pytest find your 'src' package when running from root
+addopts = "--strict-markers --cov=backend.src --cov-report=term-missing"
+testpaths = ["backend/tests"]
+
+#[tool.black]
+#line-length = 88
+#target-version = ["py39"]
+
+#[tool.ruff]
+#line-length = 88
+#select = ["E", "F", "W", "I", "UP", "B", "C4"] # Expanded common rules
+#ignore = ["E501"]
+#target-version = "py39"
