@@ -2,13 +2,14 @@ import { create } from "zustand";
 import { fetchWrapper } from "../utils/fetchWrapper";
 import { useAuthStore } from "./useAuthStore";
 import { toast } from "sonner";
+
+
 export type NewSkill = {
   name: string;
-  level: string;
+  skill_level_id:number;
 };
-
 // Skill type definition
-export type Skill = {id: number} & NewSkill //Composition type or we can directly add name and level attr in Skill  
+export type Skill = {id: number,  level: string} & NewSkill //Composition type or we can directly add name and level attr in Skill  
 
 type SkillState = {
   skills: Skill[];

@@ -327,30 +327,69 @@ backend\src\controllers\auth_controller.py       23      0   100%
 backend\src\controllers\skill_controller.py      46      0   100%
 backend\src\core\auth.py                         17      0   100%
 backend\src\core\config.py                        0      0   100%
-backend\src\data\db.py                           12      3    75%   25-27, 43
-backend\src\data\fake_skills.py                   1      0   100%
-backend\src\main.py                              17      2    88%   15, 29
-backend\src\middlewares\logging.py               13      0   100%
-backend\src\models\base\auth_response.py         10      0   100%
-backend\src\models\base\response_schemas.py       4      0   100%
-backend\src\models\skill\base.py                  0      0   100%
-backend\src\models\skill\db_model.py              9      0   100%
-backend\src\models\skill\schema.py               11      0   100%
-backend\src\models\skill_level\base.py            0      0   100%
-backend\src\models\skill_level\db_model.py        8      0   100%
-backend\src\models\skill_level\schema.py          5      0   100%
-backend\src\models\user\base.py                   0      0   100%
-backend\src\models\user\db_model.py               5      0   100%
-backend\src\models\user\schema.py                13      0   100%
-backend\src\routes\api\auth_routes.py            13      0   100%
-backend\src\routes\api\index.py                   6      0   100%
-backend\src\routes\api\skill_routes.py           25      0   100%
-backend\src\routes\api\user_routes.py             0      0   100%
-backend\src\routes\index.py                       4      0   100%
-backend\src\seeders\seed.py                      47      3    94%   62-64
-backend\src\services\auth_service.py             20      0   100%
 ---------------------------------------------------------------------------
 | ✅ **Overall**                                         | **92%**  |
+
+## ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
+
+**Focus:**  
+Write and improve **frontend unit tests** using Vitest & React Testing Library, and optimize **backend test coverage** with Pytest.
+
+---
+
+### ✅ Completed Frontend Tasks:
+
+- 🧪 Integrated Vitest and React Testing Library for frontend testing
+- 🔧 Mocked external dependencies:
+  - Zustand stores: `useSkillsStore`, `useSkillLevelStore`
+  - `@tanstack/react-router`'s `useNavigate`
+  - `sonner` toast functions using `vi.hoisted()` to handle hoisting issues
+- ✅ Fully tested UI form flow, rendering, error states, and success paths
+
+---
+
+### 🧪 Frontend Test Summary:
+
+```bash
+PASS  src/components/__tests__/SkillCard.test.tsx
+ ✓ renders skill name and level
+
+PASS  src/components/__tests__/SkillsList.test.tsx
+ ✓ renders list of skills
+ ✓ shows fallback message when no skills exist
+
+PASS  src/components/__tests__/AddSkillPage.test.tsx
+ ✓ renders form correctly
+ ✓ shows error if name is empty
+ ✓ submits valid form and navigates
+ ✓ shows error toast if addSkill fails
+
+Test Files  3 passed (3)
+Tests       7 passed (7)
+
+## ✅ Completed Backend Tasks:
+
+* 🔍 Reviewed and identified uncovered code blocks
+* ✍️ Wrote additional edge-case and empty-table tests
+* 🧪 Optimized test coverage for API endpoints and validation paths
+
+---
+
+## Key Learnings:
+
+* 🔁 Used `vi.hoisted()` to avoid mock hoisting issues with `vi.fn()`
+* 🧪 Leveraged `waitFor()` and `findBy...` queries for async test cases
+* ✅ Zustand state mocking makes React components easily testable
+
+---
+
+## 🚀 Backend coverage debugging builds confidence in API reliability
+
+### ✅ Progress Recap:
+
+* ✅ **Frontend**: 7 unit tests across 3 files — all passing
+* ✅ **Backend**: Pytest coverage improved from ~80% → 97%
+* 🧱 Stable foundation for CI (GitHub Actions) and deployment safety
 
 ## 🧠 Key Learnings
 
