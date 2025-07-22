@@ -22,13 +22,10 @@ def get_session() -> Generator[Session, None, None]:
     Dependency to provide a database session.
     It ensures the session is properly closed after the request.
     """
-    print("\n--- DEBUG: get_session() called: Opening DB session ---")
     with Session(engine) as session:
-        print(f"--- DEBUG: Session object created in get_session: {type(session)}, ID: {id(session)} ---")
-        try:
-            yield session
-        finally:
-            print("--- DEBUG: get_session() finished: Closing DB session ---")
+        # print(f"--- DEBUG: Session object created in get_session: {type(session)}, ID: {id(session)} ---")
+        yield session
+
 
 
 """     Explanation: This defines a function to initialize your database schema.

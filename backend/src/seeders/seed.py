@@ -1,5 +1,7 @@
 import os
 import sys
+
+from sqlalchemy import Engine
 # Adjust path to include the 'backend' directory (your project root) in sys.path
 # This allows importing from 'data.db' and 'data.models' correctly.
 script_dir = os.path.dirname(os.path.abspath(__file__)) # This will be D:\ReactLearning\SkillMate\backend\seeders
@@ -11,7 +13,7 @@ from models.skill import Skill
 from models.skill_level import SkillLevel
 from sqlmodel import Session, select
 
-def seed_initial_data():
+def seed_initial_data(engine:Engine):
     """
     Seeds initial SkillLevels and Skills data into the database.
     This function checks if data already exists to prevent re-seeding.
@@ -57,6 +59,6 @@ def seed_initial_data():
         print("Initial data seeded successfully!")
 
 if __name__ == "__main__":
-    from data.db import init_db
+    from data.db import init_db,engine
     init_db() # Ensure tables exist
-    seed_initial_data()
+    seed_initial_data(engine)

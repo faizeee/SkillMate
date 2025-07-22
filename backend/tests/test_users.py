@@ -57,11 +57,11 @@ def test_login_invalid_password(client,payload):
 
 @pytest.mark.parametrize("payload",[
     {},
+    {"username":"test user1","password":"123456789"}, #username with spaces
     {"username":"testuser1"},
-    {"password":"12345678"}
+    {"password":"12345678"},
 ])
 def test_login_invalid_payload(client,payload):
     response = client.post("/api/login/",json=payload)
     assert response.status_code == 422
 
-    

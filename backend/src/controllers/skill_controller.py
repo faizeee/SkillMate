@@ -16,27 +16,22 @@ def get_skill_levels(db:Session) ->list[SkillLevel] :
 
 
 def get_skills(db:Session) -> list[SkillRead] :
-     try:
-          # Use select to build your query
-          query = select(Skill).options(selectinload(Skill.level))
-          # execute the statement and fetch all results    
-          skills = db.exec(query).all()
-          if not skills :
-            print('No Skills found')
-            return []
-          results = [
-              {
-                  "id" : skill.id,
-                  "name": skill.name,
-                  "skill_level_id":skill.skill_level_id,
-                  "level":skill.level.name if skill.level else "N/A"
-             } 
-             for skill in skills
-             ]
-          return results
-     except Exception as e:
-        # import traceback
-        # traceback.print_exc()
+    try:
+        # Use select to build your query
+        query = select(Skill).options(selectinload(Skill.level))
+        # execute the statement and fetch all results    
+        skills = db.exec(query).all()
+        results = [
+            {
+                "id" : skill.id,
+                "name": skill.name,
+                "skill_level_id":skill.skill_level_id,
+                "level":skill.level.name if skill.level else "N/A"
+            } 
+            for skill in skills
+            ]
+        return results
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))     
 
 def add_skills(skill:SkillIn, db:Session) -> SkillRead : #the -> symbol in a function definition is used for type hints, specifically to indicate the return type of the function

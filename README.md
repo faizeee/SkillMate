@@ -319,10 +319,44 @@ Today, we refined our backend test suite and inspected code coverage for key con
   - `skillmate_backend.egg-info/` – safe, created by editable installs
   - `build/` – safe, usually created by packaging tools
 
+### 📈 Code Coverage Highlights
 
-## 🧠 Learning Notes
-- Test coverage tools only mark code “covered” if the actual function body executes
-- Routes calling controller functions don't imply those inner blocks were run unless mocked/tested directly
+Name                                          Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------
+backend\src\controllers\auth_controller.py       23      0   100%
+backend\src\controllers\skill_controller.py      46      0   100%
+backend\src\core\auth.py                         17      0   100%
+backend\src\core\config.py                        0      0   100%
+backend\src\data\db.py                           12      3    75%   25-27, 43
+backend\src\data\fake_skills.py                   1      0   100%
+backend\src\main.py                              17      2    88%   15, 29
+backend\src\middlewares\logging.py               13      0   100%
+backend\src\models\base\auth_response.py         10      0   100%
+backend\src\models\base\response_schemas.py       4      0   100%
+backend\src\models\skill\base.py                  0      0   100%
+backend\src\models\skill\db_model.py              9      0   100%
+backend\src\models\skill\schema.py               11      0   100%
+backend\src\models\skill_level\base.py            0      0   100%
+backend\src\models\skill_level\db_model.py        8      0   100%
+backend\src\models\skill_level\schema.py          5      0   100%
+backend\src\models\user\base.py                   0      0   100%
+backend\src\models\user\db_model.py               5      0   100%
+backend\src\models\user\schema.py                13      0   100%
+backend\src\routes\api\auth_routes.py            13      0   100%
+backend\src\routes\api\index.py                   6      0   100%
+backend\src\routes\api\skill_routes.py           25      0   100%
+backend\src\routes\api\user_routes.py             0      0   100%
+backend\src\routes\index.py                       4      0   100%
+backend\src\seeders\seed.py                      47      3    94%   62-64
+backend\src\services\auth_service.py             20      0   100%
+---------------------------------------------------------------------------
+| ✅ **Overall**                                         | **92%**  |
+
+## 🧠 Key Learnings
+
+- Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
+- **Fixture conflicts** and test data duplication can silently break expectations.
+- The `coverage report` is your best friend for spotting the real gaps.
 
 
 ## 📅 Daily Goal

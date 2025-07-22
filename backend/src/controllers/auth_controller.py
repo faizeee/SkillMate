@@ -31,6 +31,6 @@ def login(user_input: UserCreate, db:Session) -> AuthResponse:
         raise HTTPException(status_code=400, detail= "Invalid Username or Password")
     
     token = create_access_token({"sub":user.username})
-    return AuthResponse.from_token(token=token)
+    return AuthResponse.from_token(token=token,user={"id":user.id, "username":user.username})
 
 
