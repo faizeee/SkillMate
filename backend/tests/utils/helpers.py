@@ -1,11 +1,11 @@
 import select
 from typing import Optional
 from fastapi.testclient import TestClient
-from models.skill import SkillIn,Skill
+from models.skill import Skill
 from sqlmodel import Session
 
 
-def  register_and_login_test_user(client:TestClient) -> str :
+def  register_and_login_test_user(client:TestClient) -> dict :
     """
     Registers a new test user and returns a valid JWT access token.
     """
@@ -17,8 +17,8 @@ def  register_and_login_test_user(client:TestClient) -> str :
     response = client.post("/api/login/",json=payload)
     # print(f"Login Helper response text -> {response.status_code} : {response.text} : {response.json()}")
     assert response.status_code == 200
-    token = response.json()["access_token"]
-    return token
+    # token = response.json()["access_token"]
+    return response.json()
 
 def create_test_skill(client: TestClient,auth_header: dict, skill_data:Optional[dict] = None) -> dict:
     """

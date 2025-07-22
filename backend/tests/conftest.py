@@ -30,6 +30,20 @@ def prepare_test_db():
     yield
     SQLModel.metadata.drop_all(test_db_engine)
 
+@pytest.fixture(scope="function") # Use 'function' scope for isolated tests
+def drop_tables():
+    """
+    Pytest fixture to ensure a clean database state for each test.
+    Drops all tables before a test, and creates them afterwards.
+    """ 
+    # Teardown (occurs before the test runs, effectively cleaning previous state)
+    SQLModel.metadata.drop_all(test_db_engine)
+    print("\n--- All tables dropped ---") # Added for visibility during tests
+    # Yield control to the test function
+    yield
+    SQLModel.metadata.create_all(test_db_engine)
+
+
 # Provide test client to test_files
 @pytest.fixture
 def client():
@@ -37,6 +51,9 @@ def client():
     Pytest fixture to provide a FastAPI TestClient instance.
     """
     return TestClient(app)
+@pytest.fixture
+def test_engine():
+    return test_db_engine
 
 # Provide test client to test_files
 # @pytest.fixture(autouse=True)
@@ -55,8 +72,13 @@ def client():
 #     yield
 
 
+# Provide logged in user to test_files
+@pytest.fixture
+def current_user(client):
+    return register_and_login_test_user(client)
+
 # Provide auth_header to test_files
 @pytest.fixture
-def auth_header(client):
-    token = register_and_login_test_user(client)
+def auth_header(current_user):
+    token = current_user['access_token']
     return {"Authorization":f"Bearer {token}"}

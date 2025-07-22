@@ -319,10 +319,83 @@ Today, we refined our backend test suite and inspected code coverage for key con
   - `skillmate_backend.egg-info/` – safe, created by editable installs
   - `build/` – safe, usually created by packaging tools
 
+### 📈 Code Coverage Highlights
 
-## 🧠 Learning Notes
-- Test coverage tools only mark code “covered” if the actual function body executes
-- Routes calling controller functions don't imply those inner blocks were run unless mocked/tested directly
+Name                                          Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------
+backend\src\controllers\auth_controller.py       23      0   100%
+backend\src\controllers\skill_controller.py      46      0   100%
+backend\src\core\auth.py                         17      0   100%
+backend\src\core\config.py                        0      0   100%
+---------------------------------------------------------------------------
+| ✅ **Overall**                                         | **92%**  |
+
+## ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
+
+**Focus:**  
+Write and improve **frontend unit tests** using Vitest & React Testing Library, and optimize **backend test coverage** with Pytest.
+
+---
+
+### ✅ Completed Frontend Tasks:
+
+- 🧪 Integrated Vitest and React Testing Library for frontend testing
+- 🔧 Mocked external dependencies:
+  - Zustand stores: `useSkillsStore`, `useSkillLevelStore`
+  - `@tanstack/react-router`'s `useNavigate`
+  - `sonner` toast functions using `vi.hoisted()` to handle hoisting issues
+- ✅ Fully tested UI form flow, rendering, error states, and success paths
+
+---
+
+### 🧪 Frontend Test Summary:
+
+```bash
+PASS  src/components/__tests__/SkillCard.test.tsx
+ ✓ renders skill name and level
+
+PASS  src/components/__tests__/SkillsList.test.tsx
+ ✓ renders list of skills
+ ✓ shows fallback message when no skills exist
+
+PASS  src/components/__tests__/AddSkillPage.test.tsx
+ ✓ renders form correctly
+ ✓ shows error if name is empty
+ ✓ submits valid form and navigates
+ ✓ shows error toast if addSkill fails
+
+Test Files  3 passed (3)
+Tests       7 passed (7)
+
+## ✅ Completed Backend Tasks:
+
+* 🔍 Reviewed and identified uncovered code blocks
+* ✍️ Wrote additional edge-case and empty-table tests
+* 🧪 Optimized test coverage for API endpoints and validation paths
+
+---
+
+## Key Learnings:
+
+* 🔁 Used `vi.hoisted()` to avoid mock hoisting issues with `vi.fn()`
+* 🧪 Leveraged `waitFor()` and `findBy...` queries for async test cases
+* ✅ Zustand state mocking makes React components easily testable
+
+---
+
+## 🚀 Backend coverage debugging builds confidence in API reliability
+
+### ✅ Progress Recap:
+
+* ✅ **Frontend**: 7 unit tests across 3 files — all passing
+* ✅ **Backend**: Pytest coverage improved from ~80% → 97%
+* 🧱 Stable foundation for CI (GitHub Actions) and deployment safety
+
+## 🧠 Key Learnings
+
+- Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
+- **Fixture conflicts** and test data duplication can silently break expectations.
+- The `coverage report` is your best friend for spotting the real gaps.
 
 
 ## 📅 Daily Goal
