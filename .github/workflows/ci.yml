@@ -53,7 +53,7 @@ jobs:
       - name: Clean install dependencies
         working-directory: client
         run: |
-            rm -rf node_modules package-lock.json
+            rm -rf node_modules
             npm ci
 
       - name: Run Vitest
