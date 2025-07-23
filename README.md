@@ -1,5 +1,7 @@
 # SkillMate – Learn & Teach Platform
 
+![CI](https://github.com/faizeee/skillmate/actions/workflows/ci.yml/badge.svg)
+
 SkillMate is a full-stack platform where users can **offer** or **learn** real-world skills — from cooking and coding to photography and design. This project demonstrates a complete production-grade stack with modern frontend and backend technologies.
 
 ## 🔧 Tech Stack
@@ -30,6 +32,7 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 - **Backend**: FastAPI (Python)
 - **Dev Tools**: ESLint, Prettier, VS Code, GitHub
 
+![CI](https://github.com/faizeee/skillmate/actions/workflows/ci.yml/badge.svg)
 ---
 
 ## 🚀 Progress Log

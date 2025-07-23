@@ -20,34 +20,16 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        # No 'working-directory' here, as requirements.txt is at the root if in backend then add "working-directory: backend"
+        # requirements.txt is at the root, so no `working-directory` needed here.
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # If your backend/src relies on itself as an installable package
-          # or for editable installs for pytest to work correctly, you might need:
-          # pip install -e ./backend/src # Or pip install -e ./backend if tests are outside src
-          # However, pytest usually handles this if run from the root or with correct paths
 
       - name: Run pytest with coverage
-        # It's often best to run pytest from the root when tests are in a sub-directory
-        # so that imports like `from backend.src.module import ...` work correctly.
+        # No working-directory needed here either, as we want to run
+        # the command from the root to make 'backend/src' relative to it.
         run: |
-          # Ensure python path includes your src directory if needed for imports
-          # This might not be strictly necessary if pytest is run from root
-          # and your project structure allows for automatic discovery.
-          # For example, if your tests in backend/test import modules from backend/src
-          # as `from src.module import ...`, then running from `backend` directory might be better.
-          # Given your structure: `backend/src` and `backend/test`, running from `backend` directory
-          # and having `src` as a package might be the most common setup.
-
-          # Let's try running pytest from the 'backend' directory.
-          # This assumes your tests in backend/test can correctly import from backend/src
-          # (e.g., `from src.your_module import ...`)
-          cd backend
-          pytest --cov=src # Point coverage to your actual source directory
-          # or if you want coverage for the whole backend folder:
-          # pytest --cov=.
+          pytest --cov=backend/src
 
   frontend:
     name: ⚛️ Frontend Tests
@@ -67,4 +49,4 @@ jobs:
 
       - name: Run Vitest
         working-directory: client
-        run: npm run test:unit
+        run: npm test
