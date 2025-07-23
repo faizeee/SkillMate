@@ -20,7 +20,7 @@ export const useSkillLevelStore = create<SkillLevelState>((set)=>({
     levels:[],
     loading:false,
     fetchSkillLevels: async ()=>{
-        await fetchWrapper(`${BASE_URL}/api/skills/levels`,{
+        await fetchWrapper(`${BASE_URL}/skills/levels`,{
             onStart:()=>set({loading:true}),
             onSuccess:(data)=>set({levels:data}),
             onError:(err)=>toast(err),

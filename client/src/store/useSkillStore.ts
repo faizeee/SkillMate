@@ -37,7 +37,7 @@ export const useSkillsStore = create<SkillState>((set) => ({
   addSkill: async (skill) => {
     try{
 const token = useAuthStore.getState().token;
-   const response =  await fetch(`${BASE_URL}/api/skills`,{
+   const response =  await fetch(`${BASE_URL}/skills`,{
     method: "POST",
     body: JSON.stringify(skill),
     headers: { 
