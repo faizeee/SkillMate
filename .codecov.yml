@@ -6,5 +6,19 @@ coverage:
   status:
     project:
       default:
-        target: auto
-        threshold: 1%
+        target: auto     # Track overall coverage; adjust manually if needed
+
+flags:
+  backend:
+    paths:
+      - backend/src/**
+    carryforward: true
+  frontend:
+    paths:
+      - client/src/**
+    carryforward: true
+
+comment:
+  layout: "diff, flags"
+  behavior: default
+  require_changes: true
