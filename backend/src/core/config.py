@@ -17,21 +17,39 @@
 # USING pydantic : pydantic  settings is the better way to manage the env
 #-----------------------------------------------------------------------
 
-from pydantic import BaseSettings,Field
-
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 class Settings(BaseSettings):
     app_title:str = "SkillMate API"
     app_description:str = "API for SkillMate application"
     app_version:str = "0.1.0"
 
-    db_url:str
-    secret_key:str
+    # --- THE CRITICAL CHANGE FOR REQUIRED FIELDS ---
+    # For required fields, Pydantic-settings expects the environment variable
+    # to match the snake_case field name converted to UPPER_CASE by default.
+    # So, 'db_url' expects 'DB_URL', and 'secret_key' expects 'SECRET_KEY'.
+    # DO NOT use env="..." for these if you want to rely on the default mapping
+    # and they are truly required with no default value.
+    # These are required and will look for DATABASE_URL and SECRET_KEY env vars
+    database_url: str
+    secret_key: str
+
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = Field(60, env="TOKEN_EXPIRES_IN") #to manually map the Env Variable with settings variable
+    access_token_expire_minutes: int = Field(30, env="TOKEN_EXPIRES_IN") #to manually map the Env Variable with settings variable
     
-    # 👇 This is an *inner class* (also called a "Config class")
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file="backend/.env",extra="ignore")
+
 
 config = Settings()
-        
+
+# try:
+#     print("\n--- Settings Loaded Successfully! ---")
+#     print(f"App Title: {config.app_title}")
+#     print(f"DB URL: {config.database_url}")
+#     print(f"Secret Key: {config.secret_key}")
+#     print(f"Access Token Expire Minutes: {config.access_token_expire_minutes}")
+
+# except Exception as e:
+#     print(f"\n--- ERROR DURING SETTINGS LOAD ---")
+#     print(f"Error type: {type(e).__name__}")
+#     print(f"Error message: {e}")

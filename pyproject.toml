@@ -36,7 +36,7 @@ dependencies = [
     "python-jose[cryptography]~=3.5.0",
     "passlib[bcrypt]~=1.7.0",    # This will typically bring in 'bcrypt' and other hashing algorithms
     "python-dotenv~=1.1.0",      # For environment variables
-
+    "pydantic-settings~=2.10.1"  # For environment variables
     # Other common direct dependencies you might use
     # "requests", # If your backend makes HTTP requests to other services
     # "celery",   # If using a task queue
