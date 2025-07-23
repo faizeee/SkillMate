@@ -2,13 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
+from core.config import config
 from data.db import init_db
 import logging
 
-app = FastAPI( title="SkillMate API",
-    description="API for SkillMate application",
-    version="0.1.0")
+app = FastAPI(title=config.app_title,description=config.app_description,version=config.app_version)
 logging.basicConfig(level=logging.DEBUG)
+
 # Event handler to initialize the database on application startup
 @app.on_event("startup")
 def on_startup():

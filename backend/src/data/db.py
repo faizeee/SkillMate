@@ -1,9 +1,8 @@
-from .fake_skills import fake_skills
 from sqlmodel import Session, SQLModel, create_engine
 from typing import Generator
+from core.config import config
 
-DATABASE_URL  = "sqlite:///backend/skillmate.db"
-engine  = create_engine(DATABASE_URL,echo=True)
+engine  = create_engine(config.db_url,echo=True)
 
 """ Explanation: This defines a Python generator function.
 
