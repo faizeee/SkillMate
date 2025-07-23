@@ -8,9 +8,11 @@ __pycache__/
 env/
 *.pyc
 *.db
+.coverage
 
 # Vite
 .vite/
+coverage/
 
 *.egg-info/
 build/

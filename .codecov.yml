@@ -1,0 +1,25 @@
+codecov:
+  token: e12e59f3-5199-4b55-9e8e-c85ba52d4a3b
+  bot: "codecov"
+  notify:
+    after_n_builds: 1
+coverage:
+  status:
+    project:
+      default:
+        target: auto     # Track overall coverage; adjust manually if needed
+
+flags:
+  backend:
+    paths:
+      - backend/src/**
+    carryforward: true
+  frontend:
+    paths:
+      - client/src/**
+    carryforward: true
+
+comment:
+  layout: "diff, flags"
+  behavior: default
+  require_changes: true
