@@ -26,6 +26,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run pytest with coverage
+        env:
+         DATABASE_URL: ${{ secrets.DATABASE_URL }} # Use GitHub Secrets
+         SECRET_KEY: ${{ secrets.SECRET_KEY }}     # Use GitHub Secrets
         # No working-directory needed here either, as we want to run
         # the command from the root to make 'backend/src' relative to it.
         run: |
