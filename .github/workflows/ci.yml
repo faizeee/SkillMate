@@ -27,7 +27,7 @@ jobs:
         
       - name: Set up backend test environment
         run: |
-         echo "database_url=sqlite:///./test.db" >> backend/.env
+         echo "database_url=sqlite:///:memory:" >> backend/.env
          echo "secret_key=test_secret" >> backend/.env
     #   - name: Copy test env file
     #     run: cp backend/.env.test backend/.env
