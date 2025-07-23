@@ -3,7 +3,8 @@
 # SkillMate – Learn & Teach Platform
 
 ![CI](https://github.com/faizeee/skillmate/actions/workflows/ci.yml/badge.svg)
-![Backend Coverage](https://codecov.io/gh/faizeee/SkillMate/branch/main/graph/badge.svg?flag=backend)](https://codecov.io/gh/faizeee/SkillMate)
+[![Backend Coverage](https://codecov.io/gh/faizeee/SkillMate/branch/main/graph/badge.svg?flag=backend)]](https://codecov.io/gh/faizeee/SkillMate)
+
 [![Frontend Coverage](https://codecov.io/gh/faizeee/SkillMate/branch/main/graph/badge.svg?flag=frontend)](https://codecov.io/gh/faizeee/SkillMate)
 
 SkillMate is a full-stack platform where users can **offer** or **learn** real-world skills — from cooking and coding to photography and design. This project demonstrates a complete production-grade stack with modern frontend and backend technologies.
@@ -416,7 +417,7 @@ Tests       7 passed (7)
   - Auto-uploads coverage reports from GitHub Actions
   - PR comment support added (Codecov bot enabled)
   - Currently shows:
-    - Backend: 97% coverage (`pytest --cov`)
+    - Backend: 98% coverage (`pytest --cov`)
     - Frontend: ✅ 100% patch coverage (Vitest)
 
 ---
