@@ -398,6 +398,44 @@ Tests       7 passed (7)
 * ✅ **Backend**: Pytest coverage improved from ~80% → 97%
 * 🧱 Stable foundation for CI (GitHub Actions) and deployment safety
 
+## ✅ Day 13 Progress – CI/CD & Environment Configuration
+
+### 🔧 What We Did:
+- ♻️ **Refactored `.env` management** for both backend and frontend
+  - Separated environment variables cleanly
+  - Used `vite`-prefixed variables for client
+  - Used `python-dotenv` and `.env.example` for backend
+- ⚙️ **Set up GitHub Actions CI pipelines**
+  - ✅ Backend: `pytest` with 97%+ coverage
+  - ✅ Frontend: `Vitest` with coverage reporting
+  - Configured caching for faster CI builds
+- 📦 Fixed CI errors by:
+  - Ignoring `node_modules` and `package-lock.json` in workflows
+  - Running `npm install` instead of `npm ci`
+- 📈 Integrated **Codecov**
+  - Auto-uploads coverage reports from GitHub Actions
+  - PR comment support added (Codecov bot enabled)
+  - Currently shows:
+    - Backend: 97% coverage (`pytest --cov`)
+    - Frontend: ✅ 100% patch coverage (Vitest)
+
+---
+
+### 📁 New or Updated Files
+- `.env`, `.env.example`, `.env.test`, `.env.production`
+- `.github/workflows/backend.yml`
+- `.github/workflows/frontend.yml`
+- `client/vite.config.ts`
+- `backend/conftest.py`, `test.env`
+- `README.md` (add Codecov badges next)
+
+---
+
+### 🧪 Coverage Status
+- ✅ Backend: 97%+ total coverage
+- ✅ Frontend: 100% patch coverage
+
+
 ## 🧠 Key Learnings
 
 - Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
