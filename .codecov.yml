@@ -1,4 +1,5 @@
 codecov:
+  token: e12e59f3-5199-4b55-9e8e-c85ba52d4a3b
   bot: "codecov"
   notify:
     after_n_builds: 1
