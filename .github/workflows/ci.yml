@@ -29,7 +29,14 @@ jobs:
         # No working-directory needed here either, as we want to run
         # the command from the root to make 'backend/src' relative to it.
         run: |
-          pytest --cov=backend/src
+          pytest --cov=backend/src --cov-report=xml --cov-report=term-missing
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+         files: ./coverage.xml
+         flags: backend
+         name: backend-tests
 
   frontend:
     name: ⚛️ Frontend Tests

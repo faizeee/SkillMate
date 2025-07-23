@@ -12,6 +12,7 @@ env/
 
 # Vite
 .vite/
+coverage/
 
 *.egg-info/
 build/
