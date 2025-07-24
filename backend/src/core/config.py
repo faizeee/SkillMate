@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     # DO NOT use env="..." for these if you want to rely on the default mapping
     # and they are truly required with no default value.
     # These are required and will look for DATABASE_URL and SECRET_KEY env vars
-    database_url: str
+    database_url: str = "sqlite:///backend/skillmate.db"
     secret_key: str
 
     algorithm: str = "HS256"
