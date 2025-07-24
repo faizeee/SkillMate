@@ -435,6 +435,46 @@ Tests       7 passed (7)
 - ✅ Backend: 97%+ total coverage
 - ✅ Frontend: 100% patch coverage
 
+# ✅ Day 14 - SkillMate Backend - Docker &  PostgreSQL Setup 
+
+> 💥 After 9 intense hours and 4+ hrs debugging volume issues — we finally have a working Dockerized FastAPI backend using **PostgreSQL** instead of SQLite! This README documents the working state as of **July 24**.
+
+---
+
+## ✅ Achievements
+
+- [x] ✅ Dockerized FastAPI app with `uvicorn`
+- [x] ✅ Switched from SQLite → PostgreSQL
+- [x] ✅ Dockerized PostgreSQL container with volume persistence
+- [x] ✅ Seed DB script runs only once at container startup
+- [x] ✅ `.env` configuration respected inside Docker
+- [x] ✅ Verified API routes accessible at `http://localhost:8000`
+- [x] ✅ Removed faulty volume mount (`.backend:/app/backend`)
+- [x] ✅ Full image rebuild after cache purge (`1.6GB` reclaimed)
+
+---
+
+## 🐘 Database: PostgreSQL via Docker
+
+### 📦 PostgreSQL Service (docker-compose.yml)
+
+```yaml
+services:
+  db:
+    image: postgres:15
+    container_name: skillmate-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: skillmate_user
+      POSTGRES_PASSWORD: supersecret
+      POSTGRES_DB: skillmate_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 
 ## 🧠 Key Learnings
 
