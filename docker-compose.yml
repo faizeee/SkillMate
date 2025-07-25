@@ -16,8 +16,8 @@ services:
         dockerfile: Dockerfile
       container_name: skillmate-backend
       #command: sh -c "PYTHONPATH=./backend/src uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
-      # volumes:
-      #   - .backend:/app/backend
+      volumes:
+        - ./backend/src:/app/backend/src
       env_file:
         - backend/.env.docker
       ports:

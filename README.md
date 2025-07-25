@@ -213,7 +213,7 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 🔥 **Reflection**: This was a real engineer's day. You cleaned architecture, handled DB relations like a pro, solved real-world bugs, and built solid auth. You're not just building apps now — you're building systems.
 # 📅 Day 8 – UX Polish, Auth Routing, Error Handling, Toast System
 
-Today we focused on ([→ Full Details](logs/Day8.md)):
+Today we focused on ([→ Full Details](logs/day-8.md)):
 - Protected routing with `beforeLoad` and TanStack Router
 - Public vs Auth layouts
 - SSR-safe localStorage access
@@ -441,8 +441,7 @@ Tests       7 passed (7)
 
 ---
 
-## ✅ Achievements
-
+## ✅ Achievements [→ Full Details](logs/day-14.md): 
 - [x] ✅ Dockerized FastAPI app with `uvicorn`
 - [x] ✅ Switched from SQLite → PostgreSQL
 - [x] ✅ Dockerized PostgreSQL container with volume persistence
