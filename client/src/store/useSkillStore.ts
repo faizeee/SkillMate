@@ -26,7 +26,7 @@ export const useSkillsStore = create<SkillState>((set) => ({
   loading: false,
   error: null,
   fetchSkills: async () => {
-    await fetchWrapper(`${BASE_URL}/api/skills`, {
+    await fetchWrapper(`${BASE_URL}/skills`, {
       onStart: () => set({ loading: true, error: null }),
       onSuccess: (data) => set({ skills: data }),
       onError: (err) => set({ error: err }),
@@ -69,7 +69,7 @@ if (typeof err_data.detail === "string") {
       set({loading:false})
     }
     
-  //   await fetchWrapper(`${BASE_URL}/api/skills`,{
+  //   await fetchWrapper(`${BASE_URL}/skills`,{
   //   method: "POST",
   //   body: JSON.stringify(skill),
   //   headers: { "Content-Type": "application/json" },
