@@ -1,6 +1,6 @@
 import {render,screen} from  "@testing-library/react";
-import SkillsList from "@/components/SkillsList";
 import type { Skill } from "../../store/useSkillStore";
+import SkillsList from "../SkillsList";
 
 describe("SkillsList",()=>{
     it("render skills list mutlti component",()=>{
