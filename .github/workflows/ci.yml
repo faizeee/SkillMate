@@ -10,6 +10,20 @@ jobs:
   backend:
     name: 🐍 Backend Tests
     runs-on: ubuntu-latest
+  service:
+      postgre:
+          image: postgres:15
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: test_db
+      ports:
+        - 5432:5432
+      options: >-
+        --health-cmd="pg_isready"
+        --health-interval=10s
+        --health-timeout=5s
+        --health-retries=5
 
     steps:
       - uses: actions/checkout@v3
@@ -19,6 +33,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         # requirements.txt is at the root, so no `working-directory` needed here.
         run: |
@@ -27,15 +49,10 @@ jobs:
         
       - name: Set up backend test environment
         run: |
-         echo "database_url=sqlite:///:memory:" >> backend/.env
+         echo "database_url=postgresql://postgres:postgres@localhost:5432/test_db" >> backend/.env
          echo "secret_key=test_secret" >> backend/.env
-    #   - name: Copy test env file
-    #     run: cp backend/.env.test backend/.env
-      
+               
       - name: Run pytest with coverage
-        # env:
-        #  DATABASE_URL: ${{ secrets.DATABASE_URL }} # Use GitHub Secrets
-        #  SECRET_KEY: ${{ secrets.SECRET_KEY }}     # Use GitHub Secrets
         # No working-directory needed here either, as we want to run
         # the command from the root to make 'backend/src' relative to it.
         run: |
@@ -60,6 +77,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+     
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Clean install dependencies
         working-directory: client
