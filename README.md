@@ -213,7 +213,7 @@ SkillMate is a full-stack platform to help users manage, showcase, and track the
 🔥 **Reflection**: This was a real engineer's day. You cleaned architecture, handled DB relations like a pro, solved real-world bugs, and built solid auth. You're not just building apps now — you're building systems.
 # 📅 Day 8 – UX Polish, Auth Routing, Error Handling, Toast System
 
-Today we focused on ([→ Full Details](logs/Day8.md)):
+Today we focused on ([→ Full Details](logs/day-8.md)):
 - Protected routing with `beforeLoad` and TanStack Router
 - Public vs Auth layouts
 - SSR-safe localStorage access
@@ -441,8 +441,7 @@ Tests       7 passed (7)
 
 ---
 
-## ✅ Achievements
-
+## ✅ Achievements [→ Full Details](logs/day-14.md): 
 - [x] ✅ Dockerized FastAPI app with `uvicorn`
 - [x] ✅ Switched from SQLite → PostgreSQL
 - [x] ✅ Dockerized PostgreSQL container with volume persistence
@@ -475,6 +474,40 @@ services:
 
 volumes:
   pgdata:
+
+# ✅ Day 15 Progress – SkillMate 🧠🚀 [→ Full Details](logs/day-15.md)
+
+## 🔹 🐳 Docker Integration (Frontend + Backend)
+
+- ✅ Created a `client/Dockerfile` using **Nginx** to serve Vite build output.
+- ✅ Updated `docker-compose.yml`:
+  - Connected frontend and backend containers via service names.
+  - Mapped ports:
+    - Frontend: `3000:80`
+    - Backend: `8000:8000`
+- ✅ Frontend running at: [http://localhost:3000](http://localhost:3000)
+- ✅ Backend API docs at: [http://localhost:8000/docs](http://localhost:8000/docs)
+- ✅ Verified JWT Auth flow is functional with PostgreSQL.
+
+---
+
+## 🛠️ 🔧 Docker Line Ending Fix (Windows Shell Script Issue)
+
+We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`)** in shell scripts.
+
+### 🔸 Problem:
+- Docker container failed with:  
+  `exec ./start.sh: no such file or directory`  
+  despite `start.sh` being present.
+
+### 🔸 Root Cause:
+- File had Windows-style CRLF endings, making `chmod +x` ineffective inside Linux container.
+
+### ✅ Solution:
+- Replaced `dos2unix` (which wasn't available) with:
+  ```dockerfile
+  RUN sed -i 's/\r$//' ./start.sh
+
 
 ## 🧠 Key Learnings
 

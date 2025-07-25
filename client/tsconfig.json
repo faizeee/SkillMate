@@ -7,8 +7,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["client/src/*"]
-    }
+      "@/*": ["src/*"]
+    },
+    "types": ["vitest/globals", "vite/client"]
   },
-   "include": ["client", "server", "types"]
+  // "include": ["client", "server", "types"]
 }

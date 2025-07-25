@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 export type NewSkill = {
   name: string;
-  skill_level_id:number;
+  skill_level_id:string;
 };
 // Skill type definition
 export type Skill = {id: number,  level: string} & NewSkill //Composition type or we can directly add name and level attr in Skill  
@@ -26,7 +26,7 @@ export const useSkillsStore = create<SkillState>((set) => ({
   loading: false,
   error: null,
   fetchSkills: async () => {
-    await fetchWrapper(`${BASE_URL}/api/skills`, {
+    await fetchWrapper(`${BASE_URL}/skills`, {
       onStart: () => set({ loading: true, error: null }),
       onSuccess: (data) => set({ skills: data }),
       onError: (err) => set({ error: err }),
@@ -69,7 +69,7 @@ if (typeof err_data.detail === "string") {
       set({loading:false})
     }
     
-  //   await fetchWrapper(`${BASE_URL}/api/skills`,{
+  //   await fetchWrapper(`${BASE_URL}/skills`,{
   //   method: "POST",
   //   body: JSON.stringify(skill),
   //   headers: { "Content-Type": "application/json" },

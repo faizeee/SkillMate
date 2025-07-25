@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from '@tanstack/react-router'
-import { useAuthStore } from '@/store/useAuthStore'
 import AppToaster from '../components/ui/AppToaster'
+import { useAuthStore } from '../store/useAuthStore'
 
 export default function PublicLayout() {
   const is_loggedin = useAuthStore(s => s.is_loggedin())

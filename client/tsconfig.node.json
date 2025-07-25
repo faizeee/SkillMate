@@ -12,6 +12,12 @@
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
+    
+    /* Path Aliases */
+    "baseUrl": ".", // This needs to be set
+    "paths": {
+      "@/*": ["./src/*"] // This maps '@/anything' to './src/anything'
+    },
 
     /* Linting */
     "strict": true,

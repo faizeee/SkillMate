@@ -11,13 +11,14 @@ services:
       ports:
             - "5432:5432" 
     backend:
+
       build: 
         context: .
         dockerfile: Dockerfile
       container_name: skillmate-backend
       #command: sh -c "PYTHONPATH=./backend/src uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
-      # volumes:
-      #   - .backend:/app/backend
+      volumes:
+        - ./backend/src:/app/backend/src
       env_file:
         - backend/.env.docker
       ports:
@@ -28,5 +29,14 @@ services:
       # environment: 
       #   DATABASE_URL: postgresql+psycopg2://skillmate:supersecret@db:5432/skillmate_db
       restart: unless-stopped
+    frontend:
+      build:
+        context: .
+        dockerfile: client/Dockerfile
+      container_name: skillmate-frontend
+      ports:
+        - "3000:80"
+      depends_on:
+        - backend
 volumes:
   postgres_data:  
