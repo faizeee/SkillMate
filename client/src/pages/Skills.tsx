@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSkillsStore } from "@/store/useSkillStore";
-import SkillsList from "@/components/skillsList";
+import SkillsList from "@/components/SkillsList";
 import { Link } from "@tanstack/react-router";
 
 export default function SkillsPage() {

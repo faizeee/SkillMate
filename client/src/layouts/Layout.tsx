@@ -1,4 +1,4 @@
-import { Outlet, Link} from "@tanstack/react-router";
+import { Outlet } from "@tanstack/react-router";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import AppToaster from "../components/ui/AppToaster";

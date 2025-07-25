@@ -4,9 +4,8 @@ import {
   createRouter,
   Outlet,
   redirect,
-  RouterProvider,
 } from "@tanstack/react-router";
-import { lazy, StrictMode } from "react";
+import { lazy } from "react";
 import { useAuthStore } from '@/store/useAuthStore';
 
 import Layout from "@/layouts/Layout";

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 export type NewSkill = {
   name: string;
-  skill_level_id:number;
+  skill_level_id:string;
 };
 // Skill type definition
 export type Skill = {id: number,  level: string} & NewSkill //Composition type or we can directly add name and level attr in Skill  
