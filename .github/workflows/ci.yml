@@ -3,9 +3,16 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore: 
+      - 'README.md'
+      - '.gitignore'
+      - 'LICENCE'
   pull_request:
     branches: [main]
-
+    paths-ignore: 
+      - 'README.md'
+      - '.gitignore'
+      - 'LICENCE'
 jobs:
   backend:
     name: 🐍 Backend Tests

@@ -240,13 +240,6 @@ Today we introduced backend testing using **pytest** with an isolated in-memory 
 
 ---
 
-## 🏗️ New Files and Structure
-tests/
-├── conftest.py # Pytest fixtures: DB setup, dependency override
-├── test_skills.py # GET /api/skills test
-└── utils/
-└── seed.py # Seed function to insert test skills
-
 ## 🔧 `tests/conftest.py`
 
 - Creates in-memory SQLite DB
@@ -310,7 +303,7 @@ tests/
   ```bash
   pip install pytest-xdist
 
-  # ✅ Day 11 – Backend Coverage & Testing Deep Dive
+# ✅ Day 11 – Backend Coverage & Testing Deep Dive
 
 Today, we refined our backend test suite and inspected code coverage for key controller files.
 
@@ -328,16 +321,9 @@ Today, we refined our backend test suite and inspected code coverage for key con
 
 ### 📈 Code Coverage Highlights
 
-Name                                          Stmts   Miss  Cover   Missing
----------------------------------------------------------------------------
-backend\src\controllers\auth_controller.py       23      0   100%
-backend\src\controllers\skill_controller.py      46      0   100%
-backend\src\core\auth.py                         17      0   100%
-backend\src\core\config.py                        0      0   100%
----------------------------------------------------------------------------
 | ✅ **Overall**                                         | **92%**  |
 
-## ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
+# ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
 
 **Focus:**  
 Write and improve **frontend unit tests** using Vitest & React Testing Library, and optimize **backend test coverage** with Pytest.
@@ -398,7 +384,14 @@ Tests       7 passed (7)
 * ✅ **Backend**: Pytest coverage improved from ~80% → 97%
 * 🧱 Stable foundation for CI (GitHub Actions) and deployment safety
 
-## ✅ Day 13 Progress – CI/CD & Environment Configuration
+## 🧠 Key Learnings
+
+- Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
+- **Fixture conflicts** and test data duplication can silently break expectations.
+- The `coverage report` is your best friend for spotting the real gaps.
+
+
+# ✅ Day 13 Progress – CI/CD & Environment Configuration
 
 ### 🔧 What We Did:
 - ♻️ **Refactored `.env` management** for both backend and frontend
@@ -507,13 +500,6 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
 - Replaced `dos2unix` (which wasn't available) with:
   ```dockerfile
   RUN sed -i 's/\r$//' ./start.sh
-
-
-## 🧠 Key Learnings
-
-- Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
-- **Fixture conflicts** and test data duplication can silently break expectations.
-- The `coverage report` is your best friend for spotting the real gaps.
 
 
 ## 📅 Daily Goal
