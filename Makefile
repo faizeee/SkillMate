@@ -1,4 +1,4 @@
-# SkillMate backend project Makefile 
+# SkillMate backend project Makefile
 # Usage: make run, make test, make install, etc.
 
 # App entry point (adjusted to actual project structure)

@@ -14,6 +14,6 @@ export default function PublicLayout() {
         <AppToaster/>
       </main>
     </div>
-    
+
   )
 }

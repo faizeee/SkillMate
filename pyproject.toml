@@ -78,6 +78,23 @@ pythonpath = ["backend/src"] # Helps pytest find your 'src' package when running
 addopts = "--strict-markers --cov=backend.src --cov-report=term-missing"
 testpaths = ["backend/tests"]
 
+# [tool.flake8]
+# per-file-ignores = ["__init__.py:D104"]
+# max-line-length = 88
+# extend-ignore = ["E203", "W503"]
+# exclude = [
+#     ".git",
+#     "__pycache__",
+#     "env",
+#     "venv",
+#     "migrations",
+#     "tests"
+# ]
+
+# [tool.pydocstyle]
+# convention = "google"
+# add-ignore = ["D100", "D104"]
+
 #[tool.black]
 #line-length = 88
 #target-version = ["py39"]

@@ -1,5 +1,9 @@
 from pydantic import BaseModel
+
+
 class SkillLevelRead(BaseModel):
-    id:int
-    name:str
-    description:str
+    """This class describes the structure of skill level."""
+
+    id: int
+    name: str
+    description: str

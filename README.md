@@ -325,7 +325,7 @@ Today, we refined our backend test suite and inspected code coverage for key con
 
 # ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
 
-**Focus:**  
+**Focus:**
 Write and improve **frontend unit tests** using Vitest & React Testing Library, and optimize **backend test coverage** with Pytest.
 
 ---
@@ -428,13 +428,13 @@ Tests       7 passed (7)
 - ✅ Backend: 97%+ total coverage
 - ✅ Frontend: 100% patch coverage
 
-# ✅ Day 14 - SkillMate Backend - Docker &  PostgreSQL Setup 
+# ✅ Day 14 - SkillMate Backend - Docker &  PostgreSQL Setup
 
 > 💥 After 9 intense hours and 4+ hrs debugging volume issues — we finally have a working Dockerized FastAPI backend using **PostgreSQL** instead of SQLite! This README documents the working state as of **July 24**.
 
 ---
 
-## ✅ Achievements [→ Full Details](logs/day-14.md): 
+## ✅ Achievements [→ Full Details](logs/day-14.md):
 - [x] ✅ Dockerized FastAPI app with `uvicorn`
 - [x] ✅ Switched from SQLite → PostgreSQL
 - [x] ✅ Dockerized PostgreSQL container with volume persistence
@@ -489,8 +489,8 @@ volumes:
 We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`)** in shell scripts.
 
 ### 🔸 Problem:
-- Docker container failed with:  
-  `exec ./start.sh: no such file or directory`  
+- Docker container failed with:
+  `exec ./start.sh: no such file or directory`
   despite `start.sh` being present.
 
 ### 🔸 Root Cause:
@@ -503,5 +503,15 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
 
 
 ## 📅 Daily Goal
+Day 16 Goals
 
+    🔹 Build Docker Images in CI (optional but production-like)
+
+    🔹 Add Codecov + CI Status Badges
+
+    🔹 Setup .env.test, .env.prod, .env.dev with fallbacks
+
+    🔹 Optimize docker-compose health checks & wait strategies
+
+    🔹 Add Git hooks and lint/format steps (optional polish)
 We’re building one job-ready feature or setup milestone per day. Stay tuned.

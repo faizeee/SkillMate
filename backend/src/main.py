@@ -4,14 +4,23 @@ from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
 from data.db import init_db
+
 # import logging
 
-app = FastAPI(title=config.app_title,description=config.app_description,version=config.app_version)
+app = FastAPI(
+    title=config.app_title,
+    description=config.app_description,
+    version=config.app_version,
+)
+
+
 # logging.basicConfig(level=logging.DEBUG)
 # Event handler to initialize the database on application startup
 @app.on_event("startup")
 def on_startup():
-      init_db()
+    """Handel application startup."""
+    init_db()
+
 
 # Allow CORS
 app.add_middleware(
@@ -23,11 +32,16 @@ app.add_middleware(
 
 app.add_middleware(LoggingMiddleware)
 
+
 @app.get("/")
 def root():
+    """Handel fall back route."""
     return {"message": "SkillMate Backend is running!"}
 
-app.include_router(router) #The tags parameter is used for grouping related API endpoints in the automatically generated interactive API documentation (Swagger UI / OpenAPI UI).
+
+app.include_router(
+    router
+)  # The tags parameter is used for grouping related API endpoints in the automatically generated interactive API documentation (Swagger UI / OpenAPI UI).
 # # (Optional but good for local development)
 # # This block allows you to run the app directly from this file
 # # by executing `python main.py`
