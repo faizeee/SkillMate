@@ -23,6 +23,11 @@ def override_get_session():
 # Apply the override globally
 app.dependency_overrides[get_session] = override_get_session
 
+# @pytest.fixture(scope="session", autouse=True)
+# async def init_redis_cache():
+#     """Setup redis."""
+#     await init_redis()
+
 
 # Create schema and seed DB before running tests
 @pytest.fixture(scope="session", autouse=True)

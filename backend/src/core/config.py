@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     # These are required and will look for DATABASE_URL and SECRET_KEY env vars
     database_url: str = "sqlite:///backend/skillmate.db"
     secret_key: str
+    redis_url: str = "redis://redis:6379"
 
     algorithm: str = "HS256"
     access_token_expire_minutes: int = Field(

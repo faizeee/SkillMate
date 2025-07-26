@@ -4,6 +4,7 @@ from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
 from data.db import init_db
+from core.redis import init_redis
 
 # import logging
 
@@ -17,8 +18,9 @@ app = FastAPI(
 # logging.basicConfig(level=logging.DEBUG)
 # Event handler to initialize the database on application startup
 @app.on_event("startup")
-def on_startup():
+async def on_startup():
     """Handel application startup."""
+    await init_redis()
     init_db()
 
 
