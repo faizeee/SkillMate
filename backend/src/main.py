@@ -6,7 +6,6 @@ from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
 from data.db import init_db
-from core.redis import init_redis
 
 # import logging
 
@@ -15,7 +14,6 @@ from core.redis import init_redis
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Handel application startup."""
-    init_redis()
     init_db()
     yield
 

@@ -13,7 +13,6 @@ from controllers.skill_controller import (
 )
 from models.user import User
 from models.base.response_schemas import ResponseMessage
-from fastapi_cache.decorator import cache
 
 
 router = (
@@ -38,10 +37,6 @@ def create_skill(
 
 
 @router.get("/levels", response_model=list[SkillLevel])
-@cache(
-    expire=60 * 60 * 24,
-    key_builder=lambda f, *args, **kwargs: "skillmate-cache:skill-levels",
-)
 def get_levels(db: Session = Depends(get_session)):
     """Get all skill levels.
 
