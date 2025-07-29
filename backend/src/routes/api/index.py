@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from .skill_routes import router as skill_router
 from .auth_routes import router as auth_router
-#from .user_routes import  user_router  # For future
+
+# from .user_routes import  user_router  # For future
 
 api_router = APIRouter()
 # Grouped routers

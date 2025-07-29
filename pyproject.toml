@@ -36,13 +36,10 @@ dependencies = [
     "python-jose[cryptography]~=3.5.0",
     "passlib[bcrypt]~=1.7.0",    # This will typically bring in 'bcrypt' and other hashing algorithms
     "python-dotenv~=1.1.0",      # For environment variables
-    "pydantic-settings~=2.10.1"  # For environment variables
-    # Other common direct dependencies you might use
-    # "requests", # If your backend makes HTTP requests to other services
-    # "celery",   # If using a task queue
-    # "redis",    # If using Redis
-    # ...
-    # Add any other packages your application needs to *run*
+    "pydantic-settings~=2.10.1",
+    "pre-commit~=4.2.0",
+    # "redis~=6.2.0",
+    # "fastapi-cache2~=0.2.2"
 ]
 
 [tool.setuptools]
@@ -51,6 +48,8 @@ package-dir = {"" = "backend/src"}
 [tool.setuptools.packages.find]
 where = ["backend/src"]
 
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
 # --- IMPORTANT: Your Development Dependencies ---
 [project.optional-dependencies]
 dev = [
@@ -77,6 +76,23 @@ dev = [
 pythonpath = ["backend/src"] # Helps pytest find your 'src' package when running from root
 addopts = "--strict-markers --cov=backend.src --cov-report=term-missing"
 testpaths = ["backend/tests"]
+
+# [tool.flake8]
+# per-file-ignores = ["__init__.py:D104"]
+# max-line-length = 88
+# extend-ignore = ["E203", "W503"]
+# exclude = [
+#     ".git",
+#     "__pycache__",
+#     "env",
+#     "venv",
+#     "migrations",
+#     "tests"
+# ]
+
+# [tool.pydocstyle]
+# convention = "google"
+# add-ignore = ["D100", "D104"]
 
 #[tool.black]
 #line-length = 88

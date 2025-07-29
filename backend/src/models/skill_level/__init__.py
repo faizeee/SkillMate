@@ -3,4 +3,4 @@ from .db_model import SkillLevel
 
 SkillLevel.update_forward_refs()
 
-__all__ = ['SkillLevelRead','SkillLevel']
+__all__ = ["SkillLevelRead", "SkillLevel"]

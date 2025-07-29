@@ -2,18 +2,20 @@ from typing import Self
 from pydantic import BaseModel
 from models.user import UserRead
 
+
 class AuthResponse(BaseModel):
+    """Default response model of authentication requests."""
+
     access_token: str
     token_type: str = "bearer"
-    user:UserRead
+    user: UserRead
 
     @classmethod
-    def from_token(cls, token:str,user:UserRead) -> Self:
-        """
-        Creates a TokenResponse instance from a given access token.
-        """
-        return cls(access_token=token,user=user)
-    
+    def from_token(cls, token: str, user: UserRead) -> Self:
+        """Create a TokenResponse instance from a given access token."""
+        return cls(access_token=token, user=user)
+
+
 # Explanation:
 # cls: The first argument of a classmethod, `cls`, is implicitly the class itself.
 #      You don't typically need to hint `cls` explicitly with `Type[SomeClass]`

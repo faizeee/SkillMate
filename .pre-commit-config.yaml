@@ -1,0 +1,70 @@
+# This configuration file defines the pre-commit hooks for this project.
+# Pre-commit hooks are scripts that Git automatically executes before a commit
+# is finalized. They help automate checks to ensure code quality, maintain
+# consistent formatting, and catch common errors early in the development workflow.
+#
+# The 'repos' key lists the source repositories from which the hooks are pulled.
+#
+# --- Repository 1: pre-commit/pre-commit-hooks ---
+# URL: https://github.com/pre-commit/pre-commit-hooks
+# This repository provides a collection of general-purpose, language-agnostic hooks.
+# 'rev: v4.5.0' pins the exact version of this hook collection to use, ensuring
+# consistent behavior across all developer environments.
+#
+# Enabled hooks from this repository:
+# - id: trailing-whitespace: Automatically removes any whitespace characters at the end of lines.
+# - id: end-of-file-fixer: Ensures that all files end with a single newline character.
+# - id: check-yaml: Validates the syntax of YAML files (e.g., .yaml, .yml).
+# - id: check-json: Validates the syntax of JSON files.
+#
+# --- Repository 2: psf/black ---
+# URL: https://github.com/psf/black
+# This repository contains Black, an uncompromising Python code formatter.
+# 'rev: 24.4.2' pins the exact version of the Black formatter.
+#
+# Enabled hooks from this repository:
+# - id: black: This hook automatically reformats Python code according to Black's
+#   rules. If Black modifies a file, the commit will temporarily fail, requiring
+#   you to 'git add' the changes Black made and then commit again.
+#   - language_version: python3.11: Specifies the Python version to use when setting
+#     up the isolated virtual environment for Black. This ensures compatibility
+#     with your project's Python version.
+#
+# --- Repository 3: pycqa/flake8 ---
+# URL: https://github.com/pycqa/flake8
+# This repository contains Flake8, a popular Python linter. It combines
+# PyFlakes (checks for programming errors), pycodestyle (checks PEP 8 style violations),
+# and McCabe (checks cyclomatic complexity).
+# 'rev: 7.0.0' pins the exact version of Flake8.
+#
+# Enabled hooks from this repository:
+# - id: flake8: This hook analyzes your Python code for stylistic issues, potential bugs,
+#   and questionable constructs. If Flake8 finds any issues, the commit will be blocked
+#   until they are resolved.
+#   - additional_dependencies: [flake8-docstrings]: This parameter allows you to specify
+#     extra Python packages that the hook needs. In this case, 'flake8-docstrings' is a
+#     Flake8 plugin that adds checks for docstring presence and style.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^requirements\.txt$
+      - id: end-of-file-fixer
+        exclude: ^requirements\.txt$
+      - id: check-yaml
+      - id: check-json
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        default_language_version: system
+        #language_version: python3.11
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-docstrings]

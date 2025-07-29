@@ -32,13 +32,13 @@ export default function LoginPage () {
         <input
         type="text"
         value={username}
-        onChange={e => setUsername(e.target.value)}     
+        onChange={e => setUsername(e.target.value)}
         className="w-full p-2 text-white bg-black border border-gray-700 rounded"
           placeholder="Username"/>
         <input
         type="password"
         value={password}
-        onChange={e => setPassword(e.target.value)}     
+        onChange={e => setPassword(e.target.value)}
         className="w-full p-2 text-white bg-black border border-gray-700 rounded"
           placeholder="Password"/>
 

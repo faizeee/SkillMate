@@ -2,7 +2,7 @@ from sqlmodel import Session, SQLModel, create_engine
 from typing import Generator
 from core.config import config
 
-engine  = create_engine(config.database_url,echo=True)
+engine = create_engine(config.database_url, echo=True)
 
 """ Explanation: This defines a Python generator function.
 
@@ -16,15 +16,15 @@ yield session: This is the core of a generator function. Instead of returning a 
 
 Purpose: This function is designed to be used as a dependency in web frameworks (like FastAPI) or other parts of your application where you need a database session. It provides a clean and safe way to get a session, use it, and ensure it's closed, preventing resource leaks. """
 
+
 def get_session() -> Generator[Session, None, None]:
-    """
-    Dependency to provide a database session.
+    """Dependency to provide a database session.
+
     It ensures the session is properly closed after the request.
     """
     with Session(engine) as session:
         # print(f"--- DEBUG: Session object created in get_session: {type(session)}, ID: {id(session)} ---")
         yield session
-
 
 
 """     Explanation: This defines a function to initialize your database schema.
@@ -38,5 +38,8 @@ def get_session() -> Generator[Session, None, None]:
         Purpose: You would call this function once when your application starts up for the first time, or during a setup script, to create all the necessary tables in your skillmate.db file.
 
  """
-def init_db() ->None :
+
+
+def init_db() -> None:
+    """Create all the tables in db."""
     SQLModel.metadata.create_all(engine)

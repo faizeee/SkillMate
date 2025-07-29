@@ -6,20 +6,17 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
-    
-    /* Path Aliases */
-    "baseUrl": ".", // This needs to be set
+
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"] // This maps '@/anything' to './src/anything'
+      "@/*": ["./src/*"]
     },
 
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

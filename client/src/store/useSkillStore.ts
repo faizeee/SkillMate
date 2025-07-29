@@ -9,7 +9,7 @@ export type NewSkill = {
   skill_level_id:string;
 };
 // Skill type definition
-export type Skill = {id: number,  level: string} & NewSkill //Composition type or we can directly add name and level attr in Skill  
+export type Skill = {id: number,  level: string} & NewSkill //Composition type or we can directly add name and level attr in Skill
 
 type SkillState = {
   skills: Skill[];
@@ -17,7 +17,7 @@ type SkillState = {
   error: string | null;
   fetchSkills: () => Promise<void>;
   addSkill:(skill:NewSkill) => Promise<void>;
-  
+
 };
 const BASE_URL = import.meta.env.VITE_API_URL
 // Zustand store for global state
@@ -40,9 +40,9 @@ const token = useAuthStore.getState().token;
    const response =  await fetch(`${BASE_URL}/skills`,{
     method: "POST",
     body: JSON.stringify(skill),
-    headers: { 
+    headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}` 
+      "Authorization": `Bearer ${token}`
     },
     });
     if(!response.ok){
@@ -68,7 +68,7 @@ if (typeof err_data.detail === "string") {
     } finally {
       set({loading:false})
     }
-    
+
   //   await fetchWrapper(`${BASE_URL}/skills`,{
   //   method: "POST",
   //   body: JSON.stringify(skill),

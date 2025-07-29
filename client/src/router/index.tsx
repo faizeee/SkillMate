@@ -40,7 +40,7 @@ const authenticatedRootRoute  = createRoute({
       // This prevents the Layout or any child components from rendering.
       throw redirect({to:'/login'})
     }
-    
+
     // If logged in, proceed to render the Layout and its children.
     return {}; // Must return an object
   }

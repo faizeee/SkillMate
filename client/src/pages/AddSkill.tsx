@@ -5,10 +5,10 @@ import { toast } from "sonner";
 import { useSkillLevelStore } from "../store/useSkillLevelStore";
 
 export default function AddSkillPage () {
-    const {levels:skillLevels,fetchSkillLevels} = useSkillLevelStore() 
+    const {levels:skillLevels,fetchSkillLevels} = useSkillLevelStore()
     const [name,setName] = useState("")
     const [skill_level_id,setSkillLevelId] = useState("")
-    const {addSkill,loading} = useSkillsStore() 
+    const {addSkill,loading} = useSkillsStore()
     const navigate = useNavigate()
     useEffect(()=>{fetchSkillLevels()},[])
     const handleSubmit = async (e: React.FormEvent) => {
@@ -31,13 +31,13 @@ export default function AddSkillPage () {
         <div className="p-6 space-y-4">
             <h1 className="text-2xl font-bold text-gray-500">➕ Add a New Skill</h1>
             <form onSubmit={handleSubmit} className="max-w-md space-y-4">
-                <input type="text" placeholder="Skill Name" 
+                <input type="text" placeholder="Skill Name"
                 className="w-full px-4 py-2 text-white bg-gray-800 rounded"
                 value={name}
                 onChange={(e)=>setName(e.target.value)}
                 />
-                
-                <select value={skill_level_id} 
+
+                <select value={skill_level_id}
                 onChange={(e)=>setSkillLevelId(e.target.value)}
                 className="w-full px-4 py-2 text-white bg-gray-800 rounded">
                     <option value="">Select Skill Level</option>

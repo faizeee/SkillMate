@@ -19,8 +19,8 @@
 We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`)** in shell scripts.
 
 ### 🔸 Problem:
-- Docker container failed with:  
-  `exec ./start.sh: no such file or directory`  
+- Docker container failed with:
+  `exec ./start.sh: no such file or directory`
   despite `start.sh` being present.
 
 ### 🔸 Root Cause:

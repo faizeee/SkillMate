@@ -28,4 +28,3 @@ export const useSkillLevelStore = create<SkillLevelState>((set)=>({
         })
     }
 }));
-

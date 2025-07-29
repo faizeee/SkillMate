@@ -240,13 +240,6 @@ Today we introduced backend testing using **pytest** with an isolated in-memory 
 
 ---
 
-## 🏗️ New Files and Structure
-tests/
-├── conftest.py # Pytest fixtures: DB setup, dependency override
-├── test_skills.py # GET /api/skills test
-└── utils/
-└── seed.py # Seed function to insert test skills
-
 ## 🔧 `tests/conftest.py`
 
 - Creates in-memory SQLite DB
@@ -310,7 +303,7 @@ tests/
   ```bash
   pip install pytest-xdist
 
-  # ✅ Day 11 – Backend Coverage & Testing Deep Dive
+# ✅ Day 11 – Backend Coverage & Testing Deep Dive
 
 Today, we refined our backend test suite and inspected code coverage for key controller files.
 
@@ -328,18 +321,11 @@ Today, we refined our backend test suite and inspected code coverage for key con
 
 ### 📈 Code Coverage Highlights
 
-Name                                          Stmts   Miss  Cover   Missing
----------------------------------------------------------------------------
-backend\src\controllers\auth_controller.py       23      0   100%
-backend\src\controllers\skill_controller.py      46      0   100%
-backend\src\core\auth.py                         17      0   100%
-backend\src\core\config.py                        0      0   100%
----------------------------------------------------------------------------
 | ✅ **Overall**                                         | **92%**  |
 
-## ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
+# ✅ Day 12 — Fullstack Testing Progress (Pytest + Vitest)
 
-**Focus:**  
+**Focus:**
 Write and improve **frontend unit tests** using Vitest & React Testing Library, and optimize **backend test coverage** with Pytest.
 
 ---
@@ -398,7 +384,14 @@ Tests       7 passed (7)
 * ✅ **Backend**: Pytest coverage improved from ~80% → 97%
 * 🧱 Stable foundation for CI (GitHub Actions) and deployment safety
 
-## ✅ Day 13 Progress – CI/CD & Environment Configuration
+## 🧠 Key Learnings
+
+- Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
+- **Fixture conflicts** and test data duplication can silently break expectations.
+- The `coverage report` is your best friend for spotting the real gaps.
+
+
+# ✅ Day 13 Progress – CI/CD & Environment Configuration
 
 ### 🔧 What We Did:
 - ♻️ **Refactored `.env` management** for both backend and frontend
@@ -435,13 +428,13 @@ Tests       7 passed (7)
 - ✅ Backend: 97%+ total coverage
 - ✅ Frontend: 100% patch coverage
 
-# ✅ Day 14 - SkillMate Backend - Docker &  PostgreSQL Setup 
+# ✅ Day 14 - SkillMate Backend - Docker &  PostgreSQL Setup
 
 > 💥 After 9 intense hours and 4+ hrs debugging volume issues — we finally have a working Dockerized FastAPI backend using **PostgreSQL** instead of SQLite! This README documents the working state as of **July 24**.
 
 ---
 
-## ✅ Achievements [→ Full Details](logs/day-14.md): 
+## ✅ Achievements [→ Full Details](logs/day-14.md):
 - [x] ✅ Dockerized FastAPI app with `uvicorn`
 - [x] ✅ Switched from SQLite → PostgreSQL
 - [x] ✅ Dockerized PostgreSQL container with volume persistence
@@ -496,8 +489,8 @@ volumes:
 We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`)** in shell scripts.
 
 ### 🔸 Problem:
-- Docker container failed with:  
-  `exec ./start.sh: no such file or directory`  
+- Docker container failed with:
+  `exec ./start.sh: no such file or directory`
   despite `start.sh` being present.
 
 ### 🔸 Root Cause:
@@ -508,14 +501,18 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
   ```dockerfile
   RUN sed -i 's/\r$//' ./start.sh
 
+# 📅 Day 16 – Stability, CI Cleanup & Pre-Commit Finalization [→ Full Details](logs/day-16.md)
 
-## 🧠 Key Learnings
+🔹 Switched to Poetry for dependency management, cleaning up `requirements.txt` usage
+🔹 Fixed Docker build errors caused by Python version incompatibilities (`fastapi-cache2`)
+🔹 Removed Redis integration after multiple CI/test failures and focused on restoring stability
+🔹 All tests now passing and coverage reported to Codecov
+🔹 Pre-commit fully configured and running: `black`, `flake8`, `check-yaml/json`, etc.
+🔹 Clean Dockerfile with proper shell script permission fixes (line endings, `chmod +x`)
+🔹 GitHub Actions CI runs tests and uploads coverage for both backend and frontend
+🔹 Protected `main` branch with enforced CI checks
+🔹 Redis logic removed cleanly but retained in logs for future optional caching
 
-- Writing good tests is more than just hitting 100% — it's about covering **real usage paths**.
-- **Fixture conflicts** and test data duplication can silently break expectations.
-- The `coverage report` is your best friend for spotting the real gaps.
-
-
-## 📅 Daily Goal
+✅ Everything is green, fast, and reliable — back on track for feature dev tomorrow!
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.

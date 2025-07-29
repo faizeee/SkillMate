@@ -9,10 +9,15 @@ services:
       volumes:
             - postgres_data:/var/lib/postgresql/data
       ports:
-            - "5432:5432" 
+            - "5432:5432"
+    # redis:
+    #   image: redis:7
+    #   ports:
+    #         - "6379:6379"
+    #   restart: unless-stopped
     backend:
 
-      build: 
+      build:
         context: .
         dockerfile: Dockerfile
       container_name: skillmate-backend
@@ -26,7 +31,7 @@ services:
       depends_on:
         - db
       #So unless you're intentionally overriding it (e.g., in CI/CD), it’s better to keep a single source of truth:
-      # environment: 
+      # environment:
       #   DATABASE_URL: postgresql+psycopg2://skillmate:supersecret@db:5432/skillmate_db
       restart: unless-stopped
     frontend:
@@ -39,4 +44,4 @@ services:
       depends_on:
         - backend
 volumes:
-  postgres_data:  
+  postgres_data:

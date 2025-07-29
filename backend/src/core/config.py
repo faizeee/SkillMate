@@ -1,6 +1,6 @@
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 # Bellow is the the Basic way of loading dot env in the system.
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 #
 #  from dotenv import load_dotenv
 # import os
@@ -13,16 +13,20 @@
 # ALGORITHM= os.getenv("ALGORITHM","HS256")
 # ACCESS_TOKEN_EXPIRE_MINUTES= int(os.getenv("TOKEN_EXPIRES_IN",60))
 #
-#------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 # USING pydantic : pydantic  settings is the better way to manage the env
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
+
+
 class Settings(BaseSettings):
-    app_title:str = "SkillMate API"
-    app_description:str = "API for SkillMate application"
-    app_version:str = "0.1.0"
+    """This class represents a configuration settings from system."""
+
+    app_title: str = "SkillMate API"
+    app_description: str = "API for SkillMate application"
+    app_version: str = "0.1.0"
 
     # --- THE CRITICAL CHANGE FOR REQUIRED FIELDS ---
     # For required fields, Pydantic-settings expects the environment variable
@@ -33,11 +37,14 @@ class Settings(BaseSettings):
     # These are required and will look for DATABASE_URL and SECRET_KEY env vars
     database_url: str = "sqlite:///backend/skillmate.db"
     secret_key: str
+    redis_url: str = "redis://redis:6379"
 
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = Field(30, env="TOKEN_EXPIRES_IN") #to manually map the Env Variable with settings variable
-    
-    model_config = SettingsConfigDict(env_file="backend/.env",extra="ignore")
+    access_token_expire_minutes: int = Field(
+        30, env="TOKEN_EXPIRES_IN"
+    )  # to manually map the Env Variable with settings variable
+
+    model_config = SettingsConfigDict(env_file="backend/.env", extra="ignore")
 
 
 config = Settings()
