@@ -501,17 +501,18 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
   ```dockerfile
   RUN sed -i 's/\r$//' ./start.sh
 
+# 📅 Day 16 – Stability, CI Cleanup & Pre-Commit Finalization [→ Full Details](logs/day-16.md)
 
-## 📅 Daily Goal
-Day 16 Goals
+🔹 Switched to Poetry for dependency management, cleaning up `requirements.txt` usage
+🔹 Fixed Docker build errors caused by Python version incompatibilities (`fastapi-cache2`)
+🔹 Removed Redis integration after multiple CI/test failures and focused on restoring stability
+🔹 All tests now passing and coverage reported to Codecov
+🔹 Pre-commit fully configured and running: `black`, `flake8`, `check-yaml/json`, etc.
+🔹 Clean Dockerfile with proper shell script permission fixes (line endings, `chmod +x`)
+🔹 GitHub Actions CI runs tests and uploads coverage for both backend and frontend
+🔹 Protected `main` branch with enforced CI checks
+🔹 Redis logic removed cleanly but retained in logs for future optional caching
 
-    🔹 Build Docker Images in CI (optional but production-like)
+✅ Everything is green, fast, and reliable — back on track for feature dev tomorrow!
 
-    🔹 Add Codecov + CI Status Badges
-
-    🔹 Setup .env.test, .env.prod, .env.dev with fallbacks
-
-    🔹 Optimize docker-compose health checks & wait strategies
-
-    🔹 Add Git hooks and lint/format steps (optional polish)
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
