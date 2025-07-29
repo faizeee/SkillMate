@@ -16,6 +16,11 @@ RUN apt-get update && apt-get install -y build-essential libpq-dev
 # Copy dependency files (pyproject, poetry lock, or requirements if exists)
 COPY pyproject.toml poetry.lock* requirements.txt* ./
 
+# # --- NEW: Clean requirements.txt before installation ---
+# # Remove NULL bytes from requirements.txt
+# RUN sed -i 's/\x00//g' requirements.txt
+# # --- END NEW ---
+
 # Install Python deps
 RUN pip install --upgrade pip && pip install poetry
 RUN poetry config virtualenvs.create false

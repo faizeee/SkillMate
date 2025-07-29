@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+export PYTHONPATH=./backend/src
 # Run DB seed only once
 if [ ! -f "/app/.seeded" ]; then
     echo "⚙️ Running database seeder..."
@@ -11,4 +11,4 @@ else
 fi
 
 # Start the FastAPI server
-PYTHONPATH=./backend/src uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload

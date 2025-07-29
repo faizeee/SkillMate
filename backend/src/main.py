@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator
 from fastapi.middleware.cors import CORSMiddleware
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
@@ -8,20 +10,31 @@ from core.redis import init_redis
 
 # import logging
 
+
+# Event handler to initialize the database on application startup
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Handel application startup."""
+    init_redis()
+    init_db()
+    yield
+
+
 app = FastAPI(
     title=config.app_title,
     description=config.app_description,
     version=config.app_version,
+    lifespan=lifespan,
 )
 
 
 # logging.basicConfig(level=logging.DEBUG)
-# Event handler to initialize the database on application startup
-@app.on_event("startup")
-async def on_startup():
-    """Handel application startup."""
-    await init_redis()
-    init_db()
+
+# @app.on_event("startup")
+# async def on_startup():
+#     """Handel application startup."""
+#     await init_redis()
+#     init_db()
 
 
 # Allow CORS

@@ -36,13 +36,10 @@ dependencies = [
     "python-jose[cryptography]~=3.5.0",
     "passlib[bcrypt]~=1.7.0",    # This will typically bring in 'bcrypt' and other hashing algorithms
     "python-dotenv~=1.1.0",      # For environment variables
-    "pydantic-settings~=2.10.1"  # For environment variables
-    # Other common direct dependencies you might use
-    # "requests", # If your backend makes HTTP requests to other services
-    # "celery",   # If using a task queue
-    # "redis",    # If using Redis
-    # ...
-    # Add any other packages your application needs to *run*
+    "pydantic-settings~=2.10.1",
+    "pre-commit~=4.2.0",
+    "redis~=6.2.0",
+    "fastapi-cache2~=0.2.2"
 ]
 
 [tool.setuptools]
@@ -51,6 +48,8 @@ package-dir = {"" = "backend/src"}
 [tool.setuptools.packages.find]
 where = ["backend/src"]
 
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
 # --- IMPORTANT: Your Development Dependencies ---
 [project.optional-dependencies]
 dev = [

@@ -62,14 +62,16 @@ def test_skill_by_invalid_id(client, auth_header):
     assert response.status_code == 404
 
 
-def test_get_skill_levels(client):
+@pytest.mark.asyncio
+async def test_get_skill_levels(client):
     response = client.get("/api/skills/levels")
     # print("RESPONSE TEXT:", response.text)  # print raw error message
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
-def test_get_skill_levels_error(client, drop_tables):
+@pytest.mark.asyncio
+async def test_get_skill_levels_error(client, drop_tables):
     response = client.get("/api/skills/levels")
     print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
     assert response.status_code == 500

@@ -4,7 +4,7 @@ from fastapi_cache.backends.redis import RedisBackend
 from core.config import config
 
 
-async def init_redis():
+def init_redis():
     """Initialize the redis."""
     redis = aioredis.from_url(config.redis_url, encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="skillmate-cache")
@@ -15,6 +15,8 @@ async def init_redis():
 #     """Clear a single key cache."""
 #     await FastAPICache.get_backend().delete(key)
 
-# async def clear_whole_namespace(name_space:str="skillmate-cache"):
-#     """Delete full redis namespace."""
-#     await FastAPICache.clear(namespace=name_space)
+
+async def clear_whole_namespace(name_space: str = "skillmate-cache"):
+    """Delete full redis namespace."""
+    await FastAPICache.clear(namespace=name_space)
+    yield
