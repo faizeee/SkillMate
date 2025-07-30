@@ -2381,4 +2381,4 @@ dev = ["black", "ipython", "mypy", "pytest", "pytest-asyncio", "pytest-cov", "py
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "6385f1380cc46e7acd413ebe0e9c59297acfa180652644fd7c0891118487c3a1"
+content-hash = "59526d9f6f4964fd5caf05a77e28f034de560acf001f67b1d63e73ee8299c592"
