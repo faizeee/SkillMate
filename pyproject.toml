@@ -82,6 +82,7 @@ testpaths = ["backend/tests"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.4.1"
+pytest-xdist="3.8.0"
 pytest-cov = "6.2.1"
 
 # [tool.flake8]
