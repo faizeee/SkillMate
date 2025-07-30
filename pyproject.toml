@@ -32,6 +32,8 @@ dependencies = [
     "psycopg2-binary",          # For PostgreSQL
     "aiosqlite~=0.21.0",        # For async SQLite
 
+
+
     # Authentication & Security
     "python-jose[cryptography]~=3.5.0",
     "passlib[bcrypt]~=1.7.0",    # This will typically bring in 'bcrypt' and other hashing algorithms
@@ -77,6 +79,10 @@ dev = [
 pythonpath = ["backend/src"] # Helps pytest find your 'src' package when running from root
 addopts = "--strict-markers --cov=backend.src --cov-report=term-missing"
 testpaths = ["backend/tests"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.4.1"
+pytest-cov = "6.2.1"
 
 # [tool.flake8]
 # per-file-ignores = ["__init__.py:D104"]
