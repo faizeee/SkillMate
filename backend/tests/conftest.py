@@ -6,11 +6,13 @@ from data.db import get_session
 from tests.utils.seed import seed_test_db
 from sqlalchemy.pool import StaticPool
 from tests.utils.helpers import register_and_login_test_user
+from core.config import config
 
 # In-memory SQLite for testing
-DATABASE_URL = "sqlite:///:memory:"
 test_db_engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}, poolclass=StaticPool
+    config.test_database_url,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
 )
 
 

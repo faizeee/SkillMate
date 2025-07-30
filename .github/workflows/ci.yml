@@ -63,6 +63,7 @@ jobs:
       - name: Set up backend test environment
         run: |
           echo "database_url=postgresql://postgres:postgres@localhost:5432/test_db" >> backend/.env
+          echo "test_database_url=postgresql://postgres:postgres@localhost:5432/test_db" >> backend/.env
           echo "secret_key=test_secret" >> backend/.env
 
       - name: Run pytest with coverage
@@ -87,6 +88,10 @@ jobs:
         run: |
           echo "Loaded DB URL: $DATABASE_URL"
           cat .env
+
+      - name: Clean test database schema
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d test_db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 
       - name: Run DB migrations
         run: PYTHONPATH=backend/src alembic upgrade head
