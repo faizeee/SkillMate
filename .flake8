@@ -5,6 +5,8 @@ per-file-ignores =
     __init__.py:D104,D100
     backend/tests/*: D100,D101,D102,D103,D104
     backend/src/models/skill_level/db_model.py: F821
+    backend/src/models/user_role/db_model.py: F821
+    alembic/env.py: F401
 extend-ignore =
     E203,
     W503,
