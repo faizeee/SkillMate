@@ -89,7 +89,7 @@ jobs:
           cat .env
 
       - name: Run DB migrations
-        run: alembic upgrade head
+        run: PYTHONPATH=backend/src alembic upgrade head
 
       - name: Run pre-commit on all files
         run: pre-commit run --all-files
