@@ -4,6 +4,20 @@ from models.user import User
 from services.auth_service import get_current_user
 from core.auth import create_access_token
 
+# from core.config import config
+# from data.db import get_session
+
+# def test_db_url_check():
+#     print("🚨 TEST DB URL:", config.test_database_url)
+#     assert "postgresql" in config.test_database_url
+
+# def test_debug_session(client):
+#     session = next(get_session())
+#     print("🧪 Test session bound to:", session.bind.url)
+
+# def test_sanity_db_binding(client):
+#     assert "postgresql" in config.test_database_url, f"❌ Invalid TEST DB URL: {config.test_database_url}"
+
 
 def test_get_current_user_valid_token(client, current_user):
     token = current_user["access_token"]
@@ -67,6 +81,8 @@ def test_user_not_in_db(client):
 
     # sending request to temporary route
     response = client.get(temp_route_url, headers={"Authorization": f"Bearer {token}"})
+    print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
+
     assert response.status_code == 401
     assert response.json()["detail"] == "User not found"
 

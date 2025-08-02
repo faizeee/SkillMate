@@ -1,3 +1,5 @@
+from models import User, UserRole
+from core.auth import get_password_hash
 from sqlalchemy import Engine
 from data.db import engine, init_db
 from models.skill import Skill
@@ -64,6 +66,35 @@ def seed_initial_data(engine: Engine):
         db_conn.add(aws)
         db_conn.commit()
         print("Initial data seeded successfully!")
+
+        super_admin = UserRole(title="Super Admin", description="System Admin")
+        admin = UserRole(title="Admin", description="User Admin")
+        user = UserRole(title="User", description="User")
+
+        db_conn.add_all([super_admin, admin, user])
+        db_conn.flush()
+        db_conn.commit()
+        print("User Roles Seeded!")
+        hash_pswd = get_password_hash("12345678")
+        superadmin = User(
+            username="superadmin",
+            password_hash=hash_pswd,
+            user_role_id=super_admin.id,
+        )
+        adminuser = User(
+            username="adminuser",
+            password_hash=hash_pswd,
+            user_role_id=admin.id,
+        )
+        useracc = User(
+            username="faizeee",
+            password_hash=hash_pswd,
+            user_role_id=user.id,
+        )
+
+        db_conn.add_all([superadmin, adminuser, useracc])
+        db_conn.commit()
+        print("Test Users Seeded!")
 
 
 if __name__ == "__main__":

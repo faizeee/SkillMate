@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     # and they are truly required with no default value.
     # These are required and will look for DATABASE_URL and SECRET_KEY env vars
     database_url: str = "sqlite:///backend/skillmate.db"
+    test_database_url: str = "sqlite:///:memory:"
     secret_key: str
     redis_url: str = "redis://redis:6379"
 
