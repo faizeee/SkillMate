@@ -4,6 +4,7 @@ from core.auth import get_password_hash
 
 
 def seed_test_db(db_con: Session):
+    print("🚨 Seeder bound to:", db_con.bind.url)
     beginner = SkillLevel(name="Beginner", description="Just Starting")
     intermediate = SkillLevel(name="Intermediate", description="Going Good")
     advance = SkillLevel(name="Advance", description="Master")

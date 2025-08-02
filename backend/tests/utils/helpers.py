@@ -1,8 +1,52 @@
-import select
 from typing import Optional
 from fastapi.testclient import TestClient
 from models.skill import Skill
 from sqlmodel import Session
+from core.config import config as app_config
+from alembic.config import Config
+from alembic import command
+from sqlmodel import SQLModel
+from sqlalchemy import text
+from tests.utils.seed import seed_test_db
+from sqlmodel import select
+import os
+
+
+def run_alembic_upgrade():
+    """Run migrations before running any test run."""
+    alembic_config_file_path = os.path.join(
+        os.path.dirname(__file__), "../../../alembic.ini"
+    )
+    alembic_config = Config(alembic_config_file_path)
+    alembic_config.set_main_option("sqlalchemy.url", app_config.test_database_url)
+    print("---------------- RUNNING MIGRATIONS  ------------------------")
+    command.upgrade(alembic_config, "head")
+
+
+def reset_test_db(engine):
+    """Drop and recreate the test DB using SQLAlchemy Utils, then run Alembic."""
+    SQLModel.metadata.drop_all(engine)
+    drop_the_alembic_version(engine)
+
+
+def drop_the_alembic_version(engine):
+    """DROP TABLE IF EXISTS alembic_version cascade."""
+    with engine.connect() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS alembic_version CASCADE;"))
+        conn.commit()
+
+
+def seed_db(engine):
+    """Seed the database from seeder."""
+    with Session(engine) as session:
+        seed_test_db(session)
+    print("✅ Test DB reseeded")
+
+
+def run_migrations_and_seed_db(test_db_engine):
+    """Run migrations and seed the database."""
+    run_alembic_upgrade()
+    seed_db(test_db_engine)
 
 
 def register_and_login_test_user(client: TestClient) -> dict:

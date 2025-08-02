@@ -18,8 +18,9 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# ✅ Inject the real DB URL into Alembic config
-config.set_main_option("sqlalchemy.url", app_config.database_url)
+# ✅ Only set if not already set externally (e.g., from conftest.py)
+if not config.get_main_option("sqlalchemy.url"):
+    config.set_main_option("sqlalchemy.url", app_config.database_url)
 
 # add your model's MetaData object here
 # for 'autogenerate' support

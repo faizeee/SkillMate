@@ -9,11 +9,11 @@ def test_get_skills(client):
     assert isinstance(response.json(), list)
 
 
-def test_create_skill(client, auth_header):
+def test_create_skill(client, reset_db_state, auth_header):
     unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
     payload = {"name": unique_name, "skill_level_id": "2"}
     response = client.post("/api/skills/", json=payload, headers=auth_header)
-    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    print("RESPONSE TEXT:", response.text)  # print raw error message
     assert response.status_code == 200
     assert response.json()["name"] == unique_name
 
@@ -40,7 +40,7 @@ def test_invalid_payload(client, auth_header, payload):
     assert response.status_code == 422
 
 
-def test_get_skill_by_valid_id(client, auth_header):
+def test_get_skill_by_valid_id(client, reset_db_state, auth_header):
     response = client.get("/api/skills/1", headers=auth_header)
     assert response.status_code == 200
     assert response.json()["id"] == 1
@@ -51,7 +51,7 @@ def test_get_skill_by_invalid_id(client, auth_header):
     assert response.status_code == 404
 
 
-def test_delete_skill_by_valid_id(client, auth_header):
+def test_delete_skill_by_valid_id(client, reset_db_state, auth_header):
     response = client.delete("/api/skills/1", headers=auth_header)
     assert response.status_code == 200
     assert response.json()["success"] is True
@@ -69,15 +69,22 @@ def test_get_skill_levels(client):
     assert isinstance(response.json(), list)
 
 
-def test_get_skill_levels_error(client, drop_tables):
+def test_get_skill_levels_error(client, drop_all_tables_for_error_test):
     response = client.get("/api/skills/levels")
     print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
     assert response.status_code == 500
-    assert "no such table" in response.json()["detail"]
+    assert any(
+        phrase in response.json()["detail"]
+        for phrase in ["no such table", "does not exist", "UndefinedTable"]
+    )
 
 
-def test_get_skill_error(client, drop_tables):
+def test_get_skill_error(client, drop_all_tables_for_error_test):
     response = client.get("/api/skills")
     print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
     assert response.status_code == 500
-    assert "no such table" in response.json()["detail"]
+    assert any(
+        phrase in response.json()["detail"]
+        for phrase in ["no such table", "does not exist", "UndefinedTable"]
+    )
+    # assert "no such table" in response.json()["detail"]
