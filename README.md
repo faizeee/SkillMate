@@ -515,4 +515,56 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
 
 ✅ Everything is green, fast, and reliable — back on track for feature dev tomorrow!
 
+# 📅 Day 17 – Dockerized PostgreSQL CI ✅, Deterministic Tests 🧪, Parallel Test Prep ⚙️
+
+## ✅ Completed
+
+- 🔁 **Migrated test database from SQLite → PostgreSQL**
+- 🐳 **Integrated PostgreSQL with Docker Compose for both local & CI**
+- ✅ **Enabled deterministic test seeding using `reset_test_db` + `run_migrations_and_seed_db`**
+- ✅ **Overrode FastAPI `get_session` dependency with isolated `test_db_engine`**
+- 🔒 **Used `filelock` to prevent parallel seeding/migration race conditions**
+- 🧪 **All tests passing with full database reset where needed**
+- 🟢 **CI fully green using PostgreSQL**
+- ✅ **Added test coverage badge to `README.md`**
+- ⚙️ **Started working on re-enabling `pytest-xdist` for parallel testing**
+- ⚠️ **Observed flaky behavior during parallel runs (changing errors each time)**
+- 🧠 **Implemented dynamic per-worker test DB creation using `PYTEST_XDIST_WORKER`**
+- 🛠️ **Designed automatic worker DB cleanup after test sessions**
+- 🐞 Investigated key errors:
+  - Alembic migrations not applying in time (race condition)
+  - `skill_levels`, `user_roles`, and other missing tables
+  - Tests failing inconsistently across workers
+
+---
+
+## 🔧 Tech Highlights
+
+- `--dist loadscope` performed better than `loadfile` in minimizing test collisions
+- Used dynamic DB naming: `skillmate_test_db_<worker_id>` for isolation
+- Added worker-aware debug logging using `os.getenv("PYTEST_XDIST_WORKER")`
+- Detected `.env` syntax issues when running under xdist (dotenv couldn't parse)
+
+---
+
+## 💤 Blockers / Next Steps (moved to **Day 18**)
+
+- 🧪 **Re-enable and stabilize `pytest-xdist`** with:
+  - Safe per-worker DB setup
+  - Alembic migration locking
+  - Post-test DB teardown
+- 🔐 **Implement ACL (Access Control Layer)**:
+  - Add `user_roles` table
+  - Add `user.role_id` foreign key
+  - Protect routes via role-based checks
+
+---
+
+## ⏱ Time Spent: ~6–9 hours
+
+> 🧠 High-effort day — after nearly **5 days** of persistence, we now have **stable PostgreSQL CI & tests passing**. 🎉
+
+---
+
+
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
