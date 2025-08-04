@@ -359,7 +359,7 @@ PASS  src/components/__tests__/AddSkillPage.test.tsx
 
 Test Files  3 passed (3)
 Tests       7 passed (7)
-
+```
 ## ✅ Completed Backend Tasks:
 
 * 🔍 Reviewed and identified uncovered code blocks
@@ -467,7 +467,7 @@ services:
 
 volumes:
   pgdata:
-
+```
 # ✅ Day 15 Progress – SkillMate 🧠🚀 [→ Full Details](logs/day-15.md)
 
 ## 🔹 🐳 Docker Integration (Frontend + Backend)
@@ -536,6 +536,12 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
   - `skill_levels`, `user_roles`, and other missing tables
   - Tests failing inconsistently across workers
 
+## ⏱ Time Spent: ~6–9 hours
+
+> 🧠 High-effort day — after nearly **5 days** of persistence, we now have **stable PostgreSQL CI & tests passing**. 🎉
+
+---
+
 # 📅 Day 18 – Role-Based Access Control (ACL) [→ Full Details](logs/day-18.md)
 
 - ✅ Added `user_roles` table and seeded roles: `Admin`, `User`
@@ -571,12 +577,6 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
   - Add `user_roles` table
   - Add `user.role_id` foreign key
   - Protect routes via role-based checks
-
----
-
-## ⏱ Time Spent: ~6–9 hours
-
-> 🧠 High-effort day — after nearly **5 days** of persistence, we now have **stable PostgreSQL CI & tests passing**. 🎉
 
 ---
 
