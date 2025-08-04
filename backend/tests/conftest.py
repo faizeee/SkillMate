@@ -5,6 +5,7 @@ from main import app
 from data.db import get_session
 from tests.utils.helpers import (
     register_and_login_test_user,
+    login_test_user,
     run_migrations_and_seed_db,
     reset_test_db,
 )
@@ -70,4 +71,18 @@ def current_user(client):
 @pytest.fixture
 def auth_header(current_user):
     token = current_user["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+# Provide logged in user to test_files
+@pytest.fixture
+def admin_user(client):
+    payload = {"username": "adminuser", "password": "12345678"}
+    return login_test_user(client, payload)
+
+
+# Provide auth_header to test_files
+@pytest.fixture
+def auth_header_for_admin(admin_user):
+    token = admin_user["access_token"]
     return {"Authorization": f"Bearer {token}"}

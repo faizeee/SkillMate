@@ -536,6 +536,20 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
   - `skill_levels`, `user_roles`, and other missing tables
   - Tests failing inconsistently across workers
 
+# 📅 Day 18 – Role-Based Access Control (ACL) [→ Full Details](logs/day-18.md)
+
+- ✅ Added `user_roles` table and seeded roles: `Admin`, `User`
+- ✅ Added `role_id` foreign key to `users` table with default
+- ✅ Built reusable permission dependency: `required_role`
+- ✅ Created guards: `admin_only`, `user_only`
+- ✅ Protected routes using role-based `Depends` checks
+- ✅ Wrote full test suite for:
+  - Permission dependencies
+  - Protected routes using admin and user tokens
+- ✅ Debugged and fixed route conflict issue in tests using unique paths
+- ✅ Developed all logic and tests independently — huge confidence boost 🎉
+
+
 ---
 
 ## 🔧 Tech Highlights
