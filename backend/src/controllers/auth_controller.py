@@ -3,9 +3,11 @@
 from fastapi import HTTPException
 from sqlmodel import Session, select
 from models.user import User
+from sqlalchemy.orm import selectinload
 from core.auth import get_password_hash, verify_password, create_access_token
 from models.user import UserCreate, UserRead
 from models.base.auth_response import AuthResponse
+from utils.roles import Roles
 
 
 def register(user_input: UserCreate, db: Session) -> UserRead:
@@ -25,10 +27,10 @@ def register(user_input: UserCreate, db: Session) -> UserRead:
         raise HTTPException(status_code=400, detail="Username already Exits")
 
     hashed = get_password_hash(user_input.password)
-    user = User(username=username, password_hash=hashed)
+    user = User(username=username, password_hash=hashed, user_role_id=Roles.USER.value)
     db.add(user)
     db.commit()
-    db.refresh(user)
+    db.refresh(user, attribute_names=["role"])
 
     return {"id": user.id, "username": user.username}
 
@@ -44,12 +46,21 @@ def login(user_input: UserCreate, db: Session) -> AuthResponse:
             AuthResponse: User information and token.
     """
     username = user_input.username
-    user = db.exec(select(User).where(User.username == username)).first()
+    statement = (
+        select(User).where(User.username == username).options(selectinload(User.role))
+    )
+    user = db.exec(statement).first()
 
     if not user or not verify_password(user_input.password, user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid Username or Password")
 
     token = create_access_token({"sub": user.username})
     return AuthResponse.from_token(
-        token=token, user={"id": user.id, "username": user.username}
+        token=token,
+        user={
+            "id": user.id,
+            "username": user.username,
+            "user_role_id": user.user_role_id,
+            "role": user.role,
+        },
     )

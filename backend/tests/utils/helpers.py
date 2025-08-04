@@ -50,16 +50,18 @@ def run_migrations_and_seed_db(test_db_engine):
 
 
 def register_and_login_test_user(client: TestClient) -> dict:
-    """Register a new test user and returns a valid JWT access token."""
+    """Register a new test user and returns a valid valid user data."""
     # Register user data
     payload = {"username": "testuser", "password": "12345678"}
     # Register user
     client.post("/api/register/", json=payload)
-    # Login user
-    response = client.post("/api/login/", json=payload)
-    # print(f"Login Helper response text -> {response.status_code} : {response.text} : {response.json()}")
+    return login_test_user(client, payload)
+
+
+def login_test_user(client: TestClient, user_payload: dict) -> dict:
+    """Login a test user and returns a valid user data."""
+    response = client.post("/api/login/", json=user_payload)
     assert response.status_code == 200
-    # token = response.json()["access_token"]
     return response.json()
 
 

@@ -13,7 +13,7 @@ from controllers.skill_controller import (
 )
 from models.user import User
 from models.base.response_schemas import ResponseMessage
-
+from services.permissions import user_only
 
 router = (
     APIRouter()
@@ -26,7 +26,7 @@ def list_skills(db: Session = Depends(get_session)):
     return get_skills(db)
 
 
-@router.post("/", response_model=SkillRead)
+@router.post("/", response_model=SkillRead, dependencies=[Depends(user_only)])
 def create_skill(
     skill: SkillIn,
     user: User = Depends(get_current_user),

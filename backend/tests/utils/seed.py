@@ -35,7 +35,7 @@ def seed_test_db(db_con: Session):
     )
     adminuser = User(
         username="adminuser",
-        password_hash=hash_pswd,
+        password_hash=get_password_hash("12345678"),
         user_role_id=admin.id,
     )
     useracc = User(
