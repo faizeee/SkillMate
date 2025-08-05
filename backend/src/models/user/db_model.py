@@ -13,3 +13,8 @@ class User(SQLModel, table=True):
 
     # Relationship to UserRole table (many-to-one)
     role: Optional[UserRole] = Relationship(back_populates="users")
+
+    @property
+    def role_name(self) -> str | None:
+        """Get role name from role object."""
+        return self.role.title if self.role else None

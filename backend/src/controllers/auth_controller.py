@@ -55,12 +55,12 @@ def login(user_input: UserCreate, db: Session) -> AuthResponse:
         raise HTTPException(status_code=400, detail="Invalid Username or Password")
 
     token = create_access_token({"sub": user.username})
+    # user_dict = user.model_validate(user)
+    # user_dict["role_name"] = user.role.title
+    user_data = UserRead.model_validate(
+        user
+    )  # OR UserRead({**user.model_dump(exclude={"password_hash"}), "role_name":user.role.title})
     return AuthResponse.from_token(
         token=token,
-        user={
-            "id": user.id,
-            "username": user.username,
-            "user_role_id": user.user_role_id,
-            "role": user.role,
-        },
+        user=user_data,
     )
