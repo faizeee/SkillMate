@@ -1,9 +1,9 @@
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+import AppToaster from "@/components/ui/AppToaster";
 import { Outlet } from "@tanstack/react-router";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import AppToaster from "../components/ui/AppToaster";
 
-export default function Layout() {
+export default function AdminLayout() {
   return (
     <div className="min-h-screen">
       {/* Navbar */}
@@ -13,6 +13,7 @@ export default function Layout() {
         <Sidebar />
         {/* Main Content */}
         <main className="flex-1 p-6 bg-gray-50">
+          <h1 className="text-2xl">Admin Dashboard</h1>
           <Outlet />
           <AppToaster />
         </main>
