@@ -580,5 +580,46 @@ We resolved a blocking Docker bug caused by **Windows-style line endings (`\r\n`
 
 ---
 
+# 🚀 Day 19 – Frontend Role-Based Access Control (RBAC)
+
+### ✅ Goals
+- Implement UI-level access control using user roles from Zustand auth store
+- Create `useRole` hook for easy access to current user’s role
+- Conditionally render UI elements (e.g. buttons) based on role
+- Protect sensitive pages using TanStack Router’s `beforeLoad` with role checks
+- Write tests to verify role-based rendering using Zustand mocking
+
+---
+
+### 📁 Files Touched
+- `src/hooks/useRole.ts` – new custom hook for accessing role
+- `src/components/InviteMentorButton.tsx` – role-protected component
+- `src/routes/admin/dashboard.tsx` – TanStack route with `beforeLoad` role check
+- `src/components/__tests__/InviteMentorButton.test.tsx` – unit test with role mocking
+- `test/utils/renderWithAuthRole.ts` – helper for rendering with mocked Zustand store
+
+---
+
+### 🧠 Key Concepts Implemented
+- ✅ Zustand-based role access using `useAuthStore`
+- ✅ React UI conditional rendering with `useRole()`
+- ✅ `beforeLoad()` hook in TanStack Router to protect routes
+- ✅ `act()` wrapping in tests to avoid React state update warnings
+- ✅ Clean test isolation with store resets between tests
+
+---
+
+### 🧪 Sample Test Case
+```tsx
+act(() => {
+  useAuthStore.setState({
+    token: "mock-token",
+    user: mockUser("admin"),
+  })
+})
+render(<InviteMentorButton />)
+expect(screen.getByText("Invite Mentor")).toBeInTheDocument()
+
+
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.

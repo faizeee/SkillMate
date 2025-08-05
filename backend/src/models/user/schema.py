@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field, field_validator
+from typing import Optional
+from pydantic import BaseModel, Field, field_validator, ConfigDict
+from models.user_role import UserRole
 
 
 class UserBase(BaseModel):
@@ -25,3 +27,7 @@ class UserRead(UserBase):
     """This class describes the structure of user when fetching."""
 
     id: int
+    role: Optional[UserRole] = None
+    role_name: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)

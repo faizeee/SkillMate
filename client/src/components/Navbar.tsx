@@ -2,7 +2,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "@tanstack/react-router";
 
 export default function Navbar() {
-    const {username,logout} = useAuthStore();
+    const {logout} = useAuthStore();
+    const username = useAuthStore(s=>s.username());
     const navigate = useNavigate()
     const handelLogout = () => {
         logout()
