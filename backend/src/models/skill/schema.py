@@ -1,4 +1,7 @@
+from typing import Optional
 from pydantic import BaseModel, Field, field_validator
+
+from models.skill_level import SkillLevel
 
 
 class SkillIn(BaseModel):
@@ -25,4 +28,4 @@ class SkillRead(SkillIn):
     """This class describes the properties a skill will contains when user asked for skill."""
 
     id: int
-    level: str
+    level: Optional[SkillLevel | str] = None
