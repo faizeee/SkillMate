@@ -43,7 +43,7 @@ def get_skills(db: Session) -> list[SkillRead]:
                 "id": skill.id,
                 "name": skill.name,
                 "skill_level_id": skill.skill_level_id,
-                "level": skill.level.name if skill.level else "N/A",
+                "level_name": skill.level.name if skill.level else "N/A",
             }
             for skill in skills
         ]
@@ -76,7 +76,7 @@ def add_skills(skill: SkillIn, db: Session) -> SkillRead:
     db.refresh(new_skill, attribute_names=["level"])
     # Now, new_skill.level will contain the fully loaded SkillLevel object
     result = new_skill.model_dump()
-    result["level"] = new_skill.level.name if new_skill.level else "N/A"
+    result["level_name"] = new_skill.level.name if new_skill.level else "N/A"
 
     return result
 
@@ -98,7 +98,7 @@ def get_skill_by_id(id: int, db: Session) -> SkillRead:
             status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
         )
     result = selected_skill.model_dump()
-    result["level"] = selected_skill.level.name if selected_skill.level else "N/A"
+    result["level_name"] = selected_skill.level.name if selected_skill.level else "N/A"
     return result
 
 
@@ -143,8 +143,9 @@ def update_skill_by_id(skill_id: int, inputs: SkillIn, db: Session) -> SkillRead
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Skill not found")
 
     check_skill_duplicate(db, inputs.name, skill_id)
-
-    for key, value in inputs.model_dump().items():
+    # NOTE: use inputs.model_dump(exclude_unset=True).items()  for partial
+    # updates it ignores the unchanged
+    for key, value in inputs.model_dump(exclude_unset=True).items():
         setattr(skill, key, value)
 
     db.commit()

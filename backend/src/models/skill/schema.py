@@ -28,4 +28,5 @@ class SkillRead(SkillIn):
     """This class describes the properties a skill will contains when user asked for skill."""
 
     id: int
-    level: Optional[SkillLevel | str] = None
+    level: Optional[SkillLevel] = None
+    level_name: Optional[str] = None
