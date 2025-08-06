@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 export PYTHONPATH=./backend/src
+#Run DB migrations
+alembic upgrade head
+
 # Run DB seed only once
 if [ ! -f "/app/.seeded" ]; then
     echo "⚙️ Running database seeder..."

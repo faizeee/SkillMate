@@ -1,5 +1,6 @@
 """Contains skills curd: create,update,delete and fetch handlers."""
 
+from typing import Optional
 from fastapi import HTTPException, status
 from models.base.response_schemas import ResponseMessage
 from models.skill import Skill, SkillIn, SkillRead
@@ -42,7 +43,7 @@ def get_skills(db: Session) -> list[SkillRead]:
                 "id": skill.id,
                 "name": skill.name,
                 "skill_level_id": skill.skill_level_id,
-                "level": skill.level.name if skill.level else "N/A",
+                "level_name": skill.level.name if skill.level else "N/A",
             }
             for skill in skills
         ]
@@ -62,17 +63,7 @@ def add_skills(skill: SkillIn, db: Session) -> SkillRead:
     Returns:
         SkillRead: New Created Skill.
     """
-    # Database Uniqueness Validation
-    # Build a statement to check for an existing skill with the same name (case-insensitive if desired)
-    # For case-insensitive, you might convert both to lower() if your DB supports it or use specific functions
-    # For SQLite, it's typically case-insensitive for ASCII by default, but explicit is better.
-
-    if db.exec(
-        select(Skill).filter(func.lower(Skill.name) == skill.name.lower())
-    ).first():
-        raise HTTPException(
-            status_code=409, detail=f"Skill with name '{skill.name}' already exits"
-        )
+    check_skill_duplicate(db=db, skill_name=skill.name)
     # 1. Create and add the new skill
     new_skill = Skill(
         **skill.model_dump()
@@ -85,7 +76,7 @@ def add_skills(skill: SkillIn, db: Session) -> SkillRead:
     db.refresh(new_skill, attribute_names=["level"])
     # Now, new_skill.level will contain the fully loaded SkillLevel object
     result = new_skill.model_dump()
-    result["level"] = new_skill.level.name if new_skill.level else "N/A"
+    result["level_name"] = new_skill.level.name if new_skill.level else "N/A"
 
     return result
 
@@ -107,7 +98,7 @@ def get_skill_by_id(id: int, db: Session) -> SkillRead:
             status_code=status.HTTP_404_NOT_FOUND, detail="Skill not found"
         )
     result = selected_skill.model_dump()
-    result["level"] = selected_skill.level.name if selected_skill.level else "N/A"
+    result["level_name"] = selected_skill.level.name if selected_skill.level else "N/A"
     return result
 
 
@@ -135,6 +126,46 @@ def delete_skill_by_id(id: int, db: Session) -> ResponseMessage:
     # db.refresh(selected_skill) # Less critical for delete, but doesn't hurt
 
     return ResponseMessage(message=f"Skill with id {id} deleted successfully")
+
+
+def update_skill_by_id(skill_id: int, inputs: SkillIn, db: Session) -> SkillRead:
+    """Update a skill in skills table based on skill_id.
+
+    Args:
+        skill_id(int): Skill id
+        inputs: skill data
+        db (Session): Need a resolved Session object by route.
+    Returns:
+        SkillRead: New Created Skill.
+    """
+    skill = db.get(Skill, skill_id)
+    if not skill:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Skill not found")
+
+    check_skill_duplicate(db, inputs.name, skill_id)
+    # NOTE: use inputs.model_dump(exclude_unset=True).items()  for partial
+    # updates it ignores the unchanged
+    for key, value in inputs.model_dump(exclude_unset=True).items():
+        setattr(skill, key, value)
+
+    db.commit()
+    db.refresh(skill)
+    return skill
+
+
+def check_skill_duplicate(
+    db: Session, skill_name: str, skill_id: Optional[int | None] = None
+):
+    """Database Uniqueness Validation, ignoring the skill being updated."""
+    statement = select(Skill).filter(func.lower(Skill.name) == skill_name.lower())
+    # Exclude the current skill from the uniqueness check if it has an ID
+    if skill_id:
+        statement.filter(Skill.id != skill_id)
+
+    if db.exec(statement).first():
+        raise HTTPException(
+            status_code=409, detail=f"Skill with name '{skill_name}' already exits"
+        )
 
 
 # Option 2: Direct Delete Query

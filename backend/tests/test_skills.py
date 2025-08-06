@@ -88,3 +88,47 @@ def test_get_skill_error(client, drop_all_tables_for_error_test):
         for phrase in ["no such table", "does not exist", "UndefinedTable"]
     )
     # assert "no such table" in response.json()["detail"]
+
+
+def test_update_skill_with_valid_user_and_data(client, auth_header_for_admin):
+    unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
+    skill_id = 1
+    payload = {"name": unique_name, "skill_level_id": "2"}
+    response = client.patch(
+        f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
+    )
+    print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == 200
+    assert response.json()["name"] == unique_name
+    assert response.json()["id"] == skill_id
+
+
+def test_update_skill_with_invalid_user(client, auth_header):
+    unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
+    skill_id = 1
+    payload = {"name": unique_name, "skill_level_id": "2"}
+    response = client.patch(
+        f"/api/skills/{skill_id}", json=payload, headers=auth_header
+    )
+    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "payload, expected_status_code",
+    [
+        ({}, 422),  # missing all fields
+        ({"skill_level_id": "1"}, 422),  # missing name
+        ({"name": "c++"}, 422),  # missing skill_level_id
+        ({"name": "JavaScript", "skill_level_id": "1"}, 409),  # duplicate name
+    ],
+)
+def test_update_skill_with_invalid_payload(
+    client, auth_header_for_admin, payload, auth_header, expected_status_code
+):
+    skill_id = 2
+    response = client.patch(
+        f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
+    )
+    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == expected_status_code

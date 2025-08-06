@@ -10,10 +10,11 @@ from controllers.skill_controller import (
     get_skill_levels,
     get_skill_by_id,
     delete_skill_by_id,
+    update_skill_by_id,
 )
 from models.user import User
 from models.base.response_schemas import ResponseMessage
-from services.permissions import user_only
+from services.permissions import user_only, admin_only
 
 router = (
     APIRouter()
@@ -34,6 +35,19 @@ def create_skill(
 ):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
     """Create a new skill."""
     return add_skills(skill, db)
+
+
+@router.patch(
+    "/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)]
+)
+def update_skill(
+    skill_id: int,
+    inputs: SkillIn,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_session),
+):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
+    """Update a skill."""
+    return update_skill_by_id(skill_id, inputs, db)
 
 
 @router.get("/levels", response_model=list[SkillLevel])
