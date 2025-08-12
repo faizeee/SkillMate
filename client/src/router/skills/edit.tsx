@@ -7,9 +7,9 @@ export const EditSkillRoute = createRoute({
   path: "/edit/:skill_id",
   getParentRoute: () => authenticatedRootRoute,
   component: SkillEditPage,
-  loader: async ({ params }) => {
+  loader: ({ params }) => {
     console.log(params);
-    const skill = await useSkillsStore.getState().getSkill(params.skill_id);
+    const skill = useSkillsStore.getState().getSkill(params.skill_id);
     console.log(skill);
     return {skill};
   },

@@ -53,6 +53,12 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
     try {
       const skillToDelete = get().getSkill(skill_id);
       if(!skillToDelete) {
+        toast.error("Invalid Skill!")
+        return;
+      }
+
+      if(!confirm(`Do You realy want to delete ${skillToDelete.name} (${skillToDelete.level_name})?`)){
+        toast.error("Operation Declined!")
         return;
       }
 

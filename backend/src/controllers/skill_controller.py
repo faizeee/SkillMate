@@ -150,7 +150,9 @@ def update_skill_by_id(skill_id: int, inputs: SkillIn, db: Session) -> SkillRead
 
     db.commit()
     db.refresh(skill)
-    return skill
+    skill_data = skill.model_dump()
+    skill_data["level_name"] = skill.level.name if skill.level else "N/A"
+    return skill_data
 
 
 def check_skill_duplicate(
