@@ -1,13 +1,34 @@
+import { useRole } from "@/hooks/useRole"
+import { useSkillsStore } from "@/store/useSkillStore"
 import type { Skill as SkillType } from "@/types/skill"
+import { Link } from "@tanstack/react-router"
 
 type SkillProps = {
-    skill : SkillType
+    skill : SkillType,
+    // onDeleteSkill ?: (skill_id: number | string)=>void
 }
 
-const SkillCard = ({skill}:SkillProps) => <li  key={skill.id} className="p-4 text-white bg-gray-800 rounded shadow">
+const SkillCard = ({skill}:SkillProps) => {
+    const handelDeleteSkill  = (skill_id:number | string) => {
+        console.warn({delete:skill_id})
+        deleteSkill(skill_id)
+        // onDeleteSkill?.(skill_id);
+    }
+    const role = useRole()
+    const {deleteSkill} = useSkillsStore()
+    return (
+        <li  key={skill.id} className="p-4 text-white bg-gray-800 rounded shadow">
     <p className="flex justify-between text-lg font-semibold">{skill.name}
-        <span className="flex items-center space-y-2 text-xs text-green-500 border rounded-2xl text-green outline">Level:{skill.level_name}</span>
+        <span className="flex items-center space-y-2 text-xs text-green-500 border rounded-2xl text-green outline">
+            Level:{skill.level_name}
+        </span>
+</p>
+<p className="font-semibold">
+    <span onClick={()=>handelDeleteSkill(skill.id)} className="text-red-600 underline hover:cursor-pointer">Delete</span>
+    {role == "Admin" && (<Link to = {`/edit/${skill.id}`} > Edit </Link>)}
 </p>
 </li>
+    );
+}
 
 export default SkillCard

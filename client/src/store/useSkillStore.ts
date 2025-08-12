@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { fetchWrapper } from "../utils/fetchWrapper";
-import { useAuthStore } from "./useAuthStore";
 import { toast } from "sonner";
 import type { Skill, NewSkill } from "@/types/skill";
+import { fetchRequest } from "@/utils/fetchRequest";
+import { handleApiError } from "@/utils/apiErrorHandler";
 
 type SkillState = {
   skills: Skill[];
@@ -10,10 +11,13 @@ type SkillState = {
   error: string | null;
   fetchSkills: () => Promise<void>;
   addSkill: (skill: NewSkill) => Promise<void>;
+  updateSkill: (skill: NewSkill, skill_id: number | string) => Promise<void>;
+  getSkill: (skill_id: number | string) => Skill | null;
+  deleteSkill: (skill_id: number | string) => Promise<void>;
 };
 const BASE_URL = import.meta.env.VITE_API_URL;
 // Zustand store for global state
-export const useSkillsStore = create<SkillState>((set) => ({
+export const useSkillsStore = create<SkillState>((set, get) => ({
   skills: [],
   loading: false,
   error: null,
@@ -25,38 +29,59 @@ export const useSkillsStore = create<SkillState>((set) => ({
       onFinish: () => set({ loading: false }),
     });
   },
+  getSkill: (skill_id: number | string) => {
+    return get().skills.find(skill => skill.id == skill_id) || null
+  },
 
-  addSkill: async (skill) => {
+  // getSkill: async (skill_id: number | string) => {
+  //   try {
+  //     const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`);
+  //     const skill = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch skill");
+  //     }
+  //     console.log(skill);
+  //     return skill;
+  //   } catch (err) {
+  //     set({ error: (err as Error).message });
+  //     console.error(err);
+  //     return null;
+  //   }
+  // },
+
+  deleteSkill: async (skill_id: number | string) => {
     try {
-      const token = useAuthStore.getState().token;
-      const response = await fetch(`${BASE_URL}/skills`, {
-        method: "POST",
-        body: JSON.stringify(skill),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+      const skillToDelete = get().getSkill(skill_id);
+      if(!skillToDelete) {
+        return;
+      }
+
+      const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`, {
+        method: "delete",
       });
       if (!response.ok) {
-        const err_data = await response.json();
-        let err_message = "Something went wrong";
-
-        if (typeof err_data.detail === "string") {
-          err_message = err_data.detail;
-        } else if (Array.isArray(err_data.detail)) {
-          err_message = err_data.detail.map((e: any) => e.msg).join(", ");
-        } else if (
-          typeof err_data.detail === "object" &&
-          err_data.detail.message
-        ) {
-          err_message = err_data.detail.message;
-        }
-        set({ error: err_message });
-        console.error(err_message);
-        throw new Error(
-          response.status === 409 ? "Skill Already Exits" : err_message,
-        );
+        throw new Error("Something went wrong!");
       }
+      console.log({skillToDelete})
+      set((state) => ({skills: state.skills.filter((s)=>s.id == skill_id)}))
+      return;
+    } catch (err: any) {
+      console.log(err.message);
+      throw new Error(err.message);
+    }
+  },
+  addSkill: async (skill) => {
+    try {
+      const response = await fetchRequest (`${BASE_URL}/skills`,{
+        method: "POST",
+        body: JSON.stringify(skill)
+      });
+      if (!response.ok) {
+        await handleApiError(response);
+      }
+      const createdSkill = await response.json();
+      console.log({createdSkill})
+      set((state) => ({skills:[...state.skills,createdSkill]}))
       toast.success("Skill added Successfully");
       return;
     } catch (err: any) {
@@ -65,20 +90,26 @@ export const useSkillsStore = create<SkillState>((set) => ({
     } finally {
       set({ loading: false });
     }
-
-    //   await fetchWrapper(`${BASE_URL}/skills`,{
-    //   method: "POST",
-    //   body: JSON.stringify(skill),
-    //   headers: { "Content-Type": "application/json" },
-    //   onStart:()=>set({loading:true,error:null}),
-    //   onSuccess:(newSkill)=>set((state)=>({skills:[...state.skills,newSkill]})),
-    //   onError:(err)=>{
-    //     set({error:err})
-    //     throw new Error(err)
-    //   },
-    //   onFinish:()=>set({loading:false})
-    // })
   },
 
+  updateSkill: async (skill: NewSkill, skill_id: number | string) => {
+    try {
+      const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`, {
+        method: "patch",
+        body: JSON.stringify(skill),
+      });
 
+      if (!response.ok) {
+        await handleApiError(response);
+      }
+      const updatedSkill = await response.json()
+      console.log({updatedSkill})
+      // Use the 'set' function to update the state directly
+      set((state)=>({skills: state.skills.map((s)=>s.id == skill_id ? updatedSkill : s)}))
+      return;
+    } catch (err: any) {
+      set({ error: err.message });
+      throw err;
+    }
+  },
 }));
