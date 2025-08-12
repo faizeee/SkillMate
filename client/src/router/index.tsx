@@ -12,10 +12,11 @@ import Layout from "@/layouts/Layout";
 import PublicLayout from "@/layouts/PublicLayout";
 import LoginPage from "@/pages/LoginPage";
 import AdminLayout from "@/layouts/AdminLayout";
-
+import { EditSkillRoute } from "./skills/edit";
 // Lazy-loaded pages
 const SkillsPage = lazy(() => import("@/pages/Skills"));
-const AddSkillPage = lazy(() => import("@/pages/AddSkill"));
+// const AddSkillPage = lazy(() => import("@/pages/AddSkill"));
+const SkillCreatePage = lazy(() => import("@/pages/SkillCreatePage"));
 const HomePage = lazy(() => import("@/pages/Home"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
 const Dashboard = lazy(() => import("@/pages/admin/Dashboard"));
@@ -29,7 +30,7 @@ const rootRoute = createRootRoute({
 });
 
 // Define a child route of the main root for routes that use your main Layout and require auth
-const authenticatedRootRoute = createRoute({
+export const authenticatedRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   component: Layout,
   id: "authenticated-root",
@@ -99,8 +100,9 @@ const authenticated_routes = authenticatedRootRoute.addChildren([
   createRoute({
     path: "/add",
     getParentRoute: () => authenticatedRootRoute,
-    component: AddSkillPage,
+    component: SkillCreatePage,
   }),
+  EditSkillRoute,
   createRoute({
     path: "/profile",
     getParentRoute: () => authenticatedRootRoute,

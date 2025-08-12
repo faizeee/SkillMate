@@ -1,5 +1,5 @@
 import {render,screen} from  "@testing-library/react";
-import type { Skill } from "../../store/useSkillStore";
+import type { Skill } from "@/types/skill";
 import SkillsList from "../SkillsList";
 
 describe("SkillsList",()=>{
