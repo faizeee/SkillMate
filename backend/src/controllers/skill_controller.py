@@ -165,7 +165,8 @@ def check_skill_duplicate(
     if skill_id:
         filters.append(Skill.id != skill_id)
 
-    if db.exec(select(Skill).filter(*filters)).first():
+    statement = select(Skill).filter(*filters)
+    if db.exec(statement).first():
         raise HTTPException(
             status_code=409, detail=f"Skill with name '{skill_name}' already exits"
         )

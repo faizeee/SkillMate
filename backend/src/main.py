@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
@@ -24,6 +25,17 @@ app = FastAPI(
     version=config.app_version,
     lifespan=lifespan,
 )
+
+
+@app.middleware("http")
+async def preflight_middleware(request: Request, call_next):
+    """Handel OPTIONS request."""
+    # Intercept all OPTIONS requests before they hit route dependencies
+    if request.method == "OPTIONS":
+        # Empty JSON body with 200 OK
+        return JSONResponse(content={}, status_code=200)
+    # Continue normally for other requests
+    return await call_next(request)
 
 
 # logging.basicConfig(level=logging.DEBUG)

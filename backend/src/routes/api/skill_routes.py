@@ -37,7 +37,9 @@ def create_skill(
     return add_skills(skill, db)
 
 
-@router.put("/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)])
+@router.patch(
+    "/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)]
+)
 def update_skill(
     skill_id: int,
     inputs: SkillIn,

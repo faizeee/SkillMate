@@ -120,12 +120,25 @@ def test_update_skill_with_invalid_user(client, auth_header):
         ({}, 422),  # missing all fields
         ({"skill_level_id": "1"}, 422),  # missing name
         ({"name": "c++"}, 422),  # missing skill_level_id
-        ({"name": "JavaScript", "skill_level_id": "1"}, 409),  # duplicate name
+        # ({"name": "PHP", "skill_level_id": "1"}, 409),  # duplicate name
     ],
 )
 def test_update_skill_with_invalid_payload(
-    client, auth_header_for_admin, payload, auth_header, expected_status_code
+    client, auth_header_for_admin, payload, expected_status_code
 ):
+    skill_id = 2
+    response = client.patch(
+        f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
+    )
+    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == expected_status_code
+
+
+def test_update_skill_with_invalid_skill_name(
+    client, auth_header_for_admin, reset_db_state
+):
+    payload = {"name": "PHP", "skill_level_id": "1"}
+    expected_status_code = 409
     skill_id = 2
     response = client.patch(
         f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
