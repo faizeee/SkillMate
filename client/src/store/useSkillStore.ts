@@ -13,6 +13,7 @@ type SkillState = {
   addSkill: (skill: NewSkill) => Promise<void>;
   updateSkill: (skill: NewSkill, skill_id: number | string) => Promise<void>;
   getSkill: (skill_id: number | string) => Skill | null;
+  fetchSkill: (skill_id: number | string) => Promise<Skill | null>;
   deleteSkill: (skill_id: number | string) => Promise<void>;
 };
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -33,21 +34,21 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
     return get().skills.find(skill => skill.id == skill_id) || null
   },
 
-  // getSkill: async (skill_id: number | string) => {
-  //   try {
-  //     const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`);
-  //     const skill = await response.json();
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch skill");
-  //     }
-  //     console.log(skill);
-  //     return skill;
-  //   } catch (err) {
-  //     set({ error: (err as Error).message });
-  //     console.error(err);
-  //     return null;
-  //   }
-  // },
+  fetchSkill: async (skill_id: number | string) => {
+    try {
+      const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch skill");
+      }
+      const skill = await response.json();
+      console.log(skill);
+      return skill;
+    } catch (err) {
+      set({ error: (err as Error).message });
+      console.error(err);
+      return null;
+    }
+  },
 
   deleteSkill: async (skill_id: number | string) => {
     try {
@@ -96,7 +97,7 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
   updateSkill: async (skill: NewSkill, skill_id: number | string) => {
     try {
       const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`, {
-        method: "patch",
+        method: "put",
         body: JSON.stringify(skill),
       });
 

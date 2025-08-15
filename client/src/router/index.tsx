@@ -13,6 +13,7 @@ import PublicLayout from "@/layouts/PublicLayout";
 import LoginPage from "@/pages/LoginPage";
 import AdminLayout from "@/layouts/AdminLayout";
 import { EditSkillRoute } from "./skills/edit";
+import { NotFoundRoute } from "./errors/404";
 // Lazy-loaded pages
 const SkillsPage = lazy(() => import("@/pages/Skills"));
 // const AddSkillPage = lazy(() => import("@/pages/AddSkill"));
@@ -69,7 +70,7 @@ const adminRootRoute = createRoute({
   },
 });
 // Public Root Route
-const publicRoute = createRoute({
+export const publicRoute = createRoute({
   getParentRoute: () => rootRoute,
   component: PublicLayout,
   id: "public-root",
@@ -122,7 +123,7 @@ const routeTree = rootRoute.addChildren([public_routes, authenticated_routes,adm
 
 console.log({routeTree});
 // ✅ Export the router instance
-export const router = createRouter({ routeTree });
+export const router = createRouter({ routeTree, notFoundRoute:NotFoundRoute });
 
 // ✅ Also declare module for type safety
 declare module "@tanstack/react-router" {
