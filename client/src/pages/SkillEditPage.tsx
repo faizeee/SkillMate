@@ -12,13 +12,13 @@ export default function SkillEditPage() {
   const {skill : editSkill} = useLoaderData({from:EditSkillRoute.id})
   const navigate = useNavigate();
   const handleSubmit = async (formData:NewSkill) => {
-    console.info(formData)
+    console.info({formData})
     try{
       await updateSkill(formData,editSkill.id)
       toast.success("New Skill Updated")
       // console.info("redirecting to skills page");
         // ✅ Only navigate if no error
-      navigate({ to: "/skills" });
+      // navigate({ to: "/skills" });
     }
     catch(err){
       toast.error(`${err || "Something went wrong"}`)

@@ -2,6 +2,7 @@ import { useRole } from "@/hooks/useRole"
 import { useSkillsStore } from "@/store/useSkillStore"
 import type { Skill as SkillType } from "@/types/skill"
 import { Link } from "@tanstack/react-router"
+import { toast } from "sonner"
 
 type SkillProps = {
     skill : SkillType,
@@ -9,9 +10,19 @@ type SkillProps = {
 }
 
 const SkillCard = ({skill}:SkillProps) => {
-    const handelDeleteSkill  = (skill_id:number | string) => {
-        console.warn({delete:skill_id})
-        deleteSkill(skill_id)
+    const handelDeleteSkill  =  async () => {
+        const skill_name = `${skill.name} (${skill.level_name})`;
+        if(!confirm(`Do You realy want to delete ${skill_name}?`)){
+            toast.error("Operation Declined!")
+            return;
+        }
+        try{
+            console.warn({delete:skill.id})
+            await deleteSkill(skill.id);
+            toast.success(`${skill_name} Deleted`)
+       }catch(err:any){
+        toast.error(err.message)
+       }
         // onDeleteSkill?.(skill_id);
     }
     const role = useRole()
@@ -24,8 +35,8 @@ const SkillCard = ({skill}:SkillProps) => {
         </span>
 </p>
 <p className="font-semibold">
-    <span onClick={()=>handelDeleteSkill(skill.id)} className="text-red-600 underline hover:cursor-pointer">Delete</span>
-    {role == "Admin" && (<Link to = {`/edit/${skill.id}`} > Edit </Link>)}
+    <span onClick={()=>handelDeleteSkill()} className="text-red-600 underline hover:cursor-pointer">Delete</span>
+    {role == "Admin" && (<Link to = {`/edit/${skill.id}`} className="text-blue-400 underline ps-2" > Edit </Link>)}
 </p>
 </li>
     );

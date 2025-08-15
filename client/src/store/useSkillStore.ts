@@ -57,11 +57,6 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
         return;
       }
 
-      if(!confirm(`Do You realy want to delete ${skillToDelete.name} (${skillToDelete.level_name})?`)){
-        toast.error("Operation Declined!")
-        return;
-      }
-
       const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`, {
         method: "delete",
       });
@@ -69,7 +64,7 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
         throw new Error("Something went wrong!");
       }
       console.log({skillToDelete})
-      set((state) => ({skills: state.skills.filter((s)=>s.id == skill_id)}))
+      set((state) => ({skills: state.skills.filter((s)=>s.id != skill_id)}))
       return;
     } catch (err: any) {
       console.log(err.message);

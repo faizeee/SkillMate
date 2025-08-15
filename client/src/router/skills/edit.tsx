@@ -4,12 +4,12 @@ import { authenticatedRootRoute } from "..";
 import { useSkillsStore } from "@/store/useSkillStore";
 const SkillEditPage = lazy(() => import("@/pages/SkillEditPage"));
 export const EditSkillRoute = createRoute({
-  path: "/edit/:skill_id",
+  path: "/edit/$skillId",
   getParentRoute: () => authenticatedRootRoute,
   component: SkillEditPage,
   loader: ({ params }) => {
     console.log(params);
-    const skill = useSkillsStore.getState().getSkill(params.skill_id);
+    const skill = useSkillsStore.getState().getSkill(params.skillId);
     console.log(skill);
     return {skill};
   },

@@ -120,6 +120,7 @@ const admin_routes = adminRootRoute.addChildren([
 
 const routeTree = rootRoute.addChildren([public_routes, authenticated_routes,admin_routes]);
 
+console.log({routeTree});
 // ✅ Export the router instance
 export const router = createRouter({ routeTree });
 
