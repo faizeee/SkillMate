@@ -159,12 +159,13 @@ def check_skill_duplicate(
     db: Session, skill_name: str, skill_id: Optional[int | None] = None
 ):
     """Database Uniqueness Validation, ignoring the skill being updated."""
-    statement = select(Skill).filter(func.lower(Skill.name) == skill_name.lower())
+    filters = [func.lower(Skill.name) == skill_name.lower()]
+
     # Exclude the current skill from the uniqueness check if it has an ID
     if skill_id:
-        statement.filter(Skill.id != skill_id)
+        filters.append(Skill.id != skill_id)
 
-    if db.exec(statement).first():
+    if db.exec(select(Skill).filter(*filters)).first():
         raise HTTPException(
             status_code=409, detail=f"Skill with name '{skill_name}' already exits"
         )
