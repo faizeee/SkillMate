@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from fastapi.middleware.cors import CORSMiddleware
 
-# from middlewares.logging import LoggingMiddleware
+from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
 from data.db import init_db
@@ -34,7 +34,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.add_middleware(LoggingMiddleware)
+app.add_middleware(LoggingMiddleware)
 
 
 @app.get("/")
