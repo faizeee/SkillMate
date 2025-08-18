@@ -31,7 +31,7 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
     });
   },
   getSkill: (skill_id: number | string) => {
-    return get().skills.find(skill => skill.id == skill_id) || null
+    return get().skills.find((skill) => skill.id == skill_id) || null;
   },
 
   fetchSkill: async (skill_id: number | string) => {
@@ -53,8 +53,8 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
   deleteSkill: async (skill_id: number | string) => {
     try {
       const skillToDelete = get().getSkill(skill_id);
-      if(!skillToDelete) {
-        toast.error("Invalid Skill!")
+      if (!skillToDelete) {
+        toast.error("Invalid Skill!");
         return;
       }
 
@@ -64,8 +64,10 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
-      console.log({skillToDelete})
-      set((state) => ({skills: state.skills.filter((s)=>s.id != skill_id)}))
+      console.log({ skillToDelete });
+      set((state) => ({
+        skills: state.skills.filter((s) => s.id != skill_id),
+      }));
       return;
     } catch (err: any) {
       console.log(err.message);
@@ -74,16 +76,16 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
   },
   addSkill: async (skill) => {
     try {
-      const response = await fetchRequest (`${BASE_URL}/skills`,{
+      const response = await fetchRequest(`${BASE_URL}/skills`, {
         method: "POST",
-        body: JSON.stringify(skill)
+        body: JSON.stringify(skill),
       });
       if (!response.ok) {
         await handleApiError(response);
       }
       const createdSkill = await response.json();
-      console.log({createdSkill})
-      set((state) => ({skills:[...state.skills,createdSkill]}))
+      console.log({ createdSkill });
+      set((state) => ({ skills: [...state.skills, createdSkill] }));
       toast.success("Skill added Successfully");
       return;
     } catch (err: any) {
@@ -104,10 +106,12 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
       if (!response.ok) {
         await handleApiError(response);
       }
-      const updatedSkill = await response.json()
-      console.log({updatedSkill})
+      const updatedSkill = await response.json();
+      console.log({ updatedSkill });
       // Use the 'set' function to update the state directly
-      set((state)=>({skills: state.skills.map((s)=>s.id == skill_id ? updatedSkill : s)}))
+      set((state) => ({
+        skills: state.skills.map((s) => (s.id == skill_id ? updatedSkill : s)),
+      }));
       return;
     } catch (err: any) {
       set({ error: err.message });

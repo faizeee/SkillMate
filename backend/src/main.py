@@ -1,14 +1,12 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from middlewares.logging import LoggingMiddleware
+
+# from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
 from data.db import init_db
-
-# import logging
 
 
 # Event handler to initialize the database on application startup
@@ -27,35 +25,16 @@ app = FastAPI(
 )
 
 
-@app.middleware("http")
-async def preflight_middleware(request: Request, call_next):
-    """Handel OPTIONS request."""
-    # Intercept all OPTIONS requests before they hit route dependencies
-    if request.method == "OPTIONS":
-        # Empty JSON body with 200 OK
-        return JSONResponse(content={}, status_code=200)
-    # Continue normally for other requests
-    return await call_next(request)
-
-
-# logging.basicConfig(level=logging.DEBUG)
-
-# @app.on_event("startup")
-# async def on_startup():
-#     """Handel application startup."""
-#     await init_redis()
-#     init_db()
-
-
 # Allow CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    # allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.add_middleware(LoggingMiddleware)
+# app.add_middleware(LoggingMiddleware)
 
 
 @app.get("/")

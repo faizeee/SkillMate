@@ -37,10 +37,21 @@ def create_skill(
     return add_skills(skill, db)
 
 
+@router.put("/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)])
+def update_skill(
+    skill_id: int,
+    inputs: SkillIn,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_session),
+):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
+    """Update a skill."""
+    return update_skill_by_id(skill_id, inputs, db)
+
+
 @router.patch(
     "/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)]
 )
-def update_skill(
+def patch_update_skill(
     skill_id: int,
     inputs: SkillIn,
     user: User = Depends(get_current_user),
