@@ -1,10 +1,22 @@
-# import os
-# from typing import Optional
-# from core.config import config
-# from fastapi import UploadFile
+import os
+from typing import Optional
+from uuid import uuid4
+from core.config import config
+from fastapi import UploadFile
+import aiofiles
 
 
-# def save_file(file:UploadFile, subdir:Optional[str] = None) -> str :
-#     """Save Uploaded file and return the file path."""
+async def save_file(file: UploadFile, subdir: Optional[str] = None) -> str:
+    """Save Uploaded file and return the file path."""
+    # creates upload path string
+    base_path = os.path.join(config.upload_dir, subdir) if subdir else config.upload_dir
+    # make directory exist_ok=True is a crucial argument.
+    os.makedirs(base_path, exist_ok=True)
+    file_ext = os.path.splitext(file.filename)[1]
+    file_name = f"{uuid4().hex}{file_ext}"
+    path = os.path.join(base_path, file_name)
+    async with aiofiles.open(path, "wb") as out_file:
+        while content := await file.read(1024 * 1024):  # 1 MB
+            await out_file.write(content)
 
-#     path_to_upload = os.path.join(config.upload_dir,subdir) if subdir else config.upload_dir
+    return path

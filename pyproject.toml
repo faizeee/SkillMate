@@ -42,7 +42,8 @@ dependencies = [
     "pre-commit~=4.2.0",
     # "redis~=6.2.0",
     # "fastapi-cache2~=0.2.2"
-    "alembic~=1.16.4"
+    "alembic~=1.16.4",
+    "aiofiles (>=24.1.0,<25.0.0)"
 ]
 
 [tool.setuptools]
