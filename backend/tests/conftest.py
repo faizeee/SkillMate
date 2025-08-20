@@ -43,6 +43,14 @@ def reset_db_state():
     yield
 
 
+@pytest.fixture(scope="session")
+def reset_db_state_for_session():
+    """Reset the db state before the test."""
+    reset_test_db(test_db_engine)  # Drop and recreate
+    run_migrations_and_seed_db(test_db_engine)  # Run migrations + seed
+    yield
+
+
 @pytest.fixture(scope="function")  # Use 'function' scope for isolated tests
 def drop_all_tables_for_error_test():
     """Pytest fixture to ensure a clean database state for each test."""

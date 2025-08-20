@@ -9,16 +9,29 @@ def test_get_skills(client):
     assert isinstance(response.json(), list)
 
 
+@pytest.mark.parametrize(
+    "data , file",
+    [
+        ({"name": "AWS", "skill_level_id": "2"}, None),
+        (
+            {"name": "AWS", "skill_level_id": "2"},
+            ("test.png", b"fake-image-bytes", "image/png"),
+        ),
+    ],
+)
 @pytest.mark.asyncio
-async def test_create_skill(async_client, reset_db_state, auth_header):
-    unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
-    payload = {"name": unique_name, "skill_level_id": "2"}
+async def test_create_skill(
+    async_client, reset_db_state_for_session, auth_header, data, file
+):
+    print(data)
+    data["name"] = f"{data['name']}-{uuid.uuid4().hex[:6]}"
+    files = {"file": file} if file else {}
     response = await async_client.post(
-        "/api/skills/", data=payload, headers=auth_header
+        "/api/skills/", data=data, files=files, headers=auth_header
     )
     print("RESPONSE TEXT:", response.text)  # print raw error message
     assert response.status_code == 200
-    assert response.json()["name"] == unique_name
+    assert response.json()["name"] == data["name"]
 
 
 def test_create_duplicate_skill(client, auth_header):
