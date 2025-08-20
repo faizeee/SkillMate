@@ -1,3 +1,4 @@
+from httpx import AsyncClient
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, create_engine
@@ -54,6 +55,13 @@ def drop_all_tables_for_error_test():
 def client():
     """Pytest fixture to provide a FastAPI TestClient instance."""
     return TestClient(app)
+
+
+@pytest.fixture
+async def async_client():
+    """Create async client."""
+    async with AsyncClient(app, base_url="http://test") as client:
+        yield client
 
 
 @pytest.fixture
