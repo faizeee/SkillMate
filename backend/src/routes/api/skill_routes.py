@@ -31,14 +31,14 @@ def list_skills(db: Session = Depends(get_session)):
 
 
 @router.post("/", response_model=SkillRead, dependencies=[Depends(user_only)])
-def create_skill(
+async def create_skill(
     skill: SkillIn = Depends(get_skill_in),
     file: UploadFile | None = Depends(validate_image),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_session),
 ):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
     """Create a new skill."""
-    return add_skills(db, skill, file)
+    return await add_skills(db, skill, file)
 
 
 @router.put("/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)])

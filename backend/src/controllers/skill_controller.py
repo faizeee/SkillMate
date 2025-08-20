@@ -6,6 +6,7 @@ from fastapi import HTTPException, UploadFile, status
 from models.base.response_schemas import ResponseMessage
 from models.skill import Skill, SkillIn, SkillRead
 from models.skill_level import SkillLevel
+from services.helpers import save_file
 from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy import func
@@ -55,7 +56,7 @@ def get_skills(db: Session) -> list[SkillRead]:
 
 # The -> symbol in a function definition is used for type hints,
 # specifically to indicate the return type of the function.
-def add_skills(
+async def add_skills(
     db: Session, skill: SkillIn, file: UploadFile | None = File(None)
 ) -> SkillRead:
     """Add new skill to Skill table.
@@ -67,9 +68,11 @@ def add_skills(
         SkillRead: New Created Skill.
     """
     check_skill_duplicate(db=db, skill_name=skill.name)
+    file_path = await save_file(file, subdir="skills") if file else None
     # 1. Create and add the new skill
+    skill_data = skill.model_dump()
     new_skill = Skill(
-        **skill.model_dump()
+        **skill_data, icon_path=file_path
     )  # OR Skill(name=skill.name,skill_level_id=skill.skill_level_id)
     db.add(new_skill)
     # This assigns the 'id' to new_skill and saves it.
