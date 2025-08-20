@@ -1,7 +1,8 @@
 """Contains skills curd: create,update,delete and fetch handlers."""
 
 from typing import Optional
-from fastapi import HTTPException, status
+from click import File
+from fastapi import HTTPException, UploadFile, status
 from models.base.response_schemas import ResponseMessage
 from models.skill import Skill, SkillIn, SkillRead
 from models.skill_level import SkillLevel
@@ -54,12 +55,14 @@ def get_skills(db: Session) -> list[SkillRead]:
 
 # The -> symbol in a function definition is used for type hints,
 # specifically to indicate the return type of the function.
-def add_skills(skill: SkillIn, db: Session) -> SkillRead:
+def add_skills(
+    db: Session, skill: SkillIn, file: UploadFile | None = File(None)
+) -> SkillRead:
     """Add new skill to Skill table.
 
     Args:
-        skill(SkillIn): submitted data
         db (Session): Need a resolved Session object by route.
+        skill(SkillIn): submitted data
     Returns:
         SkillRead: New Created Skill.
     """

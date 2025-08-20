@@ -45,6 +45,7 @@ class Settings(BaseSettings):
         30, env="TOKEN_EXPIRES_IN"
     )  # to manually map the Env Variable with settings variable
 
+    upload_dir: str = "uploads"
     model_config = SettingsConfigDict(env_file="backend/.env", extra="ignore")
 
 
