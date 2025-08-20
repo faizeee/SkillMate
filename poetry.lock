@@ -108,10 +108,10 @@ test = ["astroid (>=2,<4)", "pytest", "pytest-cov", "pytest-xdist"]
 name = "backports-asyncio-runner"
 version = "1.2.0"
 description = "Backport of asyncio.Runner, a context manager that controls event loop life cycle."
-optional = true
+optional = false
 python-versions = "<3.11,>=3.8"
 groups = ["main"]
-markers = "extra == \"dev\" and python_version < \"3.11\""
+markers = "python_version < \"3.11\""
 files = [
     {file = "backports_asyncio_runner-1.2.0-py3-none-any.whl", hash = "sha256:0da0a936a8aeb554eccb426dc55af3ba63bcdc69fa1a600b5bb305413a4477b5"},
     {file = "backports_asyncio_runner-1.2.0.tar.gz", hash = "sha256:a5aa7b2b7d8f8bfcaa2b57313f70792df84e32a2a746f585213373f900b42162"},
@@ -1536,10 +1536,9 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests
 name = "pytest-asyncio"
 version = "1.1.0"
 description = "Pytest support for asyncio"
-optional = true
+optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "extra == \"dev\""
 files = [
     {file = "pytest_asyncio-1.1.0-py3-none-any.whl", hash = "sha256:5fe2d69607b0bd75c656d1211f969cadba035030156745ee09e7d71740e58ecf"},
     {file = "pytest_asyncio-1.1.0.tar.gz", hash = "sha256:796aa822981e01b68c12e4827b8697108f7205020f24b5793b3c41555dab68ea"},
@@ -2425,4 +2424,4 @@ dev = ["black", "ipython", "mypy", "pytest", "pytest-asyncio", "pytest-cov", "py
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "2e11373b59bb76e6bf260201646fdba9b3cf49b6511927a9c90618f3a4eaa726"
+content-hash = "67468b0acd7cfb1af1c66765da552a6e97dbe14e3665a6d8910a1b9a61251fd8"

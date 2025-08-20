@@ -1,6 +1,7 @@
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 import pytest
 from fastapi.testclient import TestClient
+import pytest_asyncio
 from sqlmodel import Session, create_engine
 from main import app
 from data.db import get_session
@@ -57,10 +58,11 @@ def client():
     return TestClient(app)
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def async_client():
     """Create async client."""
-    async with AsyncClient(app, base_url="http://test") as client:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
 
 
