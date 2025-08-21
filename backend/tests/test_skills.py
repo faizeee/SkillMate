@@ -47,23 +47,26 @@ async def test_create_duplicate_skill(async_client, auth_header):
 @pytest.mark.parametrize(
     "data , file , status_code",
     [
-        ({}, None, 422),  # missing all fields
-        (
+        pytest.param({}, None, 422, id="missing-all-fields"),
+        pytest.param(
             {},
             ("test.png", BytesIO(b"fake-image-bytes"), "image/png"),
             422,
-        ),  # only image without skill details
-        ({"skill_level_id": "1"}, None, 422),  # missing name
-        ({"name": "c++"}, None, 422),  # missing skill_level_id
-        (
+            id="missing-all-except-image",
+        ),
+        pytest.param({"skill_level_id": "1"}, None, 422, id="missing-skill-name"),
+        pytest.param({"name": "c++"}, None, 422, id="missing-skill-level-id"),
+        pytest.param(
             {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
             ("test.txt", BytesIO(b"not-an-image"), "text/plain"),
             400,
-        ),  # invalid file type
-        (
+            id="invalid-file-type",
+        ),
+        pytest.param(
             {"name": f"AWS-{uuid.uuid4().hex}", "skill_level_id": "2"},
             ("test.png", BytesIO(b"0" * (6 * 1024 * 1024)), "image/png"),
             400,
+            id="invalid-file-size",
         ),  # Invalid file size i.e 6mb file size
     ],
 )
