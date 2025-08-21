@@ -1,3 +1,4 @@
+from io import BytesIO
 import pytest
 import uuid
 
@@ -44,17 +45,36 @@ async def test_create_duplicate_skill(async_client, auth_header):
 
 
 @pytest.mark.parametrize(
-    "payload",
+    "data , file , status_code",
     [
-        {},  # missing all fields
-        {"skill_level_id": "1"},  # missing name
-        {"name": "c++"},  # missing skill_level_id
+        ({}, None, 422),  # missing all fields
+        (
+            {},
+            ("test.png", BytesIO(b"fake-image-bytes"), "image/png"),
+            422,
+        ),  # only image without skill details
+        ({"skill_level_id": "1"}, None, 422),  # missing name
+        ({"name": "c++"}, None, 422),  # missing skill_level_id
+        (
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            ("test.txt", BytesIO(b"not-an-image"), "text/plain"),
+            400,
+        ),  # invalid file type
+        (
+            {"name": f"AWS-{uuid.uuid4().hex}", "skill_level_id": "2"},
+            ("test.png", BytesIO(b"0" * (6 * 1024 * 1024)), "image/png"),
+            400,
+        ),  # Invalid file size i.e 6mb file size
     ],
 )
-def test_invalid_payload(client, auth_header, payload):
-    response = client.post("/api/skills", json=payload, headers=auth_header)
-    # print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
-    assert response.status_code == 422
+@pytest.mark.asyncio
+async def test_invalid_payload(async_client, auth_header, data, file, status_code):
+    files = {"file": file} if file else {}
+    response = await async_client.post(
+        "/api/skills/", data=data, files=files, headers=auth_header
+    )
+    print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
+    assert response.status_code == status_code
 
 
 def test_get_skill_by_valid_id(client, reset_db_state, auth_header):
