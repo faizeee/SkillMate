@@ -37,7 +37,9 @@ async def test_create_skill(
 async def test_create_duplicate_skill(async_client, auth_header):
     payload = {"name": "Python", "skill_level_id": "1"}
     # client.post("/api/skills/",json=payload,)
-    response = async_client.post("/api/skills/", data=payload, headers=auth_header)
+    response = await async_client.post(
+        "/api/skills/", data=payload, headers=auth_header
+    )
     # print("RESPONSE TEXT:",response.text)
     assert response.status_code == 409
 
