@@ -1,4 +1,5 @@
-from typing import Optional
+from io import BytesIO
+from typing import Optional, Union
 from fastapi.testclient import TestClient
 from models.skill import Skill
 from sqlmodel import Session
@@ -88,3 +89,14 @@ def get_all_skills(client: TestClient) -> list[dict]:
     response = client.get("/api/skills/")
     assert response.status_code == 200
     return response.json()
+
+
+def fake_image(size_mb: float | int = 0.1) -> tuple[str, Union[bytes, BytesIO], str]:
+    """Create fake image bytes."""
+    size_bytes = int(size_mb * 1024 * 1024)  # convert MB to bytes and cast to int
+    return ("test.png", BytesIO(b"0" * size_bytes), "image/png")
+
+
+def fake_txt() -> tuple[str, Union[bytes, BytesIO], str]:
+    """Create fake text file bytes."""
+    return ("text.txt", BytesIO(b"fake-text-bytes"), "text/plain")

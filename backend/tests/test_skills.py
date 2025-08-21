@@ -1,6 +1,7 @@
-from io import BytesIO
 import pytest
 import uuid
+
+from backend.tests.utils.helpers import fake_image, fake_txt
 
 
 def test_get_skills(client):
@@ -14,10 +15,7 @@ def test_get_skills(client):
     "data , file",
     [
         ({"name": "AWS", "skill_level_id": "2"}, None),
-        (
-            {"name": "AWS", "skill_level_id": "2"},
-            ("test.png", b"fake-image-bytes", "image/png"),
-        ),
+        ({"name": "AWS", "skill_level_id": "2"}, fake_image()),
     ],
 )
 @pytest.mark.asyncio
@@ -50,7 +48,7 @@ async def test_create_duplicate_skill(async_client, auth_header):
         pytest.param({}, None, 422, id="missing-all-fields"),
         pytest.param(
             {},
-            ("test.png", BytesIO(b"fake-image-bytes"), "image/png"),
+            fake_image(),
             422,
             id="missing-all-except-image",
         ),
@@ -58,13 +56,13 @@ async def test_create_duplicate_skill(async_client, auth_header):
         pytest.param({"name": "c++"}, None, 422, id="missing-skill-level-id"),
         pytest.param(
             {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
-            ("test.txt", BytesIO(b"not-an-image"), "text/plain"),
+            fake_txt(),
             400,
             id="invalid-file-type",
         ),
         pytest.param(
             {"name": f"AWS-{uuid.uuid4().hex}", "skill_level_id": "2"},
-            ("test.png", BytesIO(b"0" * (6 * 1024 * 1024)), "image/png"),
+            fake_image(6),
             400,
             id="invalid-file-size",
         ),  # Invalid file size i.e 6mb file size
