@@ -29,6 +29,7 @@ async def test_create_skill(
         "/api/skills/", data=data, files=files, headers=auth_header
     )
     print("RESPONSE TEXT:", response.text)  # print raw error message
+    print("RESPONSE:", response.json())  # print raw error message
     assert response.status_code == 200
     assert response.json()["name"] == data["name"]
 

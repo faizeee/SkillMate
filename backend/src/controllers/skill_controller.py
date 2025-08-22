@@ -134,13 +134,16 @@ def delete_skill_by_id(id: int, db: Session) -> ResponseMessage:
     return ResponseMessage(message=f"Skill with id {id} deleted successfully")
 
 
-def update_skill_by_id(skill_id: int, inputs: SkillIn, db: Session) -> SkillRead:
+async def update_skill_by_id(
+    db: Session, skill_id: int, inputs: SkillIn, file: UploadFile | None = File(None)
+) -> SkillRead:
     """Update a skill in skills table based on skill_id.
 
     Args:
+        db (Session): Need a resolved Session object by route.
         skill_id(int): Skill id
         inputs: skill data
-        db (Session): Need a resolved Session object by route.
+        file: UploadFile Or None
     Returns:
         SkillRead: New Created Skill.
     """
@@ -149,10 +152,15 @@ def update_skill_by_id(skill_id: int, inputs: SkillIn, db: Session) -> SkillRead
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Skill not found")
 
     check_skill_duplicate(db, inputs.name, skill_id)
+
+    file_path = await save_file(file, subdir="skills") if file else None
     # NOTE: use inputs.model_dump(exclude_unset=True).items()  for partial
     # updates it ignores the unchanged
     for key, value in inputs.model_dump(exclude_unset=True).items():
         setattr(skill, key, value)
+
+    if file_path:
+        setattr(skill, "icon_path", file_path)
 
     db.commit()
     db.refresh(skill)
