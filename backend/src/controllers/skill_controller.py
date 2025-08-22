@@ -153,13 +153,13 @@ async def update_skill_by_id(
 
     check_skill_duplicate(db, inputs.name, skill_id)
 
-    file_path = await save_file(file, subdir="skills") if file else None
     # NOTE: use inputs.model_dump(exclude_unset=True).items()  for partial
     # updates it ignores the unchanged
     for key, value in inputs.model_dump(exclude_unset=True).items():
         setattr(skill, key, value)
 
-    if file_path:
+    if file:
+        file_path = await save_file(file, subdir="skills")
         setattr(skill, "icon_path", file_path)
 
     db.commit()
