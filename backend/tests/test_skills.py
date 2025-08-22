@@ -163,43 +163,64 @@ async def test_update_skill_with_valid_user_and_data(
         assert response_data["icon_path"] is not None
 
 
-def test_update_skill_with_invalid_user(client, auth_header):
+@pytest.mark.asyncio
+async def test_update_skill_with_invalid_user(async_client, auth_header):
     unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
     skill_id = 1
     payload = {"name": unique_name, "skill_level_id": "2"}
-    response = client.put(f"/api/skills/{skill_id}", json=payload, headers=auth_header)
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", json=payload, headers=auth_header
+    )
     # print("RESPONSE TEXT:", response.text)  # print raw error message
     assert response.status_code == 403
 
 
 @pytest.mark.parametrize(
-    "payload, expected_status_code",
+    "data, file, expected_status_code",
     [
-        ({}, 422),  # missing all fields
-        ({"skill_level_id": "1"}, 422),  # missing name
-        ({"name": "c++"}, 422),  # missing skill_level_id
-        # ({"name": "PHP", "skill_level_id": "1"}, 409),  # duplicate name
+        pytest.param({}, None, 422, id="update-with-all-missing"),
+        pytest.param({}, fake_image(), 422, id="update-with-all-missing-except-image"),
+        pytest.param(
+            {"skill_level_id": "1"}, fake_image(), 422, id="update-with-missing-name"
+        ),
+        pytest.param(
+            {"name": "c++"}, fake_image(), 422, id="update-with-missing-skill_level_id"
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_image(6),
+            400,
+            id="update-with-valid-user-and-data-but-invalid-file-size",
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_txt(),
+            400,
+            id="update-with-valid-user-and-data-but-invalid-file-type",
+        ),
     ],
 )
-def test_update_skill_with_invalid_payload(
-    client, auth_header_for_admin, payload, expected_status_code
+@pytest.mark.asyncio
+async def test_update_skill_with_invalid_payload(
+    async_client, auth_header_for_admin, data, file, expected_status_code
 ):
     skill_id = 2
-    response = client.put(
-        f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
+    files = {"file": file} if file else {}
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
     )
-    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    print("RESPONSE TEXT:", response.text)  # print raw error message
     assert response.status_code == expected_status_code
 
 
-def test_update_skill_with_invalid_skill_name(
-    client, auth_header_for_admin, reset_db_state
+@pytest.mark.asyncio
+async def test_update_skill_with_duplicate_skill_name(
+    async_client, auth_header_for_admin, reset_db_state
 ):
-    payload = {"name": "PHP", "skill_level_id": "1"}
-    expected_status_code = 409
+    data = {"name": "PHP", "skill_level_id": "1"}
     skill_id = 2
-    response = client.put(
-        f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", data=data, headers=auth_header_for_admin
     )
     # print("RESPONSE TEXT:", response.text)  # print raw error message
-    assert response.status_code == expected_status_code
+    assert response.status_code == 409
