@@ -1,6 +1,5 @@
 import pytest
 import uuid
-
 from backend.tests.utils.helpers import fake_image, fake_txt
 
 
@@ -131,17 +130,37 @@ def test_get_skill_error(client, drop_all_tables_for_error_test):
     # assert "no such table" in response.json()["detail"]
 
 
-def test_update_skill_with_valid_user_and_data(client, auth_header_for_admin):
-    unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
+@pytest.mark.parametrize(
+    "data, file",
+    [
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            None,
+            id="update-without-file-with-valid-user-and-data",
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_image(),
+            id="update-with-file-valid-user-and-data",
+        ),
+    ],
+)
+@pytest.mark.asyncio
+async def test_update_skill_with_valid_user_and_data(
+    async_client, auth_header_for_admin, data, file
+):
     skill_id = 1
-    payload = {"name": unique_name, "skill_level_id": "2"}
-    response = client.put(
-        f"/api/skills/{skill_id}", json=payload, headers=auth_header_for_admin
+    files = {"file": file} if file else {}
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
     )
     print("RESPONSE TEXT:", response.text)  # print raw error message
+    response_data = response.json()
     assert response.status_code == 200
-    assert response.json()["name"] == unique_name
-    assert response.json()["id"] == skill_id
+    assert response_data["name"] == data["name"]
+    assert response_data["id"] == skill_id
+    if file:
+        assert response_data["icon_path"] is not None
 
 
 def test_update_skill_with_invalid_user(client, auth_header):
