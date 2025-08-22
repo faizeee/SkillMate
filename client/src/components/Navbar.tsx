@@ -1,13 +1,15 @@
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { useAuthStore } from "../store/useAuthStore";
-import { useNavigate } from "@tanstack/react-router";
+// import { useNavigate } from "@tanstack/react-router";
 
 export default function Navbar() {
     const {logout} = useAuthStore();
     const username = useAuthStore(s=>s.username());
-    const navigate = useNavigate()
+    useAuthRedirect()
+    // const navigate = useNavigate()
     const handelLogout = () => {
         logout()
-        navigate({to:"/login"})
+        // navigate({to:"/login"})
     }
     return (
         <nav className="flex justify-between p-4 text-white bg-gray-900">

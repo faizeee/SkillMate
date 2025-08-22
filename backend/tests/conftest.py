@@ -1,5 +1,7 @@
+from httpx import ASGITransport, AsyncClient
 import pytest
 from fastapi.testclient import TestClient
+import pytest_asyncio
 from sqlmodel import Session, create_engine
 from main import app
 from data.db import get_session
@@ -41,6 +43,14 @@ def reset_db_state():
     yield
 
 
+@pytest.fixture(scope="session")
+def reset_db_state_for_session():
+    """Reset the db state before the test."""
+    reset_test_db(test_db_engine)  # Drop and recreate
+    run_migrations_and_seed_db(test_db_engine)  # Run migrations + seed
+    yield
+
+
 @pytest.fixture(scope="function")  # Use 'function' scope for isolated tests
 def drop_all_tables_for_error_test():
     """Pytest fixture to ensure a clean database state for each test."""
@@ -54,6 +64,14 @@ def drop_all_tables_for_error_test():
 def client():
     """Pytest fixture to provide a FastAPI TestClient instance."""
     return TestClient(app)
+
+
+@pytest_asyncio.fixture
+async def async_client():
+    """Create async client."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        yield client
 
 
 @pytest.fixture

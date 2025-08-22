@@ -1,4 +1,4 @@
-import type { Skill } from "../store/useSkillStore"
+import type { Skill } from "@/types/skill"
 import SkillCard from "./SkillCard"
 
 type SkillsListProps = {

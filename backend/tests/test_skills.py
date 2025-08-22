@@ -1,5 +1,6 @@
 import pytest
 import uuid
+from backend.tests.utils.helpers import fake_image, fake_txt
 
 
 def test_get_skills(client):
@@ -9,35 +10,74 @@ def test_get_skills(client):
     assert isinstance(response.json(), list)
 
 
-def test_create_skill(client, reset_db_state, auth_header):
-    unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
-    payload = {"name": unique_name, "skill_level_id": "2"}
-    response = client.post("/api/skills/", json=payload, headers=auth_header)
+@pytest.mark.parametrize(
+    "data , file",
+    [
+        ({"name": "AWS", "skill_level_id": "2"}, None),
+        ({"name": "AWS", "skill_level_id": "2"}, fake_image()),
+    ],
+)
+@pytest.mark.asyncio
+async def test_create_skill(
+    async_client, reset_db_state_for_session, auth_header, data, file
+):
+    print(data)
+    data["name"] = f"{data['name']}-{uuid.uuid4().hex[:6]}"
+    files = {"file": file} if file else {}
+    response = await async_client.post(
+        "/api/skills/", data=data, files=files, headers=auth_header
+    )
     print("RESPONSE TEXT:", response.text)  # print raw error message
+    print("RESPONSE:", response.json())  # print raw error message
     assert response.status_code == 200
-    assert response.json()["name"] == unique_name
+    assert response.json()["name"] == data["name"]
 
 
-def test_create_duplicate_skill(client, auth_header):
+@pytest.mark.asyncio
+async def test_create_duplicate_skill(async_client, auth_header):
     payload = {"name": "Python", "skill_level_id": "1"}
     # client.post("/api/skills/",json=payload,)
-    response = client.post("/api/skills/", json=payload, headers=auth_header)
+    response = await async_client.post(
+        "/api/skills/", data=payload, headers=auth_header
+    )
     # print("RESPONSE TEXT:",response.text)
     assert response.status_code == 409
 
 
 @pytest.mark.parametrize(
-    "payload",
+    "data , file , status_code",
     [
-        {},  # missing all fields
-        {"skill_level_id": "1"},  # missing name
-        {"name": "c++"},  # missing skill_level_id
+        pytest.param({}, None, 422, id="missing-all-fields"),
+        pytest.param(
+            {},
+            fake_image(),
+            422,
+            id="missing-all-except-image",
+        ),
+        pytest.param({"skill_level_id": "1"}, None, 422, id="missing-skill-name"),
+        pytest.param({"name": "c++"}, None, 422, id="missing-skill-level-id"),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_txt(),
+            400,
+            id="invalid-file-type",
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex}", "skill_level_id": "2"},
+            fake_image(6),
+            400,
+            id="invalid-file-size",
+        ),  # Invalid file size i.e 6mb file size
     ],
 )
-def test_invalid_payload(client, auth_header, payload):
-    response = client.post("/api/skills", json=payload, headers=auth_header)
-    # print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
-    assert response.status_code == 422
+@pytest.mark.asyncio
+async def test_invalid_payload(async_client, auth_header, data, file, status_code):
+    files = {"file": file} if file else {}
+    response = await async_client.post(
+        "/api/skills/", data=data, files=files, headers=auth_header
+    )
+    print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
+    assert response.status_code == status_code
 
 
 def test_get_skill_by_valid_id(client, reset_db_state, auth_header):
@@ -88,3 +128,99 @@ def test_get_skill_error(client, drop_all_tables_for_error_test):
         for phrase in ["no such table", "does not exist", "UndefinedTable"]
     )
     # assert "no such table" in response.json()["detail"]
+
+
+@pytest.mark.parametrize(
+    "data, file",
+    [
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            None,
+            id="update-without-file-with-valid-user-and-data",
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_image(),
+            id="update-with-file-valid-user-and-data",
+        ),
+    ],
+)
+@pytest.mark.asyncio
+async def test_update_skill_with_valid_user_and_data(
+    async_client, auth_header_for_admin, data, file
+):
+    skill_id = 1
+    files = {"file": file} if file else {}
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
+    )
+    print("RESPONSE TEXT:", response.text)  # print raw error message
+    response_data = response.json()
+    assert response.status_code == 200
+    assert response_data["name"] == data["name"]
+    assert response_data["id"] == skill_id
+    if file:
+        assert response_data["icon_path"] is not None
+
+
+@pytest.mark.asyncio
+async def test_update_skill_with_invalid_user(async_client, auth_header):
+    unique_name = f"AWS-{uuid.uuid4().hex[:6]}"
+    skill_id = 1
+    payload = {"name": unique_name, "skill_level_id": "2"}
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", json=payload, headers=auth_header
+    )
+    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "data, file, expected_status_code",
+    [
+        pytest.param({}, None, 422, id="update-with-all-missing"),
+        pytest.param({}, fake_image(), 422, id="update-with-all-missing-except-image"),
+        pytest.param(
+            {"skill_level_id": "1"}, fake_image(), 422, id="update-with-missing-name"
+        ),
+        pytest.param(
+            {"name": "c++"}, fake_image(), 422, id="update-with-missing-skill_level_id"
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_image(6),
+            400,
+            id="update-with-valid-user-and-data-but-invalid-file-size",
+        ),
+        pytest.param(
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            fake_txt(),
+            400,
+            id="update-with-valid-user-and-data-but-invalid-file-type",
+        ),
+    ],
+)
+@pytest.mark.asyncio
+async def test_update_skill_with_invalid_payload(
+    async_client, auth_header_for_admin, data, file, expected_status_code
+):
+    skill_id = 2
+    files = {"file": file} if file else {}
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
+    )
+    print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == expected_status_code
+
+
+@pytest.mark.asyncio
+async def test_update_skill_with_duplicate_skill_name(
+    async_client, auth_header_for_admin, reset_db_state
+):
+    data = {"name": "PHP", "skill_level_id": "1"}
+    skill_id = 2
+    response = await async_client.put(
+        f"/api/skills/{skill_id}", data=data, headers=auth_header_for_admin
+    )
+    # print("RESPONSE TEXT:", response.text)  # print raw error message
+    assert response.status_code == 409

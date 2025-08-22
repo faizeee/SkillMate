@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 from sqlmodel import Session
 from data.db import get_session
 from models.skill import SkillRead, SkillIn
@@ -10,10 +10,14 @@ from controllers.skill_controller import (
     get_skill_levels,
     get_skill_by_id,
     delete_skill_by_id,
+    update_skill_by_id,
 )
 from models.user import User
 from models.base.response_schemas import ResponseMessage
-from services.permissions import user_only
+from services.permissions import user_only, admin_only
+from models.skill.base import get_skill_in
+from services.validations import validate_image
+
 
 router = (
     APIRouter()
@@ -27,13 +31,39 @@ def list_skills(db: Session = Depends(get_session)):
 
 
 @router.post("/", response_model=SkillRead, dependencies=[Depends(user_only)])
-def create_skill(
-    skill: SkillIn,
+async def create_skill(
+    skill: SkillIn = Depends(get_skill_in),
+    file: UploadFile | None = Depends(validate_image),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_session),
 ):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
     """Create a new skill."""
-    return add_skills(skill, db)
+    return await add_skills(db, skill, file)
+
+
+@router.put("/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)])
+async def update_skill(
+    skill_id: int,
+    inputs: SkillIn = Depends(get_skill_in),
+    file: UploadFile | None = Depends(validate_image),
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_session),
+):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
+    """Update a skill."""
+    return await update_skill_by_id(db, skill_id, inputs, file)
+
+
+# @router.patch(
+#     "/{skill_id}", response_model=SkillRead, dependencies=[Depends(admin_only)]
+# )
+# def patch_update_skill(
+#     skill_id: int,
+#     inputs: SkillIn,
+#     user: User = Depends(get_current_user),
+#     db: Session = Depends(get_session),
+# ):  # Request Body Validation: This is where FastAPI's magic for incoming data happens. When a POST request comes in
+#     """Update a skill."""
+#     return update_skill_by_id(skill_id, inputs, db)
 
 
 @router.get("/levels", response_model=list[SkillLevel])

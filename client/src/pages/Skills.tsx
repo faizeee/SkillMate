@@ -7,8 +7,11 @@ export default function SkillsPage() {
   const {skills, loading, error, fetchSkills} = useSkillsStore();
 
   useEffect(()=>{
-    fetchSkills();
-  },[]);
+    // Only fetch skills if the array is empty
+    if(skills.length === 0){
+      fetchSkills();
+    }
+  },[skills.length,fetchSkills]);
 
   return (
     <div className="p-6 space-y-4">

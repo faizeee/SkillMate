@@ -12,10 +12,12 @@ import Layout from "@/layouts/Layout";
 import PublicLayout from "@/layouts/PublicLayout";
 import LoginPage from "@/pages/LoginPage";
 import AdminLayout from "@/layouts/AdminLayout";
-
+import { EditSkillRoute } from "./skills/edit";
+import { NotFoundRoute } from "./errors/404";
 // Lazy-loaded pages
 const SkillsPage = lazy(() => import("@/pages/Skills"));
-const AddSkillPage = lazy(() => import("@/pages/AddSkill"));
+// const AddSkillPage = lazy(() => import("@/pages/AddSkill"));
+const SkillCreatePage = lazy(() => import("@/pages/SkillCreatePage"));
 const HomePage = lazy(() => import("@/pages/Home"));
 const ProfilePage = lazy(() => import("@/pages/Profile"));
 const Dashboard = lazy(() => import("@/pages/admin/Dashboard"));
@@ -29,7 +31,7 @@ const rootRoute = createRootRoute({
 });
 
 // Define a child route of the main root for routes that use your main Layout and require auth
-const authenticatedRootRoute = createRoute({
+export const authenticatedRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   component: Layout,
   id: "authenticated-root",
@@ -68,7 +70,7 @@ const adminRootRoute = createRoute({
   },
 });
 // Public Root Route
-const publicRoute = createRoute({
+export const publicRoute = createRoute({
   getParentRoute: () => rootRoute,
   component: PublicLayout,
   id: "public-root",
@@ -99,8 +101,9 @@ const authenticated_routes = authenticatedRootRoute.addChildren([
   createRoute({
     path: "/add",
     getParentRoute: () => authenticatedRootRoute,
-    component: AddSkillPage,
+    component: SkillCreatePage,
   }),
+  EditSkillRoute,
   createRoute({
     path: "/profile",
     getParentRoute: () => authenticatedRootRoute,
@@ -118,8 +121,9 @@ const admin_routes = adminRootRoute.addChildren([
 
 const routeTree = rootRoute.addChildren([public_routes, authenticated_routes,admin_routes]);
 
+console.log({routeTree});
 // ✅ Export the router instance
-export const router = createRouter({ routeTree });
+export const router = createRouter({ routeTree, notFoundRoute:NotFoundRoute });
 
 // ✅ Also declare module for type safety
 declare module "@tanstack/react-router" {
