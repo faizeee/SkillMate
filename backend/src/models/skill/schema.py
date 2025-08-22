@@ -30,3 +30,5 @@ class SkillRead(SkillIn):
     id: int
     level: Optional[SkillLevel] = None
     level_name: Optional[str] = None
+    icon_path: Optional[str] = None
+    icon_url: Optional[str] = None

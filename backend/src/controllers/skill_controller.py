@@ -135,7 +135,7 @@ def delete_skill_by_id(id: int, db: Session) -> ResponseMessage:
 
 
 async def update_skill_by_id(
-    db: Session, skill_id: int, inputs: SkillIn, file: UploadFile | None = File(None)
+    db: Session, skill_id: int, inputs: SkillIn, file: UploadFile | None = None
 ) -> SkillRead:
     """Update a skill in skills table based on skill_id.
 
