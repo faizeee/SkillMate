@@ -6,7 +6,7 @@ from fastapi import HTTPException, UploadFile, status
 from models.base.response_schemas import ResponseMessage
 from models.skill import Skill, SkillIn, SkillRead
 from models.skill_level import SkillLevel
-from services.helpers import save_file
+from utils.helpers import save_file
 from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy import func

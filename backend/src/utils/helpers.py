@@ -20,3 +20,15 @@ async def save_file(file: UploadFile, subdir: Optional[str] = None) -> str:
             await out_file.write(content)
 
     return path
+
+
+def asset(path: Optional[str]) -> str:
+    """Generate a full URL for static assets.
+
+    Example:
+        asset("icons/logo.png") -> http://localhost:8000/static/icons/logo.png
+    """
+    base_url = config.app_url.rstrip("/")
+    if path:
+        return f"{base_url}/static/{path.lstrip('/')}"
+    return base_url

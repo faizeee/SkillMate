@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     app_title: str = "SkillMate API"
     app_description: str = "API for SkillMate application"
     app_version: str = "0.1.0"
+    app_url: str = "http://localhost:8000"
 
     # --- THE CRITICAL CHANGE FOR REQUIRED FIELDS ---
     # For required fields, Pydantic-settings expects the environment variable
