@@ -155,10 +155,15 @@ def test_get_skill_error(client, drop_all_tables_for_error_test):
 )
 @pytest.mark.asyncio
 async def test_update_skill_with_valid_user_and_data(
-    async_client, auth_header_for_admin, data, file
+    async_client, auth_header_for_admin, data, file, mocker, tmp_path
 ):
     skill_id = 1
-    files = {"file": file} if file else {}
+    files = {}
+    expected_icon_path = None
+    if file:
+        files = {"file": file}
+        patch_target = "controllers.skill_controller.save_file"
+        expected_icon_path = mock_save_file(mocker, patch_target, tmp_path, file)
     response = await async_client.put(
         f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
     )
@@ -169,6 +174,7 @@ async def test_update_skill_with_valid_user_and_data(
     assert response_data["id"] == skill_id
     if file:
         assert response_data["icon_path"] is not None
+        assert response_data["icon_path"] == expected_icon_path
 
 
 @pytest.mark.asyncio
