@@ -1,6 +1,7 @@
 import pytest
 import uuid
-from backend.tests.utils.helpers import fake_image, fake_txt
+
+from backend.tests.utils.helpers import fake_image, fake_txt, mock_save_file
 
 
 def test_get_skills(client):
@@ -13,24 +14,31 @@ def test_get_skills(client):
 @pytest.mark.parametrize(
     "data , file",
     [
-        ({"name": "AWS", "skill_level_id": "2"}, None),
-        ({"name": "AWS", "skill_level_id": "2"}, fake_image()),
+        ({"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"}, None),
+        ({"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"}, fake_image()),
     ],
 )
 @pytest.mark.asyncio
 async def test_create_skill(
-    async_client, reset_db_state_for_session, auth_header, data, file
+    async_client, reset_db_state_for_session, auth_header, data, file, mocker, tmp_path
 ):
-    print(data)
-    data["name"] = f"{data['name']}-{uuid.uuid4().hex[:6]}"
-    files = {"file": file} if file else {}
+    files = {}
+    expected_icon_path = None
+    if file:
+        files = {"file": file}
+        patch_target = "controllers.skill_controller.save_file"
+        expected_icon_path = mock_save_file(mocker, patch_target, tmp_path, file)
+
     response = await async_client.post(
         "/api/skills/", data=data, files=files, headers=auth_header
     )
     print("RESPONSE TEXT:", response.text)  # print raw error message
     print("RESPONSE:", response.json())  # print raw error message
+    res_json = response.json()
     assert response.status_code == 200
-    assert response.json()["name"] == data["name"]
+    assert res_json["name"] == data["name"]
+    if file:
+        assert res_json["icon_path"] == expected_icon_path
 
 
 @pytest.mark.asyncio

@@ -1,6 +1,7 @@
 from io import BytesIO
 from pathlib import Path
 from typing import Optional
+from unittest.mock import AsyncMock
 from uuid import uuid4
 from fastapi.testclient import TestClient
 from models.skill import Skill
@@ -106,8 +107,8 @@ def fake_txt() -> FileTypeTuple:
     return ("text.txt", BytesIO(b"fake-text-bytes"), "text/plain")
 
 
-def mock_upload(
-    mocker: MockerFixture, temp_path: Path, file_data: FileTypeTuple
+def mock_save_file(
+    mocker: MockerFixture, patch_target: str, temp_path: Path, file_data: FileTypeTuple
 ) -> str:
     """Mock the `save_file` function to redirect uploads to a temporary directory.
 
@@ -116,13 +117,14 @@ def mock_upload(
 
     Args:
         mocker: The pytest-mock fixture.
+        patch_target: full import path to patch (e.g. "controllers.skill_controller.save_file").
         tmp_path: The built-in pytest temporary path fixture.
         file_data: The tuple returned by your fake_image() or fake_txt() function.
 
     Returns:
         The mocked path where the file would have been "uploaded".
     """
-    temp_upload_dir = temp_path / "test_uploads"
+    temp_upload_dir = temp_path / "skills"
     temp_upload_dir.mkdir(exist_ok=True)
 
     # Get the filename from the first element of the tuple
@@ -136,6 +138,6 @@ def mock_upload(
     mocked_file_path = str(temp_upload_dir / mocked_file_name)
 
     # Patch the function with the mocked return value
-    mocker.patch("utils.helpers.save_file", return_value=mocked_file_path)
+    mocker.patch(patch_target, new=AsyncMock(return_value=mocked_file_path))
 
     return mocked_file_path
