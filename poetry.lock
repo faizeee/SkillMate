@@ -1577,10 +1577,9 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
 name = "pytest-mock"
 version = "3.14.1"
 description = "Thin-wrapper around the mock package for easier use with pytest"
-optional = true
+optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "extra == \"dev\""
 files = [
     {file = "pytest_mock-3.14.1-py3-none-any.whl", hash = "sha256:178aefcd11307d874b4cd3100344e7e2d888d9791a6a1d9bfe90fbc1b74fd1d0"},
     {file = "pytest_mock-3.14.1.tar.gz", hash = "sha256:159e9edac4c451ce77a5cdb9fc5d1100708d2dd4ba3c3df572f14097351af80e"},
@@ -2424,4 +2423,4 @@ dev = ["black", "ipython", "mypy", "pytest", "pytest-asyncio", "pytest-cov", "py
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "67468b0acd7cfb1af1c66765da552a6e97dbe14e3665a6d8910a1b9a61251fd8"
+content-hash = "80a31bd37288d7c4a835fbae80b246290254e26344399cd4cd1f5f715c51a859"

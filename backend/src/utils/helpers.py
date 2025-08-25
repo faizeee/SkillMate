@@ -12,7 +12,7 @@ async def save_file(file: UploadFile, subdir: Optional[str] = None) -> str:
     base_path = os.path.join(config.upload_dir, subdir) if subdir else config.upload_dir
     # make directory exist_ok=True is a crucial argument.
     os.makedirs(base_path, exist_ok=True)
-    file_ext = os.path.splitext(file.filename)[1]
+    _, file_ext = os.path.splitext(file.filename)
     file_name = f"{uuid4().hex}{file_ext}"
     path = os.path.join(base_path, file_name)
     async with aiofiles.open(path, "wb") as out_file:
