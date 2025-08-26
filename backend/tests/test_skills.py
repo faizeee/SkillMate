@@ -190,23 +190,38 @@ async def test_update_skill_with_invalid_user(async_client, auth_header):
 
 
 @pytest.mark.parametrize(
-    "data, file, expected_status_code",
+    "skill_id, data, file, expected_status_code",
     [
-        pytest.param({}, None, 422, id="update-with-all-missing"),
-        pytest.param({}, fake_image(), 422, id="update-with-all-missing-except-image"),
+        pytest.param(2, {}, None, 422, id="update-with-all-missing"),
         pytest.param(
-            {"skill_level_id": "1"}, fake_image(), 422, id="update-with-missing-name"
+            2, {}, fake_image(), 422, id="update-with-all-missing-except-image"
         ),
         pytest.param(
-            {"name": "c++"}, fake_image(), 422, id="update-with-missing-skill_level_id"
+            2, {"skill_level_id": "1"}, fake_image(), 422, id="update-with-missing-name"
         ),
         pytest.param(
+            2,
+            {"name": "c++"},
+            fake_image(),
+            422,
+            id="update-with-missing-skill_level_id",
+        ),
+        pytest.param(
+            99999,
+            {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
+            None,
+            404,
+            id="update-with-valid-data-but-invalid-skill-id",
+        ),
+        pytest.param(
+            2,
             {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
             fake_image(6),
             400,
             id="update-with-valid-user-and-data-but-invalid-file-size",
         ),
         pytest.param(
+            2,
             {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
             fake_txt(),
             400,
@@ -216,9 +231,8 @@ async def test_update_skill_with_invalid_user(async_client, auth_header):
 )
 @pytest.mark.asyncio
 async def test_update_skill_with_invalid_payload(
-    async_client, auth_header_for_admin, data, file, expected_status_code
+    async_client, auth_header_for_admin, skill_id, data, file, expected_status_code
 ):
-    skill_id = 2
     files = {"file": file} if file else {}
     response = await async_client.put(
         f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
