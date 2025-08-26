@@ -17,6 +17,7 @@ def test_get_skills(client):
         ({"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"}, None),
         ({"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"}, fake_image()),
     ],
+    ids=["create-skill-without-file", "create-skill-with-file"],
 )
 @pytest.mark.asyncio
 async def test_create_skill(
@@ -44,7 +45,6 @@ async def test_create_skill(
 @pytest.mark.asyncio
 async def test_create_duplicate_skill(async_client, auth_header):
     payload = {"name": "Python", "skill_level_id": "1"}
-    # client.post("/api/skills/",json=payload,)
     response = await async_client.post(
         "/api/skills/", data=payload, headers=auth_header
     )
@@ -183,7 +183,7 @@ async def test_update_skill_with_invalid_user(async_client, auth_header):
     skill_id = 1
     payload = {"name": unique_name, "skill_level_id": "2"}
     response = await async_client.put(
-        f"/api/skills/{skill_id}", json=payload, headers=auth_header
+        f"/api/skills/{skill_id}", data=payload, headers=auth_header
     )
     # print("RESPONSE TEXT:", response.text)  # print raw error message
     assert response.status_code == 403
