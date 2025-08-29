@@ -1,8 +1,9 @@
+import errno
 import os
 from typing import Optional
 from uuid import uuid4
 from core.config import config
-from fastapi import UploadFile
+from fastapi import HTTPException, UploadFile
 import aiofiles
 
 
@@ -23,6 +24,23 @@ async def save_file(
             await out_file.write(content)
 
     return path
+
+
+async def save_file_safe_mode(
+    file: UploadFile, subdir: Optional[str] = None, base_dir: Optional[str] = None
+) -> str:
+    """Save Uploaded file in safe mode to handel exception and return the file path."""
+    try:
+        return save_file(file, subdir, base_dir)
+    except OSError as e:
+        if e.errno == errno.ENOSPC:
+            raise HTTPException(status_code=507, detail="Disk full, cannot save file")
+        elif e.errno == errno.EACCES:
+            raise HTTPException(
+                status_code=500, detail="Permission denied while saving file"
+            )
+        else:
+            raise HTTPException(status_code=500, detail="Unexpected file system error")
 
 
 def asset(path: Optional[str]) -> str:
