@@ -6,7 +6,7 @@ from fastapi import HTTPException, UploadFile, status
 from models.base.response_schemas import ResponseMessage
 from models.skill import Skill, SkillIn, SkillRead
 from models.skill_level import SkillLevel
-from utils.helpers import save_file
+from utils.helpers import save_file_safe_mode
 from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy import func
@@ -68,7 +68,7 @@ async def add_skills(
         SkillRead: New Created Skill.
     """
     check_skill_duplicate(db=db, skill_name=skill.name)
-    file_path = await save_file(file, subdir="skills") if file else None
+    file_path = await save_file_safe_mode(file, subdir="skills") if file else None
     # 1. Create and add the new skill
     skill_data = skill.model_dump()
     new_skill = Skill(
@@ -152,6 +152,8 @@ async def update_skill_by_id(
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Skill not found")
 
     check_skill_duplicate(db, inputs.name, skill_id)
+    if file:
+        file_path = await save_file_safe_mode(file, subdir="skills")
 
     # NOTE: use inputs.model_dump(exclude_unset=True).items()  for partial
     # updates it ignores the unchanged
@@ -159,7 +161,6 @@ async def update_skill_by_id(
         setattr(skill, key, value)
 
     if file:
-        file_path = await save_file(file, subdir="skills")
         setattr(skill, "icon_path", file_path)
 
     db.commit()

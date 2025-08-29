@@ -27,7 +27,7 @@ async def test_create_skill(
     expected_icon_path = None
     if file:
         files = {"file": file}
-        patch_target = "controllers.skill_controller.save_file"
+        patch_target = "controllers.skill_controller.save_file_safe_mode"
         expected_icon_path = mock_save_file(mocker, patch_target, tmp_path, file)
 
     response = await async_client.post(
@@ -144,7 +144,7 @@ def test_get_skill_error(client, drop_all_tables_for_error_test):
         pytest.param(
             {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
             None,
-            id="update-without-file-with-valid-user-and-data",
+            id="update-without-file-but-with-valid-user-and-data",
         ),
         pytest.param(
             {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"},
@@ -162,7 +162,7 @@ async def test_update_skill_with_valid_user_and_data(
     expected_icon_path = None
     if file:
         files = {"file": file}
-        patch_target = "controllers.skill_controller.save_file"
+        patch_target = "controllers.skill_controller.save_file_safe_mode"
         expected_icon_path = mock_save_file(mocker, patch_target, tmp_path, file)
     response = await async_client.put(
         f"/api/skills/{skill_id}", data=data, files=files, headers=auth_header_for_admin
