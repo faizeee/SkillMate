@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Optional
 from unittest.mock import AsyncMock
 from uuid import uuid4
+from fastapi import UploadFile
 from fastapi.testclient import TestClient
 from models.skill import Skill
 from pytest_mock import MockerFixture
@@ -100,6 +101,14 @@ def fake_image(size_mb: float | int = 0.1) -> FileTypeTuple:
     """Create fake image bytes."""
     size_bytes = int(size_mb * 1024 * 1024)  # convert MB to bytes and cast to int
     return ("test.png", BytesIO(b"0" * size_bytes), "image/png")
+
+
+def fake_upload_file(tmp_path: Path, file_ext: str = ".png") -> UploadFile:
+    """Create fake upload file."""
+    file_name = f"test{file_ext}"
+    test_file = tmp_path / file_name
+    test_file.write_bytes(b"fake item data with long test for units.")
+    return UploadFile(filename=file_name, file=open(test_file, "rb"))
 
 
 def fake_txt() -> FileTypeTuple:

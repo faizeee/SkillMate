@@ -6,10 +6,13 @@ from fastapi import UploadFile
 import aiofiles
 
 
-async def save_file(file: UploadFile, subdir: Optional[str] = None) -> str:
+async def save_file(
+    file: UploadFile, subdir: Optional[str] = None, base_dir: Optional[str] = None
+) -> str:
     """Save Uploaded file and return the file path."""
     # creates upload path string
-    base_path = os.path.join(config.upload_dir, subdir) if subdir else config.upload_dir
+    upload_dir = base_dir or config.upload_dir
+    base_path = os.path.join(upload_dir, subdir) if subdir else upload_dir
     # make directory exist_ok=True is a crucial argument.
     os.makedirs(base_path, exist_ok=True)
     _, file_ext = os.path.splitext(file.filename)
