@@ -31,7 +31,7 @@ async def save_file_safe_mode(
 ) -> str:
     """Save Uploaded file in safe mode to handel exception and return the file path."""
     try:
-        return save_file(file, subdir, base_dir)
+        return await save_file(file, subdir, base_dir)
     except OSError as e:
         if e.errno == errno.ENOSPC:
             raise HTTPException(status_code=507, detail="Disk full, cannot save file")
