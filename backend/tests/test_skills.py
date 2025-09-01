@@ -1,3 +1,4 @@
+import errno
 import pytest
 import uuid
 
@@ -86,6 +87,49 @@ async def test_invalid_payload(async_client, auth_header, data, file, status_cod
     )
     print(f"RESPONSE TEXT -> {response.status_code} : {response.text}")
     assert response.status_code == status_code
+
+
+@pytest.mark.parametrize(
+    "error_type , error_message , expected_error_code, expected_error_message",
+    [
+        (errno.ENOSPC, "No space left on device", 507, "Disk Full"),
+        (errno.EACCES, "Permission denied while saving file", 500, "Permission denied"),
+        (errno.EIO, "I/O error", 500, "Unexpected file system error"),
+    ],
+    ids=["disk-full-error", "permissions-error", "io-error"],
+)
+@pytest.mark.asyncio
+async def test_io_write_errors(
+    async_client,
+    auth_header,
+    error_type,
+    error_message,
+    expected_error_code,
+    expected_error_message,
+    monkeypatch,
+):
+
+    class FakeFile:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc, tb):
+            pass
+
+        async def write(self, *args, **kwargs):
+            raise OSError(error_type, error_message)
+
+    monkeypatch.setattr("aiofiles.open", lambda *a, **kw: FakeFile())
+    data = {"name": f"AWS-{uuid.uuid4().hex[:6]}", "skill_level_id": "2"}
+    files = {"file": fake_image()}
+    response = await async_client.post(
+        "/api/skills/", data=data, files=files, headers=auth_header
+    )
+    print("RESPONSE TEXT:", response.text)  # print raw error message
+    print("RESPONSE:", response.json())  # print raw error message
+    res_json = response.json()
+    assert response.status_code == expected_error_code
+    assert expected_error_message.lower() in res_json["detail"].lower()
 
 
 def test_get_skill_by_valid_id(client, reset_db_state, auth_header):
