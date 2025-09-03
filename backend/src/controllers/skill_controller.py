@@ -41,12 +41,15 @@ def get_skills(db: Session) -> list[SkillRead]:
         # execute the statement and fetch all results
         skills = db.exec(query).all()
         results = [
-            {
-                "id": skill.id,
-                "name": skill.name,
-                "skill_level_id": skill.skill_level_id,
-                "level_name": skill.level.name if skill.level else "N/A",
-            }
+            SkillRead(
+                **{
+                    "id": skill.id,
+                    "name": skill.name,
+                    "skill_level_id": skill.skill_level_id,
+                    "level_name": skill.level.name if skill.level else "N/A",
+                    "icon_path": skill.icon_path,
+                }
+            )
             for skill in skills
         ]
         return results

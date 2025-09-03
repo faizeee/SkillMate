@@ -1,4 +1,5 @@
 from typing import Optional
+from anyio import Path
 from pydantic import AnyHttpUrl, BaseModel, Field, computed_field, field_validator
 
 from models.skill_level import SkillLevel
@@ -39,4 +40,6 @@ class SkillRead(SkillIn):
         """Generate full_url for icon."""
         if not self.icon_path:
             return None
-        return asset(self.icon_path)
+        # Replace backslashes with forward slashes
+        clean_path = Path(self.icon_path).as_posix()
+        return asset(clean_path)
