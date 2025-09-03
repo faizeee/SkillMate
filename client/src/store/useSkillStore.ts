@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import type { Skill, NewSkill } from "@/types/skill";
 import { fetchRequest } from "@/utils/fetchRequest";
 import { handleApiError } from "@/utils/apiErrorHandler";
+import { skillFormData } from "@/utils/skillFormData";
 
 type SkillState = {
   skills: Skill[];
@@ -78,7 +79,7 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
     try {
       const response = await fetchRequest(`${BASE_URL}/skills`, {
         method: "POST",
-        body: JSON.stringify(skill),
+        body: skillFormData(skill), //JSON.stringify(skill),
       });
       if (!response.ok) {
         await handleApiError(response);
@@ -100,7 +101,7 @@ export const useSkillsStore = create<SkillState>((set, get) => ({
     try {
       const response = await fetchRequest(`${BASE_URL}/skills/${skill_id}`, {
         method: "put",
-        body: JSON.stringify(skill),
+        body: skillFormData(skill), //JSON.stringify(skill),
       });
 
       if (!response.ok) {
