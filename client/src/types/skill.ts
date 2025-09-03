@@ -1,6 +1,7 @@
 export type NewSkill = {
   name: string;
   skill_level_id: string | number;
+  file?: File
 };
 // Skill type definition
 export type Skill = NewSkill & {

@@ -17,13 +17,36 @@ export default function CreateSkillForm({
   const [formData, setFormData] = useState<NewSkill>({
     name: editSkill?.name || "",
     skill_level_id: editSkill?.skill_level_id || SKILL_LEVELS.BEGINNER,
+    file: undefined,
   });
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Only Images are allowed!");
+      return;
+    }
+    setFormData((prev) => ({ ...prev, file: file }));
+    setPreview(URL.createObjectURL(file));
+  };
+
+  // cleanup object URLs
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     console.info({ name, value });
 
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -66,7 +89,7 @@ export default function CreateSkillForm({
         />
 
         <select
-        name="skill_level_id"
+          name="skill_level_id"
           value={formData.skill_level_id}
           onChange={handleInputChange}
           className="w-full px-4 py-2 text-white bg-gray-800 rounded"
@@ -77,6 +100,28 @@ export default function CreateSkillForm({
             </option>
           ))}
         </select>
+
+        {/* File input */}
+        <input
+          type="file"
+          name="file"
+          placeholder="Select Skill Icon"
+          accept="image/*"
+          onChange={handleFileSelect}
+          className="w-full px-4 py-2 text-white bg-gray-800 rounded"
+        />
+
+        {/* File Preview*/}
+        {preview && (
+          <div className="mt-2">
+            <p className="text-sm text-gray-400">Preview:</p>
+            <img
+              src={preview}
+              alt="Skill icon"
+              className="object-cover w-24 h-24 border rounded"
+            />
+          </div>
+        )}
 
         <button
           type="submit"

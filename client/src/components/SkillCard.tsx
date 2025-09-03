@@ -38,6 +38,7 @@ const SkillCard = ({ skill }: SkillProps) => {
 
         {/* SKill Details */}
         <div className="flex items-center justify-between w-11/12">
+        {/* Skill Name and Actions */}
           <div className="flex-1 w-10/12">
             <p className="flex justify-between text-lg font-semibold">
               {skill.name}
@@ -59,6 +60,7 @@ const SkillCard = ({ skill }: SkillProps) => {
               )}
             </p>
           </div>
+          {/*  skill level  */}
           <div className="flex justify-end w-2/12">
             <span className="p-2 text-sm text-center text-green-500 rounded-2xl text-green outline w-100">
              {skill.level_name}
