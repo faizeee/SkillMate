@@ -33,7 +33,8 @@ const SkillCard = ({ skill }: SkillProps) => {
       <div className="flex">
         {/* Skill Icon */}
         <div className="flex w-1/12">
-          <img src={skill.icon_url || "/vite.svg"} alt="skill icon" />
+          <img src={skill.icon_url || "/vite.svg"} alt="skill icon"
+          className={`${skill.icon_url ? "w-[50px]" : ""}`} />
         </div>
 
         {/* SKill Details */}

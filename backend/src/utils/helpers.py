@@ -47,9 +47,9 @@ def asset(path: Optional[str]) -> str:
     """Generate a full URL for static assets.
 
     Example:
-        asset("icons/logo.png") -> http://localhost:8000/static/icons/logo.png
+        asset("icons/logo.png") -> http://localhost:8000/icons/logo.png
     """
     base_url = config.app_url.rstrip("/")
     if path:
-        return f"{base_url}/static/{path.lstrip('/')}"
+        return f"{base_url}/{path.lstrip('/')}"
     return base_url

@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi.staticfiles import StaticFiles
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
@@ -34,6 +35,9 @@ app.add_middleware(
 )
 
 app.add_middleware(LoggingMiddleware)
+
+# Mount the 'uploads' directory to serve files at the /uploads URL path
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 
 @app.get("/")
