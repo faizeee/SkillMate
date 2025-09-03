@@ -7,7 +7,8 @@ export const skillFormData = (skill: NewSkill) => {
   if (skill.file) {
     formData.append("file", skill.file);
   }
-  console.log(skill);
-  console.log(formData);
+//  for (const [key, val] of formData.entries()) {
+//   console.log(key, val);
+// }
   return formData;
 };

@@ -4,9 +4,9 @@ export const fetchRequest = async (url: string, options?: RequestInit): Promise<
   const token = useAuthStore.getState().token;
   const headers = new Headers(options?.headers);
   // Set default content type if not already provided
-  if (!headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }
+  // if (!headers.has("Content-Type")) {
+  //   headers.set("Content-Type", "application/json");
+  // }
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
