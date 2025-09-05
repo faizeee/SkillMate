@@ -1,4 +1,9 @@
-from pydantic import BaseModel, Field, field_validator
+from typing import Optional
+from anyio import Path
+from pydantic import AnyHttpUrl, BaseModel, Field, computed_field, field_validator
+
+from models.skill_level import SkillLevel
+from utils.helpers import asset
 
 
 class SkillIn(BaseModel):
@@ -25,4 +30,16 @@ class SkillRead(SkillIn):
     """This class describes the properties a skill will contains when user asked for skill."""
 
     id: int
-    level: str
+    level: Optional[SkillLevel] = None
+    level_name: Optional[str] = None
+    icon_path: Optional[str] = None
+
+    @computed_field
+    @property
+    def icon_url(self) -> Optional[AnyHttpUrl]:
+        """Generate full_url for icon."""
+        if not self.icon_path:
+            return None
+        # Replace backslashes with forward slashes
+        clean_path = Path(self.icon_path).as_posix()
+        return asset(clean_path)

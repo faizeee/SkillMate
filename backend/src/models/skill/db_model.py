@@ -9,6 +9,7 @@ class Skill(SQLModel, table=True):
     __tablename__ = "skills"
     id: int | None = Field(default=None, primary_key=True)
     name: str
+    icon_path: Optional[str] = None
     skill_level_id: int = Field(foreign_key="skill_levels.id")
 
     # Relationship to SkillLevel table (many-to-one)

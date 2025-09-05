@@ -10,10 +10,13 @@ env/
 *.pyc
 *.db
 .coverage
+.vscode
 
 # Vite
 .vite/
 coverage/
+uploads/*
+!uploads/.gitkeep
 
 *.egg-info/
 build/

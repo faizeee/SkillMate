@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi.staticfiles import StaticFiles
 from middlewares.logging import LoggingMiddleware
 from routes.index import router
 from core.config import config
 from data.db import init_db
-
-# import logging
 
 
 # Event handler to initialize the database on application startup
@@ -26,15 +26,6 @@ app = FastAPI(
 )
 
 
-# logging.basicConfig(level=logging.DEBUG)
-
-# @app.on_event("startup")
-# async def on_startup():
-#     """Handel application startup."""
-#     await init_redis()
-#     init_db()
-
-
 # Allow CORS
 app.add_middleware(
     CORSMiddleware,
@@ -44,6 +35,9 @@ app.add_middleware(
 )
 
 app.add_middleware(LoggingMiddleware)
+
+# Mount the 'uploads' directory to serve files at the /uploads URL path
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 
 @app.get("/")

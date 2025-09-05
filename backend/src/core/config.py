@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     app_title: str = "SkillMate API"
     app_description: str = "API for SkillMate application"
     app_version: str = "0.1.0"
+    app_url: str = "http://localhost:8000"
 
     # --- THE CRITICAL CHANGE FOR REQUIRED FIELDS ---
     # For required fields, Pydantic-settings expects the environment variable
@@ -45,6 +46,7 @@ class Settings(BaseSettings):
         30, env="TOKEN_EXPIRES_IN"
     )  # to manually map the Env Variable with settings variable
 
+    upload_dir: str = "uploads"
     model_config = SettingsConfigDict(env_file="backend/.env", extra="ignore")
 
 

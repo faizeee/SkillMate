@@ -5,7 +5,7 @@ describe('SkillCard',()=>{
     const fakeSkill = {
       id: 1,
       name: 'React',
-      level: 'Intermediate',
+      level_name: 'Intermediate',
       skill_level_id:"2"
     };
     it("renders skill name and level",()=>{

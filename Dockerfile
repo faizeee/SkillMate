@@ -28,30 +28,14 @@ RUN poetry install --no-root
 
 # Copy backend source code
 COPY backend ./backend
-
-# # --- ADD THESE DEBUG LINES ---
-# RUN echo "--- Contents of /app/backend/src ---"
-# RUN ls -la /app/backend/src
-
-# RUN echo "--- Contents of /app/backend/src/seeders ---"
-# RUN ls -la /app/backend/src/seeders
-# # --- END DEBUG LINES ---
-
+COPY alembic.ini ./alembic.ini
+COPY alembic ./alembic
 # Make startup script executable
 COPY start.sh ./start.sh
-
-# # --- Re-add DEBUGGING for start.sh presence and permissions ---
-# RUN echo "--- Debug: After COPY start.sh ---" \
-#     && ls -la /app/start.sh || (echo "ERROR: start.sh not found after COPY. Aborting build." && exit 1)
 
 # Use sed to remove Windows CR characters, then make executable
 RUN sed -i 's/\r$//' ./start.sh \
     && chmod +x ./start.sh
-
-# RUN echo "--- Debug: After sed and chmod +x ---" \
-#     && ls -la /app/start.sh || (echo "ERROR: start.sh not found or permissions incorrect after processing. Aborting build." && exit 1)
-# # --- END DEBUGGING for start.sh ---
-
 
 # Set default command
 #CMD ["uvicorn", "backend.src.main:app", "--host", "0.0.0.0", "--port", "8000"]

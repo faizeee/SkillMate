@@ -1,12 +1,19 @@
+from io import BytesIO
+from pathlib import Path
 from typing import Optional
+from unittest.mock import AsyncMock
+from uuid import uuid4
+from fastapi import UploadFile
 from fastapi.testclient import TestClient
 from models.skill import Skill
+from pytest_mock import MockerFixture
 from sqlmodel import Session
 from core.config import config as app_config
 from alembic.config import Config
 from alembic import command
 from sqlmodel import SQLModel
 from sqlalchemy import text
+from utils.types import FileTypeTuple
 from tests.utils.seed import seed_test_db
 from sqlmodel import select
 import os
@@ -88,3 +95,58 @@ def get_all_skills(client: TestClient) -> list[dict]:
     response = client.get("/api/skills/")
     assert response.status_code == 200
     return response.json()
+
+
+def fake_image(size_mb: float | int = 0.1) -> FileTypeTuple:
+    """Create fake image bytes."""
+    size_bytes = int(size_mb * 1024 * 1024)  # convert MB to bytes and cast to int
+    return ("test.png", BytesIO(b"0" * size_bytes), "image/png")
+
+
+def fake_upload_file(tmp_path: Path, file_ext: str = ".png") -> UploadFile:
+    """Create fake upload file."""
+    file_name = f"test{file_ext}"
+    test_file = tmp_path / file_name
+    test_file.write_bytes(b"fake item data with long test for units.")
+    return UploadFile(filename=file_name, file=open(test_file, "rb"))
+
+
+def fake_txt() -> FileTypeTuple:
+    """Create fake text file bytes."""
+    return ("text.txt", BytesIO(b"fake-text-bytes"), "text/plain")
+
+
+def mock_save_file(
+    mocker: MockerFixture, patch_target: str, temp_path: Path, file_data: FileTypeTuple
+) -> str:
+    """Mock the `save_file` function to redirect uploads to a temporary directory.
+
+    Mocks the `save_file` function to redirect uploads to a temporary directory
+    while preserving the original file extension from the fake file tuple.
+
+    Args:
+        mocker: The pytest-mock fixture.
+        patch_target: full import path to patch (e.g. "controllers.skill_controller.save_file").
+        tmp_path: The built-in pytest temporary path fixture.
+        file_data: The tuple returned by your fake_image() or fake_txt() function.
+
+    Returns:
+        The mocked path where the file would have been "uploaded".
+    """
+    temp_upload_dir = temp_path / "skills"
+    temp_upload_dir.mkdir(exist_ok=True)
+
+    # Get the filename from the first element of the tuple
+    original_file_name = file_data[0]
+
+    # Extract the file name  and extension "_" represent file name without extension
+    _, file_ext = os.path.splitext(original_file_name)
+
+    # Create a unique filename with the correct extension
+    mocked_file_name = f"test-file-{uuid4().hex}{file_ext}"
+    mocked_file_path = str(temp_upload_dir / mocked_file_name)
+
+    # Patch the function with the mocked return value
+    mocker.patch(patch_target, new=AsyncMock(return_value=mocked_file_path))
+
+    return mocked_file_path

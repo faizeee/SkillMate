@@ -2,9 +2,6 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, vi } from "vitest";
 import AddSkillPage from "../../pages/AddSkill";
 
-
-
-
 // 1. Define your mock functions at the top level.
 const { toastSuccessMock, toastErrorMock } = vi.hoisted(() => ({
   toastSuccessMock: vi.fn(),
