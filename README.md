@@ -619,7 +619,7 @@ act(() => {
 })
 render(<InviteMentorButton />)
 expect(screen.getByText("Invite Mentor")).toBeInTheDocument()
-
+```
 # 🚀 Day 20 Milestone (Aug 6 → Sept 5)
 
 Day 20 was planned as “just update/delete/file upload,” but it evolved into a **major architecture milestone**.
