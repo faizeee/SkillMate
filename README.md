@@ -620,6 +620,71 @@ act(() => {
 render(<InviteMentorButton />)
 expect(screen.getByText("Invite Mentor")).toBeInTheDocument()
 
+# 🚀 Day 20 Milestone (Aug 6 → Sept 5)
+
+Day 20 was planned as “just update/delete/file upload,” but it evolved into a **major architecture milestone**.
+Instead of a quick feature tick, this month delivered **async support, robust file handling, better testing, and a more modular system design**.
+
+---
+
+## ⚙️ Backend Architecture
+- Transitioned from **pure sync → async** routes and testing (big shift).
+- Added **async test client setup**, laying groundwork for scalable async workflows.
+
+---
+
+## 🧪 Testing Improvements
+- Used **pytest-mock** and **monkeypatching** effectively.
+- Built **mock fixtures** for reuse across test suites.
+- Leveraged **`tmp_path`** for isolated file tests.
+- Added **`FakeFile`** helper to simulate I/O errors.
+- Validated error mapping at **both utility-level and route-level** with `pytest-asyncio` and parametrized tests.
+
+---
+
+## 🗂️ File Handling
+- Implemented **`save_file`** (async write) and **`save_file_safe`** (robust error translation).
+- Added **file validation utility** (type/size checks, reusable).
+- Created **form-to-pydantic converter** (`get_skill_in`) for clean route signatures.
+- Introduced **asset utility** for generating absolute URLs to static resources.
+
+---
+
+## 🏗️ Domain Model Improvements
+- Added **computed property** in `SkillRead` → `icon_url` dynamically generated.
+- Enforced **admin-only update/delete** → simpler, safer auth model.
+- Improved **DB modeling discussion** → avoiding duplication, preparing for many-to-many pivot.
+
+---
+
+## 🧩 Overall System Flow
+- Reused the **same form for create & update** (DRY principle).
+- Simplified **route signatures** via dependencies.
+- Refactored request handling into **modular utilities**.
+
+**Frontend restructured with:**
+- `fetchWithAuth` wrapper (token injection + 401 logout)
+- `useAuthRedirect` hook (protected routes)
+- Zustand store for centralized auth state
+
+---
+
+## ⚡ Static Assets
+- Configured **FastAPI `app.mount`** for serving `/uploads`.
+- Integrated **icon URLs** via computed model property (`SkillRead.icon_url`).
+
+---
+
+## 🎯 Outcomes
+- ✅ Async support across routes & tests
+- ✅ Full file handling pipeline (validation → save → URL)
+- ✅ Mocking & error simulation in tests
+- ✅ Cleaner Pydantic model design (computed props, DRY schemas)
+- ✅ Utility-based reusable architecture
+- ✅ Simplified authorization model (admin-only updates/deletes)
+- ✅ Frontend auth flow hardened with hooks + global wrapper
+
+
 
 
 We’re building one job-ready feature or setup milestone per day. Stay tuned.
