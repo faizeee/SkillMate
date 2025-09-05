@@ -621,7 +621,7 @@ render(<InviteMentorButton />)
 expect(screen.getByText("Invite Mentor")).toBeInTheDocument()
 ```
 # 🚀 Day 20 Milestone (Aug 6 → Sept 5)
-
+[→ Full Details](logs/day-20.md)
 Day 20 was planned as “just update/delete/file upload,” but it evolved into a **major architecture milestone**.
 Instead of a quick feature tick, this month delivered **async support, robust file handling, better testing, and a more modular system design**.
 

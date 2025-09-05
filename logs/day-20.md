@@ -1,5 +1,8 @@
 ## 🗓️ Day 20 – Skill Update, Delete & File Upload
 
+Day 20 was planned as “just update/delete/file upload,” but it evolved into a **major architecture milestone**.
+Instead of a quick feature tick, this month delivered **async support, robust file handling, better testing, and a more modular system design**.
+
 ### ✅ Goals
 - Implement Edit (Update) Skill: backend + frontend
 - Integrate Delete Skill (frontend only)
