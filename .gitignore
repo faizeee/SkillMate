@@ -15,7 +15,8 @@ env/
 # Vite
 .vite/
 coverage/
-uploads/
+uploads/*
+!uploads/.gitkeep
 
 *.egg-info/
 build/
